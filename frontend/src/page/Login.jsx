@@ -33,7 +33,7 @@ const Login = () => {
                 <hr className='border-none h-[1.5px] w-8 bg-gray-800' />
             </div>
             <input type="email" className='w-full px-3 py-2 border border-gray-800' placeholder='Email' required  onChange={e => setValues({ ...values, email: e.target.value })}  />
-            <input type="password" className='w-full px-3 py-2 border border-gray-800' placeholder='Password' required  onChange={e => setValues({ ...values, password: e.target.value })}/>
+            <input type="password" className='w-full px-3 py-2 border border-gray-800' placeholder='Mật khẩu' required  onChange={e => setValues({ ...values, password: e.target.value })}/>
             <div className='w-full flex justify-between text-sm mt-[-8px]'>
                 <p className='cursor-pointer'>Quên mật khẩu ?</p>
                 <Link to='/register' className='cursor-pointer'>Đăng kí</Link>

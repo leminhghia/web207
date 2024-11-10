@@ -34,6 +34,7 @@ const verifyUser = (req, res, next) => {
             } else {
                 req.user = {
                     id: decoded.id,
+                    surName: decoded.surName,
                     name: decoded.name,
                     email: decoded.email
                 };
@@ -46,17 +47,18 @@ const verifyUser = (req, res, next) => {
 
 
 app.get('/user', verifyUser, (req, res) => {
-    const { id, name, email } = req.user;
-    return res.json({ id, name, email });
+    const { id,surName, name, email } = req.user;
+    return res.json({ id,surName, name, email });
 });
 
 
 app.post('/register', (req, res) => {
-    const sql = "INSERT INTO login (`name`,`email`,`password`) VALUES (?)";
+    const sql = "INSERT INTO login (`surName`,`name`,`email`,`password`) VALUES (?)";
     bcrypt.hash(req.body.password.toString(), salt, (err, hash) => {
         if (err) return res.json({ Error: "Lỗi mã hóa mật khẩu" });
 
         const values = [
+            req.body.surName,
             req.body.name,
             req.body.email,
             hash
@@ -76,8 +78,8 @@ app.post('/login', (req, res) => {
             bcrypt.compare(req.body.password, data[0].password, (err, result) => {
                 if (err) return res.json({ Error: "Lỗi so sánh mật khẩu" });
                 if (result) {
-                    const {  id, name, email } = data[0];
-                    const token = jwt.sign({ id, name, email }, "jwt-secret-key", { expiresIn: '1d' });
+                    const {  id,surName, name, email } = data[0];
+                    const token = jwt.sign({ id,surName, name, email }, "jwt-secret-key", { expiresIn: '1d' });
                     res.cookie('token', token);
                     return res.json({ Status: "success" });
                 } else {
