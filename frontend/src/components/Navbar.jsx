@@ -1,30 +1,21 @@
-import { useState, useEffect,useContext } from 'react'
+import { useState, useEffect } from 'react'
 import { assets } from '../assets/assets'
 import { Link, NavLink } from 'react-router-dom'
 import axios from 'axios'
-import { QuizContext } from '../context/QuizContext'
 const Navbar = () => {
-  const { auth,setAuth } = useContext(QuizContext)
-
   const [login, setLogin] = useState(false)
-  const [message, setMessage] = useState('');
-  const [name, setName] = useState('')
+  const [user, setUser] = useState([])
   axios.defaults.withCredentials = true
 
   useEffect(() => {
-    axios.get('http://localhost:2000')
-      .then(res => {
-        if (res.data.Status === "success") {
-          setAuth(true)
-          setName(res.data.name)
-        } else {
+    axios
+      .get(`http://localhost:2000/user`)
+      .then((res) => setUser(res.data))
 
-          setAuth(false)
-          setMessage(res.data.error)
-        }
-      })
-      .catch(err => console.log(err))
-  }, [])
+      .catch((err) => console.log(err));
+
+
+  }, []);
 
   const handleDelete = () => {
     axios.get('http://localhost:2000/logout')
@@ -32,6 +23,7 @@ const Navbar = () => {
       .catch(err => console.log(err)
       )
   }
+
   return (
     <div >
       <img src={assets.banner} className='w-full' alt="" />
@@ -58,13 +50,17 @@ const Navbar = () => {
           {login ? <assets.FaAngleUp /> : <assets.FaAngleDown />}
           <div className={`absolute text-black top-[35px] right-[-14px] shadow-md bottom-0 overflow-hidden bg-white h-[180px]  ${login ? 'w-[170%] border-2' : 'w-0 border-0'}`}>
             <div className='flex flex-col  gap-1'>
-              {auth ? <p className='text-center'> {name}</p> :
+              {user.id ? <div>
+                <p className='text-center'> {user.name}</p>
+                <Link className='hover:bg-gray-300 transition-all w-full text-center' to='/account'><p>Thông tin tài khoản</p></Link>
+              </div> :
                 <div>  <Link className='hover:bg-gray-300 transition-all w-full text-center' to='/register'><p>Đăng kí</p></Link>
                   <Link className='hover:bg-gray-300 transition-all w-full text-center' to='/login'><p>Đăng nhập</p></Link></div>
               }
               <Link className='hover:bg-gray-300 transition-all w-full text-center' to='/'><p>Quên mật khẩu</p></Link>
               <hr className="w-[full]  border-none h-[1.5px] bg-gray-300 " />
-              <button className='hover:bg-gray-300' onClick={handleDelete}>Đăng xuất</button>              <Link className='hover:bg-gray-300 transition-all w-full text-center' to='/'><p>Đổi mật khẩu</p></Link>
+              <button className='hover:bg-gray-300' onClick={handleDelete}>Đăng xuất</button>
+              <Link className='hover:bg-gray-300 transition-all w-full text-center' to='/'><p>Đổi mật khẩu</p></Link>
               <Link className='hover:bg-gray-300 transition-all w-full text-center' to='/'><p>Cập nhật tài khoản</p></Link>
               <Link className='hover:bg-gray-300 transition-all w-full text-center' to='/quizlog'><p>Lịch sử làm bài</p></Link>
 

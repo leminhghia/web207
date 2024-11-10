@@ -6,6 +6,7 @@ import Quiz from "./page/Quiz"
 import Login from "./page/Login"
 import Register from "./page/Register"
 import QuizLog from "./page/QuizLog"
+import Account from "./page/Account"
 function App() {
   return (
     <div>
@@ -17,6 +18,7 @@ function App() {
           <Route path="/quizlog" element={<QuizLog />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/account" element={<Account />} />
 
         </Routes>
         <Footer />

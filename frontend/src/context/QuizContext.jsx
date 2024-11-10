@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { createContext, useState, } from "react";
+import { createContext, useState } from "react";
 import { subjects, ADAV, ADTE, ADBS, ADUI, ASNE, CLCO, DBAV, DBBS, GAME, HTCS, INMA, JAAV, JABS, JSPR, LAYO, MOWE, PHPP, PMAG, VBPR, WEBU } from '../assets/assets'
 
 
@@ -9,14 +9,10 @@ import { subjects, ADAV, ADTE, ADBS, ADUI, ASNE, CLCO, DBAV, DBBS, GAME, HTCS, I
 export const QuizContext = createContext();
 const QuizContextProvider = (props) => {
     const [auth, setAuth] = useState(false)
-    const hasReloaded = localStorage.getItem('hasReloaded','true');
-   
-    
-    const [reload, setReload] = useState(hasReloaded)
+    const [reload, setReload] = useState(true)
 
-console.log(reload);
 
-    
+
     const value = {
         subjects, ADAV, ADTE, ADBS, ADUI, ASNE, CLCO, DBAV, DBBS, GAME, HTCS, INMA, JAAV, JABS, JSPR, LAYO, MOWE, PHPP, PMAG, VBPR, WEBU, auth, setAuth, reload, setReload
     }

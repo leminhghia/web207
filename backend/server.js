@@ -32,15 +32,22 @@ const verifyUser = (req, res, next) => {
             if (err) {
                 return res.json({ Error: "Lỗi token" });
             } else {
-                req.name = decoded.name;
+                req.user = {
+                    id: decoded.id,
+                    name: decoded.name,
+                    email: decoded.email
+                };
                 next();
             }
         });
     }
 };
 
-app.get('/', verifyUser, (req, res) => {
-    return res.json({ Status: 'success', name: req.name });
+
+
+app.get('/user', verifyUser, (req, res) => {
+    const { id, name, email } = req.user;
+    return res.json({ id, name, email });
 });
 
 
@@ -69,8 +76,8 @@ app.post('/login', (req, res) => {
             bcrypt.compare(req.body.password, data[0].password, (err, result) => {
                 if (err) return res.json({ Error: "Lỗi so sánh mật khẩu" });
                 if (result) {
-                    const name = data[0].name;
-                    const token = jwt.sign({ name }, "jwt-secret-key", { expiresIn: '1d' });
+                    const {  id, name, email } = data[0];
+                    const token = jwt.sign({ id, name, email }, "jwt-secret-key", { expiresIn: '1d' });
                     res.cookie('token', token);
                     return res.json({ Status: "success" });
                 } else {
