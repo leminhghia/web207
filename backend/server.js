@@ -33,7 +33,7 @@ const verifyUser = (req, res, next) => {
                 return res.json({ Error: "Lỗi token" });
             } else {
                 req.user = {
-                    id: decoded.id,
+                    useId: decoded.useId,
                     surName: decoded.surName,
                     name: decoded.name,
                     email: decoded.email
@@ -47,13 +47,13 @@ const verifyUser = (req, res, next) => {
 
 
 app.get('/user', verifyUser, (req, res) => {
-    const { id,surName, name, email } = req.user;
-    return res.json({ id,surName, name, email });
+    const { useId,surName, name, email } = req.user;
+    return res.json({ useId,surName, name, email });
 });
 
 
 app.post('/register', (req, res) => {
-    const sql = "INSERT INTO login (`surName`,`name`,`email`,`password`) VALUES (?)";
+    const sql = "INSERT INTO users (`surName`,`name`,`email`,`password`) VALUES (?)";
     bcrypt.hash(req.body.password.toString(), salt, (err, hash) => {
         if (err) return res.json({ Error: "Lỗi mã hóa mật khẩu" });
 
@@ -71,15 +71,15 @@ app.post('/register', (req, res) => {
 });
 
 app.post('/login', (req, res) => {
-    const sql = "SELECT * FROM login WHERE email = ?";
+    const sql = "SELECT * FROM users WHERE email = ?";
     db.query(sql, [req.body.email], (err, data) => {
         if (err) return res.json({ Error: "Lỗi cơ sở dữ liệu" });
         if (data.length > 0) {
             bcrypt.compare(req.body.password, data[0].password, (err, result) => {
                 if (err) return res.json({ Error: "Lỗi so sánh mật khẩu" });
                 if (result) {
-                    const {  id,surName, name, email } = data[0];
-                    const token = jwt.sign({ id,surName, name, email }, "jwt-secret-key", { expiresIn: '1d' });
+                    const {  useId,surName, name, email } = data[0];
+                    const token = jwt.sign({ useId,surName, name, email }, "jwt-secret-key", { expiresIn: '1d' });
                     res.cookie('token', token);
                     return res.json({ Status: "success" });
                 } else {

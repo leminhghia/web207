@@ -3,9 +3,11 @@ import { assets } from '../assets/assets';
 import { QuizContext } from '../context/QuizContext';
 import ProductItem from '../components/ProductItem';
 import { useNavigate  } from 'react-router-dom';
+import axios from 'axios'
 const Home = () => {
-    const { subjects, auth,reload,setReload } = useContext(QuizContext)
-    const [data, setData] = useState([]);
+    const { subjects,reload,setReload } = useContext(QuizContext)
+    const [data, setData] = useState([])
+    const [user,setUser] = useState([])
     const [currentPage, setCurrentPage] = useState(1);
     const navigate = useNavigate()
     const itemsPerPage = 4;
@@ -26,6 +28,16 @@ const Home = () => {
         
     }, [ subjects]);
 
+    useEffect(() => {
+        axios
+          .get(`http://localhost:2000/user`)
+          .then((res) => setUser(res.data.useId))
+    
+          .catch((err) => console.log(err));
+    
+    
+      }, []);
+
     const LastIndex = currentPage * itemsPerPage;
     const FirstIndex = LastIndex - itemsPerPage;
     const currentItems = data.slice(FirstIndex, LastIndex);
@@ -35,7 +47,7 @@ const Home = () => {
     };
     const totalPages = Math.ceil(data.length / itemsPerPage);
     const handleAuth = () => {
-        if (!auth) {
+        if (!user) {
             window.confirm('Vui lòng đăng nhập')
             navigate('/')
         }

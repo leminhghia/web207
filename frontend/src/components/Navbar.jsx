@@ -24,6 +24,7 @@ const Navbar = () => {
       )
   }
 
+
   return (
     <div >
       <img src={assets.banner} className='w-full' alt="" />
@@ -50,7 +51,7 @@ const Navbar = () => {
           {login ? <assets.FaAngleUp /> : <assets.FaAngleDown />}
           <div className={`absolute text-black top-[35px] right-[-14px] shadow-md bottom-0 overflow-hidden bg-white h-[180px]  ${login ? 'w-[170%] border-2' : 'w-0 border-0'}`}>
             <div className='flex flex-col  gap-1'>
-              {user.id ? <div>
+              {user.useId ? <div>
                 <p className='text-center'> {user.name}</p>
                 <Link className='hover:bg-gray-300 transition-all w-full text-center' to='/account'><p>Thông tin tài khoản</p></Link>
               </div> :
