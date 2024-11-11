@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 11, 2024 at 11:30 AM
+-- Generation Time: Nov 11, 2024 at 01:05 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -39,7 +39,24 @@ CREATE TABLE `answer` (
 --
 
 INSERT INTO `answer` (`ansId`, `content`, `is_correct`, `queId`) VALUES
-(1, 'html la a.....', 1, 1);
+(1, 'A programming language', 0, 1),
+(2, 'A type of software', 0, 1),
+(3, 'A markup language', 1, 1),
+(4, 'Cascading Style Sheets', 1, 2),
+(5, 'Computer Style Sheets', 0, 2),
+(6, 'Cascading Simple Sheets', 0, 2),
+(7, 'HTML', 0, 3),
+(8, 'JavaScript', 1, 3),
+(9, 'Python', 0, 3),
+(10, '8', 1, 4),
+(11, '7', 0, 4),
+(12, '6', 0, 4),
+(13, '4', 0, 5),
+(14, '2', 1, 5),
+(15, '5', 0, 5),
+(16, '36', 0, 6),
+(17, '24', 1, 6),
+(18, '48', 0, 6);
 
 -- --------------------------------------------------------
 
@@ -59,7 +76,12 @@ CREATE TABLE `question` (
 --
 
 INSERT INTO `question` (`queId`, `content`, `score`, `subId`) VALUES
-(1, 'html la gi ?', '1', 1);
+(1, 'What is HTML?', '1', 1),
+(2, 'What does CSS stand for?', '1', 1),
+(3, 'Which of the following is a programming language?', '1', 1),
+(4, 'What is 5 + 3?', '1', 2),
+(5, 'What is the square root of 16?', '1', 2),
+(6, 'What is 12 * 3?', '1', 2);
 
 -- --------------------------------------------------------
 
@@ -80,7 +102,16 @@ CREATE TABLE `result` (
 --
 
 INSERT INTO `result` (`resId`, `score`, `date`, `time`, `useId`) VALUES
-(1, '9', '', '', 4);
+(1, '5', '2024-11-11', '10:00:00', 1),
+(2, '6', '2024-11-11', '10:30:00', 2),
+(3, '0', '2024-11-11', '18:12:16', 6),
+(4, '0', '2024-11-11', '18:14:21', 6),
+(5, '0', '2024-11-11', '18:15:15', 6),
+(6, '0', '2024-11-11', '18:16:25', 6),
+(7, '0', NULL, NULL, 6),
+(8, '0', NULL, NULL, 6),
+(9, '0', NULL, NULL, 6),
+(10, '0', '2024-11-11', '18:33:28', 6);
 
 -- --------------------------------------------------------
 
@@ -99,7 +130,8 @@ CREATE TABLE `subject` (
 --
 
 INSERT INTO `subject` (`subId`, `name`, `logo`) VALUES
-(1, 'lap trinh co ban', NULL);
+(1, 'Programming Basics', 'programming_logo.png'),
+(2, 'Mathematics', 'math_logo.png');
 
 -- --------------------------------------------------------
 
@@ -112,17 +144,36 @@ CREATE TABLE `users` (
   `surName` varchar(200) DEFAULT NULL,
   `name` varchar(200) DEFAULT NULL,
   `email` varchar(200) DEFAULT NULL,
-  `password` varchar(200) DEFAULT NULL,
-  `subId` int(11) DEFAULT NULL
+  `password` varchar(200) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`useId`, `surName`, `name`, `email`, `password`, `subId`) VALUES
-(4, 'le', 'nghia', 'a@1', '123', 1),
-(5, 'le', 'nghia', 'nghia@1', '$2b$10$5HiGlgYpvhKYZXjqGW2yFOFpbeCBEjnKPgH0pbPqApKpi/ZFyhW02', NULL);
+INSERT INTO `users` (`useId`, `surName`, `name`, `email`, `password`) VALUES
+(1, 'Nguyen', 'An', 'an@example.com', '$2b$10$z5k/UjkQxMzMHi1BcJxT/OE.Us5jEK4vvfD4PQ/mD5AqEz2pfrhzC'),
+(2, 'Le', 'Binh', 'binh@example.com', '$2b$10$8n9Ws6.QjgoFvggwvM9ZGfpm2lPr9O4fXUMnNKCwBfr4MRWcBi19a'),
+(6, 'le ', 'nghia', 'a@1', '$2b$10$wYO5Kp8CqLb80LoSBo/tHurYLNbwOKpyEzf6moIeKSKRactpD2uJy');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_subject`
+--
+
+CREATE TABLE `user_subject` (
+  `userId` int(11) NOT NULL,
+  `subId` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `user_subject`
+--
+
+INSERT INTO `user_subject` (`userId`, `subId`) VALUES
+(6, 1),
+(6, 2);
 
 --
 -- Indexes for dumped tables
@@ -159,7 +210,13 @@ ALTER TABLE `subject`
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`useId`),
+  ADD PRIMARY KEY (`useId`);
+
+--
+-- Indexes for table `user_subject`
+--
+ALTER TABLE `user_subject`
+  ADD KEY `userId` (`userId`),
   ADD KEY `subId` (`subId`);
 
 --
@@ -170,31 +227,31 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `answer`
 --
 ALTER TABLE `answer`
-  MODIFY `ansId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ansId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `question`
 --
 ALTER TABLE `question`
-  MODIFY `queId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `queId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `result`
 --
 ALTER TABLE `result`
-  MODIFY `resId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `resId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `subject`
 --
 ALTER TABLE `subject`
-  MODIFY `subId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `subId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `useId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `useId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables
@@ -219,10 +276,11 @@ ALTER TABLE `result`
   ADD CONSTRAINT `result_ibfk_1` FOREIGN KEY (`useId`) REFERENCES `users` (`useId`);
 
 --
--- Constraints for table `users`
+-- Constraints for table `user_subject`
 --
-ALTER TABLE `users`
-  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`subId`) REFERENCES `subject` (`subId`);
+ALTER TABLE `user_subject`
+  ADD CONSTRAINT `user_subject_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`useId`),
+  ADD CONSTRAINT `user_subject_ibfk_2` FOREIGN KEY (`subId`) REFERENCES `subject` (`subId`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
