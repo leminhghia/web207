@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 11, 2024 at 01:05 PM
+-- Generation Time: Nov 12, 2024 at 03:15 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -111,7 +111,22 @@ INSERT INTO `result` (`resId`, `score`, `date`, `time`, `useId`) VALUES
 (7, '0', NULL, NULL, 6),
 (8, '0', NULL, NULL, 6),
 (9, '0', NULL, NULL, 6),
-(10, '0', '2024-11-11', '18:33:28', 6);
+(10, '0', '2024-11-11', '18:33:28', 6),
+(11, '1', '2024-11-12', '17:59:41', 6),
+(12, '3', '2024-11-12', '18:02:12', 6),
+(13, '3', '2024-11-12', '18:53:33', 6),
+(14, '3', '2024-11-12', '19:12:01', 6),
+(15, '0', '2024-11-12', '19:13:08', 6),
+(16, '3', '2024-11-12', '19:14:57', 6),
+(17, '0', '2024-11-12', '19:15:05', 6),
+(18, '0', '2024-11-12', '19:16:40', 6),
+(19, '0', '2024-11-12', '19:21:32', 6),
+(20, '0', '2024-11-12', '19:21:49', 6),
+(21, '0', '2024-11-12', '19:24:39', 6),
+(22, '0', '2024-11-12', '19:26:48', 6),
+(23, '3', '2024-11-12', '19:26:54', 6),
+(24, '3', '2024-11-12', '19:27:13', 6),
+(25, '0', '2024-11-12', '20:51:12', 6);
 
 -- --------------------------------------------------------
 
@@ -163,7 +178,7 @@ INSERT INTO `users` (`useId`, `surName`, `name`, `email`, `password`) VALUES
 --
 
 CREATE TABLE `user_subject` (
-  `userId` int(11) NOT NULL,
+  `useId` int(11) NOT NULL,
   `subId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -171,7 +186,7 @@ CREATE TABLE `user_subject` (
 -- Dumping data for table `user_subject`
 --
 
-INSERT INTO `user_subject` (`userId`, `subId`) VALUES
+INSERT INTO `user_subject` (`useId`, `subId`) VALUES
 (6, 1),
 (6, 2);
 
@@ -216,7 +231,7 @@ ALTER TABLE `users`
 -- Indexes for table `user_subject`
 --
 ALTER TABLE `user_subject`
-  ADD KEY `userId` (`userId`),
+  ADD KEY `userId` (`useId`),
   ADD KEY `subId` (`subId`);
 
 --
@@ -239,7 +254,7 @@ ALTER TABLE `question`
 -- AUTO_INCREMENT for table `result`
 --
 ALTER TABLE `result`
-  MODIFY `resId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `resId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `subject`
@@ -279,7 +294,7 @@ ALTER TABLE `result`
 -- Constraints for table `user_subject`
 --
 ALTER TABLE `user_subject`
-  ADD CONSTRAINT `user_subject_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`useId`),
+  ADD CONSTRAINT `user_subject_ibfk_1` FOREIGN KEY (`useId`) REFERENCES `users` (`useId`),
   ADD CONSTRAINT `user_subject_ibfk_2` FOREIGN KEY (`subId`) REFERENCES `subject` (`subId`);
 COMMIT;
 
