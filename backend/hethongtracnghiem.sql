@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 15, 2024 at 12:55 PM
+-- Generation Time: Nov 17, 2024 at 04:25 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -31,7 +31,8 @@ CREATE TABLE `answeroption` (
   `option_id` int(11) NOT NULL,
   `question_id` int(11) NOT NULL,
   `option_text` text NOT NULL,
-  `is_correct` tinyint(1) DEFAULT 0
+  `is_correct` tinyint(1) DEFAULT 0,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -81,8 +82,16 @@ CREATE TABLE `question` (
   `question_id` int(11) NOT NULL,
   `quiz_id` int(11) NOT NULL,
   `question_text` text NOT NULL,
-  `difficulty` enum('easy','medium','hard') DEFAULT NULL
+  `difficulty` enum('easy','medium','hard') DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `question`
+--
+
+INSERT INTO `question` (`question_id`, `quiz_id`, `question_text`, `difficulty`, `created_at`) VALUES
+(1, 1, 'Câu hỏi ví dụ: 2 + 2 = ?', 'easy', '2024-11-17 19:31:03');
 
 -- --------------------------------------------------------
 
@@ -114,12 +123,19 @@ CREATE TABLE `questiontag` (
 
 CREATE TABLE `quiz` (
   `quiz_id` int(11) NOT NULL,
-  `subject_id` int(11) NOT NULL,
+  `subject_id` int(11) DEFAULT NULL,
   `title` varchar(100) NOT NULL,
   `total_questions` int(11) DEFAULT NULL,
   `duration_minutes` int(11) DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `quiz`
+--
+
+INSERT INTO `quiz` (`quiz_id`, `subject_id`, `title`, `total_questions`, `duration_minutes`, `created_at`) VALUES
+(1, 1, 'Quiz 1', 10, 30, '2024-11-17 19:22:44');
 
 -- --------------------------------------------------------
 
@@ -187,6 +203,31 @@ CREATE TABLE `subject` (
   `description` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `subject`
+--
+
+INSERT INTO `subject` (`subject_id`, `name`, `logo`, `description`) VALUES
+(1, 'Lập trình Android nâng cao', 'ADAV.jpg', NULL),
+(2, 'Lập trình Android cơ bản', 'ADBS.jpg', NULL),
+(7, 'Kiểm thử và triển khai ứng dụng Android', 'ADTE.jpg', NULL),
+(8, 'Thiết kế giao diện trên Android', 'ADUI.jpg', NULL),
+(9, 'Lập trình ASP.NET', 'ASNE.png', NULL),
+(10, 'Điện toán đám mây', 'CLCO.jpg', NULL),
+(11, 'SQL Server', 'DBAV.png', NULL),
+(12, 'Cơ sở dữ liệu', 'DBBS.png', NULL),
+(13, 'Lập trình game 2D', 'GAME.png', NULL),
+(14, 'HTML5 và CSS3', 'HTCS.jpg', NULL),
+(15, 'Internet Marketing', 'INMA.jpg', NULL),
+(16, 'Lập trình Java nâng cao', 'JAAV.png', NULL),
+(17, 'Lập trình hướng đối tượng với Java', 'JABS.png', NULL),
+(18, 'Lập trình JavaScript', 'JSPR.png', NULL),
+(19, 'Thiết kế layout', 'LAYO.jpg', NULL),
+(20, 'Thiết kế web cho điện thoại di động', 'MOWE.png', NULL),
+(21, 'Lập trình PHP', 'PHPP.png', NULL),
+(22, 'Quản lý dự án với Agile', 'PMAG.jpg', NULL),
+(23, 'Lập trình VB.NET', 'VBPR.png', NULL),
+(24, 'Xây dựng trang web', 'WEBU.jpg', NULL);
 
 -- --------------------------------------------------------
 
@@ -221,7 +262,9 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`user_id`, `surName`, `name`, `password`, `email`, `role`, `created_at`) VALUES
 (1, 'le minh ', 'nghia', '$2b$10$MvyBfZ6iDfuZygWubd5cae5vUy3rxeqh8yzxuhCBS4pjPdT5HFFbO', 'nghia@123', 'student', '2024-11-15 10:48:02'),
-(2, 'a', 'b', '$2b$10$HgqgXE6f/sZV3FDzc/YoD.yeYKPPm75IxhrzcCjeSHcmbCcQqCyze', 'a@1', 'student', '2024-11-15 10:51:17');
+(2, 'a', 'b', '$2b$10$HgqgXE6f/sZV3FDzc/YoD.yeYKPPm75IxhrzcCjeSHcmbCcQqCyze', 'a@1', 'student', '2024-11-15 10:51:17'),
+(3, 'Nguyen', 'Anh Tuan', '$2b$10$EeSa0kgr2T81YbqQ25KjtO6WMjLbOujJV.QvrLICQxFjzJEvFtnpu', 'tuan@example.com', 'student', '2024-11-17 19:45:14'),
+(4, 'le', 'minh nghia', '$2b$10$M5uLB4LMOZ6EDHL0OKGWNeMHDQXSW8nbWHxVyX1IfWE8tHh.mGKRm', 'nghia@1234', 'student', '2024-11-17 21:16:38');
 
 -- --------------------------------------------------------
 
@@ -423,13 +466,13 @@ ALTER TABLE `permission`
 -- AUTO_INCREMENT for table `question`
 --
 ALTER TABLE `question`
-  MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `quiz`
 --
 ALTER TABLE `quiz`
-  MODIFY `quiz_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `quiz_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `quizsetting`
@@ -465,7 +508,7 @@ ALTER TABLE `tag`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `useranswer`
@@ -499,21 +542,13 @@ ALTER TABLE `feedback`
 -- Constraints for table `question`
 --
 ALTER TABLE `question`
-  ADD CONSTRAINT `FK_question_quiz` FOREIGN KEY (`quiz_id`) REFERENCES `quiz` (`quiz_id`);
+  ADD CONSTRAINT `FK_question_quiz` FOREIGN KEY (`quiz_id`) REFERENCES `quiz` (`quiz_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `questioncategory`
 --
 ALTER TABLE `questioncategory`
-  ADD CONSTRAINT `FK_questioncategory_category` FOREIGN KEY (`category_id`) REFERENCES `category` (`category_id`),
-  ADD CONSTRAINT `FK_questioncategory_question` FOREIGN KEY (`question_id`) REFERENCES `question` (`question_id`);
-
---
--- Constraints for table `questiontag`
---
-ALTER TABLE `questiontag`
-  ADD CONSTRAINT `FK_questiontag_question` FOREIGN KEY (`question_id`) REFERENCES `question` (`question_id`),
-  ADD CONSTRAINT `FK_questiontag_tag` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`tag_id`);
+  ADD CONSTRAINT `FK_questioncategory_category` FOREIGN KEY (`category_id`) REFERENCES `category` (`category_id`);
 
 --
 -- Constraints for table `quiz`
@@ -567,113 +602,3 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-đây là database của tôi 
-CREATE TABLE `user` (
-  `user_id` int(11) NOT NULL,
-  `surName` varchar(50) NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `password` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `role` enum('student','admin','teacher') NOT NULL,
-  `created_at` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-CREATE TABLE `quiz` (
-  `quiz_id` int(11) NOT NULL,
-  `subject_id` int(11) NOT NULL,
-  `title` varchar(100) NOT NULL,
-  `total_questions` int(11) DEFAULT NULL,
-  `duration_minutes` int(11) DEFAULT NULL,
-  `created_at` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB D
-
-CREATE TABLE `question` (
-  `question_id` int(11) NOT NULL,
-  `quiz_id` int(11) NOT NULL,
-  `question_text` text NOT NULL,
-  `difficulty` enum('easy','medium','hard') DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-CREATE TABLE `answeroption` (
-  `option_id` int(11) NOT NULL,
-  `question_id` int(11) NOT NULL,
-  `option_text` text NOT NULL,
-  `is_correct` tinyint(1) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-CREATE TABLE `useranswer` (
-  `user_answer_id` int(11) NOT NULL,
-  `user_quiz_id` int(11) NOT NULL,
-  `question_id` int(11) NOT NULL,
-  `selected_option_id` int(11) NOT NULL,
-  `is_correct` tinyint(1) DEFAULT NULL
-) ENGI
-
-CREATE TABLE `userquiz` (
-  `user_quiz_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `quiz_id` int(11) NOT NULL,
-  `start_time` datetime NOT NULL DEFAULT current_timestamp(),
-  `end_time` datetime DEFAULT NULL,
-  `score` int(11) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-ALTER TABLE `answeroption`
-  ADD CONSTRAINT `FK_answeroption_question` FOREIGN KEY (`question_id`) REFERENCES `question` (`question_id`);
-ALTER TABLE `question`
-  ADD CONSTRAINT `FK_question_quiz` FOREIGN KEY (`quiz_id`) REFERENCES `quiz` (`quiz_id`);
-ALTER TABLE `quiz`
-  ADD CONSTRAINT `FK_quiz_subject` FOREIGN KEY (`subject_id`) REFERENCES `subject` (`subject_id`);
-ALTER TABLE `useranswer`
-  ADD CONSTRAINT `FK_useranswer_answeroption` FOREIGN KEY (`selected_option_id`) REFERENCES `answeroption` (`option_id`),
-  ADD CONSTRAINT `FK_useranswer_question` FOREIGN KEY (`question_id`) REFERENCES `question` (`question_id`),
-  ADD CONSTRAINT `FK_useranswer_userquiz` FOREIGN KEY (`user_quiz_id`) REFERENCES `userquiz` (`user_quiz_id`);
-
---
--- Constraints for table `userquiz`
---
-ALTER TABLE `userquiz`
-  ADD CONSTRAINT `FK_userquiz_quiz` FOREIGN KEY (`quiz_id`) REFERENCES `quiz` (`quiz_id`),
-  ADD CONSTRAINT `FK_userquiz_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
-
- 
-
-
