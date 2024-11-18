@@ -12,7 +12,7 @@ db.query(sql, (err, data) => {
   return res.json(data);
 });
 };
-làcái 
+
 
 export const addQuiz = (req, res) => {
   const checksql = "SELECT * FROM subject WHERE subject_id = ?";
@@ -31,3 +31,15 @@ export const addQuiz = (req, res) => {
   })
 
 };
+
+export const subject = (req,res) =>{
+  const sql = "SELECT * FROM subject";
+  db.query(sql, (err, data) => {
+    if (err) {
+      return res.json({ Error: "error" });
+    }
+    return res.json(data);
+  });
+}
+
+
