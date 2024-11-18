@@ -32,6 +32,7 @@ const AccountDetails = () => {
       [id]: value,
     })
   }
+	
 
   useEffect(() => {
     Axios.get('http://localhost:2000/user')
@@ -50,6 +51,7 @@ const AccountDetails = () => {
       })
       .catch((err) => console.log(err))
   }, [])
+
 
   if (!user) {
     return <div>loading...</div>

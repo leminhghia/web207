@@ -1,9 +1,9 @@
 import { Routes, Route } from 'react-router-dom'
 // import Home from "./page/Home"
 // import Quiz from "./page/Quiz"
-import Quiz from './components/Quiz/Quiz';
-import Result from './components/Quiz/Result';
-import Home from './components/Quiz/Home';
+import Quiz from './components/Quiz/Quiz'
+import Result from './components/Quiz/Result'
+import Home from './components/Quiz/Home'
 import Navbar from './components/Navbar'
 import Footer from './components/footer'
 import Login from './page/Login'
@@ -13,6 +13,8 @@ import IntroductionPage from './page/IntroductionPage'
 import FeedbackPage from './page/FeedbackPage'
 import FAQPage from './page/FAQPage'
 import ContactPage from './page/ContactPage'
+import QuizPages from './page/QuizPages'
+import QuizzAdd from './page/QuizzAdd'
 function App() {
   return (
     <div>
@@ -31,6 +33,8 @@ function App() {
           <Route path="/gop-y" element={<FeedbackPage />} />
           <Route path="/hoi-dap" element={<FAQPage />} />
           <Route path="/lien-he" element={<ContactPage />} />
+          <Route path="/QuizPages" element={<QuizPages />} />
+          <Route path="/QuizAdd" element={<QuizzAdd />} />
         </Routes>
         <Footer />
       </div>
