@@ -19,9 +19,11 @@ import QuizzAdd from './page/QuizzAdd'
 import Login from './components/Quiz/Login'
 import Register from './components/Quiz/Register'
 import CauHoi from './page/cauhoi'
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import QuizDashboard from './components/Quiz/Dashboard'
+import ExamInfo from './page/ExamQuizz/ExamInfo'
+import ExamQuizz from './page/ExamQuizz/ExamQuizz'
 // import Header from './components/Header'
 // import BaoMat from './page/account/settingaccount/BaoMat'
 // import MainAccountDetails from './page/account/settingaccount/mainAccountDetails'
@@ -29,7 +31,7 @@ function App() {
   return (
     <div>
       <div className="">
-        <ToastContainer/>
+        <ToastContainer />
         <Navbar />
         {/* <Navbar /> */}
         <Routes>
@@ -47,9 +49,10 @@ function App() {
           <Route path="/lien-he" element={<ContactPage />} />
           <Route path="/quiz" element={<QuizPages />} />
           <Route path="/quiz/:id" element={<CauHoi />} />
-
+          <Route path="/LamBai" element={<QuizDashboard />} />
           <Route path="/QuizAdd" element={<QuizzAdd />} />
-          
+          <Route path="/ExamInfo" element={<ExamInfo />} />
+          <Route path="/ExamQuizz" element={<ExamQuizz />} />
           {/* <Route path="/mainAccountDetails" element={<MainAccountDetails />} /> */}
         </Routes>
         <Footer />
