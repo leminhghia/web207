@@ -196,7 +196,25 @@
         "Id": 103826,
         "Text": "content://safari/bookmarks"
     }]
-}, {
+},
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{
     "Id": 25037,
     "Text": "Để lưu trữ SQLite trên thẻ nhớ, phải cung cấp quyền gì trong Android Manifest?",
     "Marks": 1,
@@ -376,7 +394,30 @@
         "Id": 103866,
         "Text": "Sai"
     }]
-}, {
+},
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{
     "Id": 25047,
     "Text": "Để xóa toàn bộ dữ liệu trong SharePreferences, sử dụng phương thức gì?",
     "Marks": 1,
@@ -520,7 +561,155 @@
         "Id": 103894,
         "Text": "TRUE"
     }]
-}, {
+},
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{
     "Id": 25057,
     "Text": "Để khởi tạo Activity và lấy kết quả trả về, phải sử dụng phương thức nào?",
     "Marks": 1,

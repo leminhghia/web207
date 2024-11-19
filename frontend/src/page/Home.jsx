@@ -31,7 +31,7 @@ const Home = () => {
     useEffect(() => {
         axios
           .get(`http://localhost:2000/user`)
-          .then((res) => setUser(res.data.useId))
+          .then((res) => setUser(res.data.user_id))
     
           .catch((err) => console.log(err));
     

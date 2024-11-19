@@ -5,7 +5,7 @@ import axios from 'axios';
 import { QuizContext } from '../context/QuizContext';
 const Login = () => {
 
-    const {setReload} = useContext(QuizContext)
+    const {setReload,url} = useContext(QuizContext)
     const [values, setValues] = useState({
         email: '',
         password: ''
@@ -14,7 +14,7 @@ const Login = () => {
     axios.defaults.withCredentials = true
     const onSubmitHandler = async (e) => {
         e.preventDefault();
-        axios.post('http://localhost:2000/login', values)
+        axios.post(`${url}/auth/login`, values)
             .then(res => {
                 if (res.data.Status === "success") {
                     setReload(false)

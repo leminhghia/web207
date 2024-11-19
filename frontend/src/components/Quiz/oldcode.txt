@@ -1,0 +1,157 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import ProductItem from '../ProductItem';
+import { Link } from 'react-router-dom';
+
+function SelectSubjects() {
+    const [subjects, setSubjects] = useState([]);
+    const [selectSub, setSelectSub] = useState([]);
+    const [userSubjects, setUserSubjects] = useState([]); // To store the subjects the user has already registered for
+
+
+    useEffect(() => {
+        axios.get('http://localhost:2000/subjects')
+            .then(res => setSubjects(res.data))
+            .catch(err => console.log(err));
+    }, []);
+
+    useEffect(() => {
+        axios.get('http://localhost:2000/checkSubRes')
+            .then(res => setUserSubjects(res.data)) // Store the data in state
+            .catch(err => console.log(err));
+    }, []);
+
+    const isSubjectRegistered = (subId) => {
+        return userSubjects.some(subject => subject.subId === subId);
+    };
+
+    const confirmAndSelect = (subId) => {
+        const confirmation = window.confirm("Bạn muốn đăng ký môn học này?");
+        if (confirmation) {
+            axios.post('http://localhost:2000/registerSubject', { subId })
+                .then(res => {
+                   res.data;
+                    setUserSubjects(prev => [...prev, { subId }]);
+                    setSelectSub(subId); 
+                })
+                .catch(err => console.log(err));
+        } else {
+            console.log("Đăng ký bị hủy.");
+        }
+    };
+console.log(userSubjects);
+
+    return (
+        <div>
+            <h2 className='my-4'>Select Subjects for Quiz</h2>
+           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 '>
+
+           {
+         userSubjects ?   
+         subjects.map((item, index) => (
+              <div key={index}>
+                  {isSubjectRegistered(item.subId) ? (
+                      <Link to={`/quiz/${item.subId}`} >
+                          <ProductItem Id={item.subId} Name={item.name} />
+                      </Link>
+                  ) :
+                  
+                  (
+                      <div onClick={() => confirmAndSelect(item.subId)} >
+                          <ProductItem Id={item.subId} Name={item.name} />
+                      </div>
+                  )
+                  
+                  }
+              </div>
+          )):
+          <div> </div>
+            
+            
+            }
+
+           </div>
+        </div>
+    );
+}
+
+export default SelectSubjects;
+
+
+
+import  { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
+
+function Ba() {
+    const { subId } = useParams();
+    const [questions, setQuestions] = useState([]);
+    const [answers, setAnswers] = useState({});
+    const [score, setScore] = useState(null);
+
+    useEffect(() => {
+        axios.get(`http://localhost:2000/quiz/${subId}`, { withCredentials: true })
+            .then(res => setQuestions(res.data))
+            .catch(err => console.log(err));
+    }, [subId]);
+r
+    const handleAnswerChange = (queId, ansId) => {
+        setAnswers(prev => ({ ...prev, [queId]: ansId }));
+    };
+
+    const handleSubmit = () => {
+        axios.post("http://localhost:2000/quiz/submit", { answers, subId }, { withCredentials: true })
+            .then(res => {
+                setScore(res.data.score);
+                alert(res.data.message);  
+            })
+            .catch(err => console.log(err));
+    };
+    
+    return (
+        <div>
+            <h2>Quiz</h2>
+            {questions.map(q => (
+                <div key={q.queId}>
+                    <p>{q.question}</p>
+                    {q.answers.map(a => (
+                        <label key={a.ansId}>
+                            <input
+                                type="radio"
+                                name={`question-${q.queId}`}
+                                onChange={() => handleAnswerChange(q.queId, a.ansId)}
+                            />
+                            {a.answer}
+                        </label>
+                    ))}
+                </div>
+            ))}
+            <button onClick={handleSubmit}>Submit Quiz</button>
+            {score !== null && <p>Your Score: {score}</p>}
+        </div>
+    );
+}
+
+export default Ba;
+
+
+import { useEffect, useState } from 'react'
+import axios from 'axios';
+const Result = () => {
+  const [data, setData] = useState([])
+  useEffect(() => {
+    axios.get('http://localhost:2000/result')
+      .then(res => setData(res.data))
+      .catch(err => console.log(err));
+  }, [])
+  console.log(data);
+
+  return (
+    <div>
+
+    </div>
+  )
+}a
+
+export default Result
+

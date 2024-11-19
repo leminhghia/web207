@@ -1,7 +1,11 @@
 import db from '../config/db.js'
 
 export const getQuestion = (req,res)=>{
-
+ const sql = `SELECT * FROM question`
+ db.query(sql,(err,data)=>{
+    if (err) return res.json({Error:"error"})
+        return res.json(data)
+ })
 }
 
 
@@ -18,7 +22,7 @@ export const addQuestion = (req,res)=>{
 
         db.query(sql,[quiz_id, question_text, difficulty],(err,data)=>{
             if (err) return res.json({ Error: "Thêm câu hỏi thất bại" });
-            res.json({ message: "thêm thành công thành công" });
+            res.json({ message: "thêm thành công" });
         })
     })
 

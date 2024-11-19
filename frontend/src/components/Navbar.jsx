@@ -1,24 +1,24 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { assets } from '../assets/assets'
 import { Link, NavLink } from 'react-router-dom'
 import axios from 'axios'
+import { QuizContext } from '../context/QuizContext'
 const Navbar = () => {
+  const { url } = useContext(QuizContext)
   const [login, setLogin] = useState(false)
   const [user, setUser] = useState([])
   axios.defaults.withCredentials = true
 
   useEffect(() => {
     axios
-      .get(`http://localhost:2000/user`)
+      .get(`${url}/auth/list`)
       .then((res) => setUser(res.data))
 
       .catch((err) => console.log(err));
-
-
   }, []);
 
   const handleDelete = () => {
-    axios.get('http://localhost:2000/logout')
+    axios.get(`${url}/auth/logout`)
       .then(res => { location.reload(true) })
       .catch(err => console.log(err)
       )
@@ -27,6 +27,12 @@ const Navbar = () => {
 
   return (
     <div >
+
+<div className={` ${user.role !== 'student' ? 'hidden' : 'flex'}`}>
+</div>
+
+{user.role !== 'student' ?<div>hien</div> : <div> an</div>}
+
       <img src={assets.banner} className='w-full' alt="" />
       <div className='flex justify-between items-center p-3 border border-gray-300 bg-gray-100'>
         <ul className='flex gap-x-6'>
@@ -49,9 +55,9 @@ const Navbar = () => {
         <div onClick={() => setLogin(!login)} className={`flex items-center justify-between cursor-pointer  relative transition-all ${login ? 'text-blue-500' : ''}`}>
           <p>Tài Khoản</p>
           {login ? <assets.FaAngleUp /> : <assets.FaAngleDown />}
-          <div className={`absolute text-black top-[35px] right-[-14px] shadow-md bottom-0 overflow-hidden bg-white h-[180px]  ${login ? 'w-[170%] border-2' : 'w-0 border-0'}`}>
+          <div className={`absolute text-black top-[35px] right-[-14px] shadow-md bottom-0 overflow-hidden bg-white h-[200px]  ${login ? 'w-[170%] border-2' : 'w-0 border-0'}`}>
             <div className='flex flex-col  gap-1'>
-              {user.useId ? <div>
+              {user.user_id ? <div>
                 <p className='text-center'> {user.name}</p>
                 <Link className='hover:bg-gray-300 transition-all w-full text-center' to='/account'><p>Thông tin tài khoản</p></Link>
               </div> :
@@ -70,7 +76,7 @@ const Navbar = () => {
         </div>
       </div>
 
-    </div>
+    </div >
   )
 }
 

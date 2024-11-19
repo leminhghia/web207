@@ -1,17 +1,20 @@
-import { useState } from 'react'
+import { useState,useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios'
+import { QuizContext } from '../context/QuizContext';
 const Register = () => {
+    const {url} = useContext(QuizContext)
     const [values, setValues] = useState({
-        surName:'',
+        surName: '',
         name: '',
         email: '',
         password: ''
-    })
-    const navigate = useNavigate()
+    });
+    const navigate = useNavigate();
+
     const onSubmitHandler = async (e) => {
         e.preventDefault();
-        axios.post('http://localhost:2000/register', values)
+        axios.post('url/auth/register', values)
             .then(res => {
                 if (res.data.Status === "success") {
                     navigate('/login')
@@ -21,7 +24,6 @@ const Register = () => {
             })
             .catch(err => console.log(err))
     }
-console.log(values);
 
     return (
         <form onSubmit={onSubmitHandler} className='flex flex-col items-center w-[90%] sm:max-w-96 m-auto mt-14 gap-4 text-gray-800'>
@@ -37,13 +39,11 @@ console.log(values);
                 <p className='cursor-pointer'>Quên mật khẩu ?</p>
                 <Link to='/login' className='cursor-pointer'>Đăng nhập</Link>
             </div>
-            <button className='bg-black text-white font0light px-8 py-2 mt-4'>
-
+            <button className='bg-black text-white font-light px-8 py-2 mt-4'>
                 Đăng kí
-
             </button>
         </form>
-    )
-}
+    );
+};
 
-export default Register
+export default Register;
