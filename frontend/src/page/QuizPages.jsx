@@ -113,7 +113,7 @@ const EduQuiz = () => {
               <div className="col-span-4 text-center">Đang tải đề thi...</div>
             ) : (
               data.map((item,index) => (
-                <Link to={`${item.id}`}
+                <Link to={`${item.quiz_id}`}
                   key={index}
                   className="p-4 bg-white rounded-lg shadow hover:shadow-lg transition flex flex-col justify-between"
                 >
