@@ -21,12 +21,11 @@ const Navbar = () => {
   const handleDelete = () => {
     axios
       .get(`http://localhost:2000/api/auth/logout`)
-      .then((res) => {
+      .then(() => {
         location.reload(true)
       })
       .catch((err) => console.log(err))
   }
-console.log(user.role);
 
   return (
     <div>
