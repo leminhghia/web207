@@ -4,14 +4,15 @@ export const getQuiz = (req, res) => {
   const sql = `
   SELECT q.quiz_id, q.title, q.total_questions, q.duration_minutes, q.created_at, s.name AS subject_name, s.subject_id AS subject_id
   FROM quiz q JOIN subject s ON q.subject_id = s.subject_id
-`
-  db.query(sql, (err, data) => {
-    if (err) {
-      return res.json({ Error: 'Không thể lấy dữ liệu quiz' })
-    }
-    return res.json(data)
-  })
-}
+`;
+db.query(sql, (err, data) => {
+  if (err) {
+    return res.json({ Error: "Không thể lấy dữ liệu quiz" });
+  }
+  return res.json(data);
+});
+};
+
 
 export const addQuiz = (req, res) => {
   const checksql = 'SELECT * FROM subject WHERE subject_id = ?'
@@ -24,12 +25,21 @@ export const addQuiz = (req, res) => {
   VALUES  (?, ?, ?, ?, NOW())
   `
 
-  db.query(
-    sql,
-    [subject_id, title, total_questions, duration_minutes],
-    (err, data) => {
-      if (err) return res.json({ Error: 'Thêm quiz thất bại' })
-      return res.json({ message: 'Thêm quiz thành công' })
+  db.query(sql,[subject_id, title, total_questions, duration_minutes ],(err,data)=>{
+    if (err) return res.json({ Error: "Thêm quiz thất bại" });
+    return res.json({message:'Thêm quiz thành công'})
+  })
+
+};
+
+export const subject = (req,res) =>{
+  const sql = "SELECT * FROM subject";
+  db.query(sql, (err, data) => {
+    if (err) {
+      return res.json({ Error: "error" });
     }
-  )
+    return res.json(data);
+  });
 }
+
+

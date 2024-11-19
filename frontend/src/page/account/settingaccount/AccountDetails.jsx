@@ -13,6 +13,7 @@ const AccountDetails = () => {
     email: '',
     lop: '',
   })
+  const [isEditing, setIsEditing] = useState(false) // Trạng thái cho phép chỉnh sửa
 
   const handleImageChange = (e) => {
     const file = e.target.files[0]
@@ -32,9 +33,22 @@ const AccountDetails = () => {
       [id]: value,
     })
   }
-	
+
+  const handleSave = () => {
+    Axios.put('http://localhost:2000/user', formData)
+      .then((res) => {
+        console.log('User updated:', res.data)
+        setIsModalOpen(false) // Đóng modal cập nhật
+        setIsEditing(false) // Tắt chế độ chỉnh sửa
+        setUser(res.data) // Cập nhật dữ liệu người dùng từ phản hồi
+      })
+      .catch((err) => {
+        console.error('Error updating user:', err)
+      })
+  }
 
   useEffect(() => {
+    // Lấy dữ liệu người dùng từ server khi component mount
     Axios.get('http://localhost:2000/user')
       .then((res) => {
         setUser(res.data)
@@ -50,8 +64,20 @@ const AccountDetails = () => {
         }
       })
       .catch((err) => console.log(err))
-  }, [])
 
+    if (isModalOpen) {
+      // Ngừng cuộn trang khi modal hiển thị
+      document.body.style.overflow = 'hidden'
+    } else {
+      // Cho phép cuộn lại khi modal đóng
+      document.body.style.overflow = 'auto'
+    }
+
+    // Dọn dẹp khi component unmount
+    return () => {
+      document.body.style.overflow = 'auto'
+    }
+  }, [isModalOpen])
 
   if (!user) {
     return <div>loading...</div>
@@ -81,11 +107,16 @@ const AccountDetails = () => {
               <FaCamera className="text-white" />
             </label>
           </div>
-          <h1 className="text-2xl font-bold mb-4">{user.surName}</h1>
+          <h1 className="text-2xl font-bold mb-4">
+            {user.surName} {user.name}
+          </h1>
         </div>
         <button
           className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800"
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => {
+            setIsModalOpen(true)
+            setIsEditing(true) // Kích hoạt chế độ chỉnh sửa
+          }}
         >
           <FaEdit />
           Edit Profile
@@ -93,6 +124,7 @@ const AccountDetails = () => {
       </div>
 
       <div className="grid grid-cols-2 gap-4">
+        {/* Các trường nhập liệu */}
         <div>
           <label
             htmlFor="name"
@@ -105,7 +137,7 @@ const AccountDetails = () => {
             id="name"
             value={formData.name}
             onChange={handleChange}
-            disabled
+            disabled={!isEditing} // Chỉ cho phép chỉnh sửa khi isEditing là true
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
           />
         </div>
@@ -121,7 +153,7 @@ const AccountDetails = () => {
             id="surName"
             value={formData.surName}
             onChange={handleChange}
-            disabled
+            disabled={!isEditing} // Chỉ cho phép chỉnh sửa khi isEditing là true
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
           />
         </div>
@@ -137,7 +169,7 @@ const AccountDetails = () => {
             id="phoneNumber"
             value={formData.phoneNumber}
             onChange={handleChange}
-            disabled
+            disabled={!isEditing} // Chỉ cho phép chỉnh sửa khi isEditing là true
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
           />
         </div>
@@ -153,7 +185,7 @@ const AccountDetails = () => {
             id="email"
             value={formData.email}
             onChange={handleChange}
-            disabled
+            disabled={!isEditing} // Chỉ cho phép chỉnh sửa khi isEditing là true
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
           />
         </div>
@@ -169,7 +201,7 @@ const AccountDetails = () => {
             id="lop"
             value={formData.lop}
             onChange={handleChange}
-            disabled
+            disabled={!isEditing} // Chỉ cho phép chỉnh sửa khi isEditing là true
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
           />
         </div>
@@ -177,8 +209,8 @@ const AccountDetails = () => {
 
       {/* Edit Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75">
-          <div className="bg-white p-8 rounded-lg w-96">
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75 z-50">
+          <div className="bg-white p-8 rounded-lg w-96 max-h-[90vh] overflow-auto">
             <h2 className="text-xl font-semibold mb-4">Edit Profile</h2>
             {Object.keys(formData).map((field) => (
               <div className="mb-4" key={field}>
@@ -208,7 +240,7 @@ const AccountDetails = () => {
               </button>
               <button
                 className="px-4 py-2 bg-blue-500 text-white rounded-md"
-                onClick={() => setIsModalOpen(false)}
+                onClick={handleSave}
               >
                 Save
               </button>

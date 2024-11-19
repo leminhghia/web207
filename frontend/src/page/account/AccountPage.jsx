@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Sidebar from './Sidebar'
-import AccountDetails from './AccountDetails'
+// import AccountDetails from './settingaccount/AccountDetails'
+import MainAccountDetails from './settingaccount/mainAccountDetails'
 import TestHistory from './TestHistory'
 import Settings from './Settings'
 import { FaBars } from 'react-icons/fa'
@@ -8,25 +9,8 @@ import ExamQuestion from './ExamQuestion'
 import KhoaHoc from './KhoaHoc'
 
 export default function AccountPage() {
-  const [section, setSection] = useState('account')
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-
-  const renderSection = () => {
-    switch (section) {
-      case 'account':
-        return <AccountDetails />
-      case 'tests':
-        return <TestHistory />
-      case 'settings':
-        return <Settings />
-      case 'examquestion':
-        return <ExamQuestion />
-      case 'khoahoc':
-        return <KhoaHoc />
-      default:
-        return <AccountDetails />
-    }
-  }
+  const [activeTab, setActiveTab] = useState('account') // Quản lý tab đang hiển thị
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false) // Quản lý trạng thái Sidebar
 
   return (
     <div className="flex h-auto bg-gray-100">
@@ -46,14 +30,20 @@ export default function AccountPage() {
       >
         <Sidebar
           onSelectSection={(section) => {
-            setSection(section)
-            setIsSidebarOpen(false)
+            setActiveTab(section) // Đặt tab đang chọn
+            setIsSidebarOpen(false) // Đóng Sidebar sau khi chọn tab
           }}
         />
       </div>
 
       {/* Nội dung chính */}
-      <div className="flex-1 p-8">{renderSection()}</div>
+      <div className="flex-1 p-8">
+        {activeTab === 'account' && <MainAccountDetails />}
+        {activeTab === 'tests' && <TestHistory />}
+        {activeTab === 'settings' && <Settings />}
+        {activeTab === 'examquestion' && <ExamQuestion />}
+        {activeTab === 'khoahoc' && <KhoaHoc />}
+      </div>
 
       {isSidebarOpen && (
         <div
