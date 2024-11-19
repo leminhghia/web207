@@ -1,6 +1,18 @@
  import db from "../config/db.js";
-export const submitQuiz = (req,res) =>{
-    
+export const addUserQuiz = (req,res) =>{
+    const { user_id} = req.user
+    const { quiz_id } = req.body;
+  
+    const checkQuizSql = "SELECT * FROM quiz WHERE quiz_id = ?";
+    db.query(checkQuizSql, [quiz_id], (err, data) => {
+      if (err) return res.json({ Error: "Không tìm thấy quiz" });
+  
+      const sql = "INSERT INTO userquiz (user_id, quiz_id, start_time , created_at) VALUES (?, ?, NOW(),NOW())";
+      db.query(sql, [user_id, quiz_id], (err, result) => {
+        if (err) return res.json({ Error: "Bắt đầu quiz thất bại" });
+        res.json({ message: "Quiz đã bắt đầu", user_quiz_id: result.insertId });
+      });
+    });
 }
 
 
@@ -14,20 +26,7 @@ export const submitQuiz = (req,res) =>{
 
 
 
-// export const startQuiz = (req, res) => {
-//     const { user_id, quiz_id } = req.body;
-  
-//     const checkQuizSql = "SELECT * FROM quiz WHERE quiz_id = ?";
-//     db.query(checkQuizSql, [quiz_id], (err, data) => {
-//       if (err) return res.json({ Error: "Không tìm thấy quiz" });
-  
-//       const sql = "INSERT INTO userquiz (user_id, quiz_id, start_time) VALUES (?, ?, NOW())";
-//       db.query(sql, [user_id, quiz_id], (err, result) => {
-//         if (err) return res.json({ Error: "Bắt đầu quiz thất bại" });
-//         res.json({ message: "Quiz đã bắt đầu", user_quiz_id: result.insertId });
-//       });
-//     });
-//   };
+
   
 
 // export const submitQuiz = (req, res) => {

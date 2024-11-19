@@ -1,9 +1,9 @@
 import express from 'express'
-import { submitQuiz } from '../controllers/userQuizController.js'
+import { addUserQuiz } from '../controllers/userQuizController.js'
 import { verifyUser } from '../middleware/authMiddleware.js'
 
 const router = express.Router()
 
-router.post('/add',verifyUser,submitQuiz)
+router.post('/add',verifyUser,addUserQuiz)
 
 export default router;
