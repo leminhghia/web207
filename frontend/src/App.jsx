@@ -45,7 +45,7 @@ function App() {
           <Route path="/gop-y" element={<FeedbackPage />} />
           <Route path="/hoi-dap" element={<FAQPage />} />
           <Route path="/lien-he" element={<ContactPage />} />
-          <Route path="/QuizPages" element={<QuizPages />} />
+          <Route path="/quiz" element={<QuizPages />} />
           <Route path="/QuizPages/:id" element={<CauHoi />} />
 
           <Route path="/QuizAdd" element={<QuizzAdd />} />

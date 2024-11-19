@@ -112,9 +112,9 @@ const EduQuiz = () => {
             {loading ? (
               <div className="col-span-4 text-center">Đang tải đề thi...</div>
             ) : (
-              data.map((item) => (
+              data.map((item,index) => (
                 <Link to={`${item.id}`}
-                  key={item.id}
+                  key={index}
                   className="p-4 bg-white rounded-lg shadow hover:shadow-lg transition flex flex-col justify-between"
                 >
                   <div className="flex flex-col space-y-2">
