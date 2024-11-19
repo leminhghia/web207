@@ -1,4 +1,4 @@
-import db from "../config/db.js";
+import db from '../config/db.js'
 
 export const getQuiz = (req, res) => {
   const sql = `
@@ -15,12 +15,12 @@ db.query(sql, (err, data) => {
 
 
 export const addQuiz = (req, res) => {
-  const checksql = "SELECT * FROM subject WHERE subject_id = ?";
+  const checksql = 'SELECT * FROM subject WHERE subject_id = ?'
 
-  const { subject_id, title, total_questions, duration_minutes } = req.body;
+  const { subject_id, title, total_questions, duration_minutes } = req.body
   db.query(checksql, [subject_id], (err, data) => {
-    if (err) return res.json({ Error: "ko co subject id" });
-  });
+    if (err) return res.json({ Error: 'ko co subject id' })
+  })
   const sql = `INSERT INTO quiz (subject_id, title, total_questions, duration_minutes,created_at)
   VALUES  (?, ?, ?, ?, NOW())
   `

@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import { createContext, useState } from "react";
-const url = 'http://localhost:2000/api'
 import { subjects, ADAV, ADTE, ADBS, ADUI, ASNE, CLCO, DBAV, DBBS, GAME, HTCS, INMA, JAAV, JABS, JSPR, LAYO, MOWE, PHPP, PMAG, VBPR, WEBU } from '../assets/assets'
 
 
@@ -14,7 +13,7 @@ const QuizContextProvider = (props) => {
 
 
     const value = {
-        subjects, ADAV, ADTE, ADBS, ADUI, ASNE, CLCO, DBAV, DBBS, GAME, HTCS, INMA, JAAV, JABS, JSPR, LAYO, MOWE, PHPP, PMAG, VBPR, WEBU, reload, setReload,url
+        subjects, ADAV, ADTE, ADBS, ADUI, ASNE, CLCO, DBAV, DBBS, GAME, HTCS, INMA, JAAV, JABS, JSPR, LAYO, MOWE, PHPP, PMAG, VBPR, WEBU, reload, setReload
     }
 
     return (
