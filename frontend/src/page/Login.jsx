@@ -1,50 +1,79 @@
-import { useState,useContext } from 'react'
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { QuizContext } from '../context/QuizContext';
+// src/pages/Login.jsx
+import { useState } from 'react'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
+
 const Login = () => {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const navigate = useNavigate()
+	
 
-    const {setReload,url} = useContext(QuizContext)
-    const [values, setValues] = useState({
-        email: '',
-        password: ''
-    })
-    const navigate = useNavigate()
-    axios.defaults.withCredentials = true
-    const onSubmitHandler = async (e) => {
-        e.preventDefault();
-        axios.post(`${url}/auth/login`, values)
-            .then(res => {
-                if (res.data.Status === "success") {
-                    setReload(false)
-                    navigate('/')
-                } else {
-                    alert(res.data.error)
-                }
-            })
-            .catch(err => console.log(err))
+  const handleLogin = async (e) => {
+    e.preventDefault()
+    try {
+      const response = await axios.post(
+        'http://localhost:2000/api/auth/login',
+        { email, password }
+      )
+
+      if (response.data.Status === 'success') {
+        navigate('/dashboard') // Chuyển hướng sau khi đăng nhập thành công
+      } else {
+        setError(response.data.Error)
+      }
+    } catch (err) {
+      setError('Có lỗi xảy ra, vui lòng thử lại!')
     }
-   
-    return (
-        <form onSubmit={onSubmitHandler} className='flex flex-col items-center w-[90%] sm:max-w-96 m-auto mt-14 gap-4 text-gray-800'>
-            <div className='inline-flex items-center gap-2 mb-2 mt-10'>
-                <p className='prata-regular text-3xl'>Đăng Nhập</p>
-                <hr className='border-none h-[1.5px] w-8 bg-gray-800' />
-            </div>
-            <input type="email" className='w-full px-3 py-2 border border-gray-800' placeholder='Email' required  onChange={e => setValues({ ...values, email: e.target.value })}  />
-            <input type="password" className='w-full px-3 py-2 border border-gray-800' placeholder='Mật khẩu' required  onChange={e => setValues({ ...values, password: e.target.value })}/>
-            <div className='w-full flex justify-between text-sm mt-[-8px]'>
-                <p className='cursor-pointer'>Quên mật khẩu ?</p>
-                <Link to='/register' className='cursor-pointer'>Đăng kí</Link>
-            </div>
-            <button className='bg-black text-white font0light px-8 py-2 mt-4'>
+  }
 
-                Đăng nhập
-            </button>
-          
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
+        <h2 className="text-2xl font-bold mb-6 text-center">Đăng Nhập</h2>
+        <form onSubmit={handleLogin}>
+          <div className="mb-4">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-600"
+            >
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div className="mb-6">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-600"
+            >
+              Mật khẩu
+            </label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            Đăng Nhập
+          </button>
         </form>
-    )
+        {error && <p className="mt-4 text-red-500 text-center">{error}</p>}
+      </div>
+    </div>
+  )
 }
 
 export default Login
