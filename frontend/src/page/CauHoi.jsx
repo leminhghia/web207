@@ -6,7 +6,8 @@ const CauHoi = () => {
   const [question, setQuestion] = useState([])
   const [answer, setAnswer] = useState([])
   const [visible, setVisible] = useState(false)
-
+  const [userQuizId, setUserQuizId] = useState(null);
+  const [userAnswer, setUserAnswer] = useState([])
   useEffect(() => {
     async function fetchData() {
       try {
@@ -31,21 +32,62 @@ const CauHoi = () => {
     fetchData()
   }, [id])
 
-
-
   const handlePostData = async () => {
     setVisible(true)
     try {
-      await axios.post(`http://localhost:2000/api/userquiz/add`, {
+      const res = await axios.post(`http://localhost:2000/api/userquiz/add`, {
         quiz_id: id,
       });
+      setUserQuizId(res.data.user_quiz_id);
     } catch (error) {
       console.error('Error posting data:', error);
     }
   };
 
-  console.log(question);
-  console.log(answer);
+  const handleAnswerSelect = async (question_id, option_id) => {
+    if (!userQuizId) {
+      console.error("Không tìm thấy user_quiz_id");
+      return;
+    }
+
+    try {
+      await axios.post(`http://localhost:2000/api/useranswer/add-Update`, {
+        user_quiz_id: userQuizId,
+        question_id: question_id,
+        selected_option_id: option_id,
+      });
+
+      const res2 = await axios.get(`http://localhost:2000/api/useranswer/list/${userQuizId}`)
+
+      setUserAnswer(res2.data);
+    } catch (error) {
+      console.error("Error adding or updating answer:", error);
+    }
+  };
+
+  const handleUpdate = async (userquiz) => {
+    if (!userquiz) {
+      console.error("Không tìm thấy user_quiz_id");
+      return;
+    }
+    try {
+
+      await axios.put(`http://localhost:2000/api/userquiz/update`, {
+        score: scorePercentage,
+        user_quiz_id: userquiz,
+        quiz_id: id
+      })
+    } catch (error) {
+      console.error(error);
+
+    }
+  }
+
+  const clacScore = userAnswer.filter(item => item.is_correct === 1).length;
+
+  const totalQuestions = userAnswer.length
+
+  const scorePercentage = (clacScore / totalQuestions) * 10;
 
 
   return (
@@ -66,7 +108,11 @@ const CauHoi = () => {
                       answer.filter((a) => a.question_id === q.question_id)
                         .map((a) => (
                           <li key={a.option_id}>
-                            {a.option_text}
+                            <button onClick={() => handleAnswerSelect(q.question_id, a.option_id)}>
+                              {a.option_text}
+
+                            </button>
+
                           </li>
                         ))
                     }
@@ -75,12 +121,13 @@ const CauHoi = () => {
               ))
               }
             </div>
-
+            <button onClick={() => handleUpdate(userQuizId)}>Nop bai</button>
           </div>
-          
+
       }
     </div>
   )
 }
 
 export default CauHoi
+

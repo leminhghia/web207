@@ -15,71 +15,43 @@ export const addUserQuiz = (req,res) =>{
     });
 }
 
+export const updateUserQuiz = (req, res) => {
+  const { score, user_quiz_id, quiz_id } = req.body;
+  const { user_id } = req.user;
 
+  const checkSql = "SELECT * FROM userquiz WHERE user_quiz_id = ?";
+  db.query(checkSql, [user_quiz_id], (err, data) => {
+    if (err) return res.json({ Error: "Không tìm thấy quiz" });
 
+    const end_time = new Date();
+    const updateSql = "UPDATE userquiz SET end_time = ?, score = ? WHERE user_quiz_id = ?";
+    db.query(updateSql, [end_time, score, user_quiz_id], (err, result) => {
+      if (err) return res.json({ Error: "Lưu kết quả quiz thất bại" });
 
+      const date_taken = end_time.toISOString().split('T')[0]; 
+      const time_taken = end_time.toISOString().split('T')[1].split('.')[0];
 
+      const insertResultSql =
+        "INSERT INTO result (user_id, quiz_id, score, date_taken, time_taken) VALUES (?, ?, ?, ?, ?)";
+      db.query(insertResultSql, [user_id, quiz_id, score, date_taken, time_taken], (err, result) => {
+        if (err) {
+          return res.json({ Error: "Lưu kết quả vào bảng result thất bại" });
+        }
 
+        res.json({ message: "Thanh cong", score });
+      });
+    });
+  });
+};
 
+export const getResult = (req,res) =>{
+  const {user_id} = req.user
 
-
-
-
-
-
-  
-
-// export const submitQuiz = (req, res) => {
-//     const { user_quiz_id } = req.body;
-  
-//     const checkSql = "SELECT * FROM userquiz WHERE user_quiz_id = ?";
-//     db.query(checkSql, [user_quiz_id], (err, data) => {
-//       if (err) return res.json({ Error: "Không tìm thấy phiên quiz" });
-  
-//       const end_time = new Date();
-//       const score = calculateScore(user_quiz_id);  // Hàm tính điểm dựa trên câu trả lời của người dùng
-  
-//       // Cập nhật thông tin kết thúc quiz và điểm số
-//       const updateSql = "UPDATE userquiz SET end_time = ?, score = ? WHERE user_quiz_id = ?";
-//       db.query(updateSql, [end_time, score, user_quiz_id], (err, result) => {
-//         if (err) return res.json({ Error: "Lưu kết quả quiz thất bại" });
-  
-//         // Lưu kết quả vào bảng `result`
-//         const user_id = data[0].user_id; // Lấy user_id từ bảng userquiz
-//         const quiz_id = data[0].quiz_id; // Lấy quiz_id từ bảng userquiz
-//         const date_taken = end_time.toISOString().split('T')[0]; // Chuyển đổi thành định dạng YYYY-MM-DD
-//         const time_taken = end_time.toISOString().split('T')[1].split('.')[0]; // Lấy giờ:phút:giây
-  
-//         const insertResultSql = "INSERT INTO result (user_id, quiz_id, score, date_taken, time_taken) VALUES (?, ?, ?, ?, ?)";
-//         db.query(insertResultSql, [user_id, quiz_id, score, date_taken, time_taken], (err, result) => {
-//           if (err) return res.json({ Error: "Lưu kết quả vào bảng result thất bại" });
-  
-//           res.json({ message: "Quiz đã được nộp và kết quả đã lưu", score });
-//         });
-//       });
-//     });
-//   };
-  
-  
-//   const calculateScore = (user_quiz_id) => {
-//     return new Promise((resolve, reject) => {
-//       // Lấy tất cả câu trả lời của người dùng cho quiz này
-//       const sql = `
-//         SELECT ua.is_correct 
-//         FROM useranswer ua 
-//         JOIN answeroption ao ON ua.selected_option_id = ao.option_id
-//         WHERE ua.user_quiz_id = ?;
-//       `;
-//       db.query(sql, [user_quiz_id], (err, results) => {
-//         if (err) reject("Error calculating score");
-  
-//         let score = 0;
-//         results.forEach(result => {
-//           if (result.is_correct) score += 1;  // Cộng điểm nếu câu trả lời đúng
-//         });
-  
-//         resolve(score); // Trả về tổng điểm
-//       });
-//     });
-//   };
-  
+  const sql = `SELECT * FROM result WHERE user_id = ?`
+  db.query(sql,[user_id],(err,data)=>{
+    if (err) {
+      return res.json({ Error: "lay that bai",err });
+    }
+    res.json(data)
+  })
+}

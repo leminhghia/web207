@@ -76,17 +76,7 @@ CREATE TABLE [user] (
     created_at DATETIME NOT NULL DEFAULT GETDATE()
 );
 
--- Tạo bảng `userquiz`
-CREATE TABLE userquiz (
-    user_quiz_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
-    user_id INT NOT NULL,
-    quiz_id INT NOT NULL,
-    start_time DATETIME NOT NULL DEFAULT GETDATE(),
-    end_time DATETIME NULL,
-    score INT DEFAULT 0,
-    CONSTRAINT FK_userquiz_user FOREIGN KEY (user_id) REFERENCES [user] (user_id),
-    CONSTRAINT FK_userquiz_quiz FOREIGN KEY (quiz_id) REFERENCES quiz (quiz_id)
-);
+
 
 -- Tạo bảng `feedback`
 CREATE TABLE feedback (
@@ -150,6 +140,20 @@ CREATE TABLE userrole (
     PRIMARY KEY (user_id, role_id),
     CONSTRAINT FK_userrole_user FOREIGN KEY (user_id) REFERENCES [user] (user_id),
     CONSTRAINT FK_userrole_role FOREIGN KEY (role_id) REFERENCES role (role_id)
+);
+
+
+
+-- Tạo bảng `userquiz`
+CREATE TABLE userquiz (
+    user_quiz_id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+    user_id INT NOT NULL,
+    quiz_id INT NOT NULL,
+    start_time DATETIME NOT NULL DEFAULT GETDATE(),
+    end_time DATETIME NULL,
+    score INT DEFAULT 0,
+    CONSTRAINT FK_userquiz_user FOREIGN KEY (user_id) REFERENCES [user] (user_id),
+    CONSTRAINT FK_userquiz_quiz FOREIGN KEY (quiz_id) REFERENCES quiz (quiz_id)
 );
 
 -- Tạo bảng `useranswer`

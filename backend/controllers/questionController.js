@@ -3,8 +3,8 @@ import db from '../config/db.js'
 export const getQuestion = (req,res)=>{
     const { quiz_id } = req.params;
 
- const sql = `SELECT * FROM question`
- db.query(sql,(err,data)=>{
+ const sql = `SELECT * FROM question WHERE quiz_id = ?`
+ db.query(sql,[quiz_id],(err,data)=>{
     if (err) return res.json({Error:"error"})
         return res.json(data)
  })

@@ -32,6 +32,7 @@ const Navbar = () => {
     setMenuOpen(false) // Đóng menu khi click vào một mục
   }
 
+
   return (
     <div className="w-full bg-gray-50 z-50 border border-gray-200">
       <div className="flex items-center justify-between gap-4 h-14 p-3 border border-gray-50">

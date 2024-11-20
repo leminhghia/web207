@@ -6,5 +6,4 @@ const router = express.Router();
 
 router.get('/list/:quiz_id',getQuestion)
 router.post("/add", verifyUser, checkRole(['teacher', 'admin']), addQuestion);
-
 export default router;

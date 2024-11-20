@@ -1,9 +1,8 @@
 import express from 'express'
-import { addUserAnswer } from '../controllers/userAnswerController.js'
+import { addOrUpdateUserAnswer, getUsetAnswer } from '../controllers/userAnswerController.js'
 import { verifyUser } from '../middleware/authMiddleware.js'
 
 const router = express.Router()
-
-router.post('/add',verifyUser,addUserAnswer)
-
+router.get('/list/:user_quiz_id',verifyUser,getUsetAnswer)
+router.post('/add-update',verifyUser,addOrUpdateUserAnswer)
 export default router;
