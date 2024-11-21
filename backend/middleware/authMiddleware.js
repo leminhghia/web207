@@ -14,9 +14,11 @@ export const verifyUser = (req, res, next) => {
 
     req.user = {
       user_id: decoded.user_id,
-      surName: decoded.surName,
       name: decoded.name,
       email: decoded.email,
+      gender: decoded.gender,
+      birthday: decoded.birthday,
+      phonenumber: decoded.phonenumber,
       role: decoded.role,  
     };
     next();

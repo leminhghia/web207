@@ -16,7 +16,7 @@ const Result = () => {
         }
         fetchData()
     },[])
-    console.log(data);
+    console.table(data);
     
     return (
         <div>

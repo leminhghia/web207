@@ -4,7 +4,6 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
 const Register = () => {
-  const [surName, setSurName] = useState('')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -16,7 +15,7 @@ const Register = () => {
     try {
       const response = await axios.post(
         'http://localhost:2000/api/auth/register',
-        { surName, name, email, password }
+        {  name, email, password }
       )
       if (response.data.Status === 'success') {
         navigate('/login') // Chuyển hướng sau khi đăng ký thành công
@@ -35,25 +34,10 @@ const Register = () => {
         <form onSubmit={handleRegister}>
           <div className="mb-4">
             <label
-              htmlFor="surName"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Họ
-            </label>
-            <input
-              type="text"
-              id="surName"
-              value={surName}
-              onChange={(e) => setSurName(e.target.value)}
-              className="w-full p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <div className="mb-4">
-            <label
               htmlFor="name"
               className="block text-sm font-medium text-gray-600"
             >
-              Tên
+             Họ Tên
             </label>
             <input
               type="text"

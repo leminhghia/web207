@@ -1,87 +1,71 @@
-import { useState, useEffect } from 'react'
-import { FaCamera, FaEdit } from 'react-icons/fa'
-import Axios from 'axios'
-
+import { useState, useEffect } from "react";
+import { FaCamera, FaEdit } from "react-icons/fa";
+import axios from "axios";
+import { toast } from 'react-toastify'
 const AccountDetails = () => {
-  const [avatar, setAvatar] = useState('https://via.placeholder.com/150')
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [user, setUser] = useState({})
-  const [formData, setFormData] = useState({
-    surName: '',
-    name: '',
-    phoneNumber: '',
-    email: '',
-    lop: '',
-  })
-  const [isEditing, setIsEditing] = useState(false) // Trạng thái cho phép chỉnh sửa
+  const [avatar, setAvatar] = useState("https://via.placeholder.com/150");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [user, setUser] = useState({});
+  const [name, setName] = useState('');
+  const [phonenumber, setPhoneNumber] = useState('');
+  const [gender, setGender] = useState('');
+  const [birthday, setBirthday] = useState('');
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0]
+    const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader()
+      const reader = new FileReader();
       reader.onloadend = () => {
-        setAvatar(reader.result)
-      }
-      reader.readAsDataURL(file)
+        setAvatar(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
-  }
-
-  const handleChange = (e) => {
-    const { id, value } = e.target
-    setFormData({
-      ...formData,
-      [id]: value,
-    })
-  }
-
-  const handleSave = () => {
-    Axios.put('http://localhost:2000/user', formData)
-      .then((res) => {
-        console.log('User updated:', res.data)
-        setIsModalOpen(false) // Đóng modal cập nhật
-        setIsEditing(false) // Tắt chế độ chỉnh sửa
-        setUser(res.data) // Cập nhật dữ liệu người dùng từ phản hồi
-      })
-      .catch((err) => {
-        console.error('Error updating user:', err)
-      })
-  }
+  };
 
   useEffect(() => {
-    // Lấy dữ liệu người dùng từ server khi component mount
-    Axios.get('http://localhost:2000/user')
+    axios.get("http://localhost:2000/api/auth/list")
       .then((res) => {
-        setUser(res.data)
-        setFormData({
-          surName: res.data.surName || '',
-          name: res.data.name || '',
-          phoneNumber: res.data.phoneNumber || '',
-          email: res.data.email || '',
-          lop: res.data.lop || '',
-        })
+        setUser(res.data);
+        setName(res.data.name)
+        setPhoneNumber(res.data.phonenumber)
+        setGender(res.data.gender)
+        const formattedBirthday = res.data.birthday ? new Date(res.data.birthday).toISOString().split('T')[0] : '';
+
+        setBirthday(formattedBirthday)
         if (res.data.avatar) {
-          setAvatar(res.data.avatar)
+          setAvatar(res.data.avatar);
         }
       })
-      .catch((err) => console.log(err))
+      .catch((err) => console.log(err));
 
     if (isModalOpen) {
-      // Ngừng cuộn trang khi modal hiển thị
-      document.body.style.overflow = 'hidden'
+      document.body.style.overflow = "hidden";
     } else {
-      // Cho phép cuộn lại khi modal đóng
-      document.body.style.overflow = 'auto'
+      document.body.style.overflow = "auto";
     }
 
-    // Dọn dẹp khi component unmount
     return () => {
-      document.body.style.overflow = 'auto'
-    }
-  }, [isModalOpen])
+      document.body.style.overflow = "auto";
+    };
+  }, [isModalOpen]);
 
-  if (!user) {
-    return <div>loading...</div>
-  }
+  const handleSave = () => {
+    axios.put("http://localhost:2000/api/auth/update", {
+      name, phonenumber, gender, birthday
+    }, {
+      withCredentials: true,
+    })
+      .then((res) => {
+        toast.success(res.data.message)
+        setIsModalOpen(false);
+      })
+      .catch((err) => {
+        toast.error(err.data.Error)
+      });
+
+  };
+
+
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg border border-gray-300">
@@ -107,15 +91,12 @@ const AccountDetails = () => {
               <FaCamera className="text-white" />
             </label>
           </div>
-          <h1 className="text-2xl font-bold mb-4">
-            {user.surName} {user.name}
-          </h1>
+          <h1 className="text-2xl font-bold mb-4">{user.name}</h1>
         </div>
         <button
           className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800"
           onClick={() => {
-            setIsModalOpen(true)
-            setIsEditing(true) // Kích hoạt chế độ chỉnh sửa
+            setIsModalOpen(true);
           }}
         >
           <FaEdit />
@@ -124,86 +105,36 @@ const AccountDetails = () => {
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        {/* Các trường nhập liệu */}
         <div>
-          <label
-            htmlFor="name"
-            className="block text-sm font-medium text-gray-700"
-          >
-            First Name
-          </label>
-          <input
-            type="text"
-            id="name"
-            value={formData.name}
-            onChange={handleChange}
-            disabled={!isEditing} // Chỉ cho phép chỉnh sửa khi isEditing là true
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-          />
+          <p>Họ tên</p>
+          <div className={`mt-1 block w-full p-2 border border-gray-300 rounded-md ${user.name ? '' : 'pt-8'}`}>
+            {user.name}
+          </div>
+
         </div>
         <div>
-          <label
-            htmlFor="surName"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Last Name
-          </label>
-          <input
-            type="text"
-            id="surName"
-            value={formData.surName}
-            onChange={handleChange}
-            disabled={!isEditing} // Chỉ cho phép chỉnh sửa khi isEditing là true
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-          />
+          <p>Số điện thoại</p>
+          <div className={`mt-1 block w-full p-2 border border-gray-300 rounded-md ${user.phonenumber ? '' : 'pt-8'}`}>
+            {user.phonenumber}
+          </div>
         </div>
         <div>
-          <label
-            htmlFor="phoneNumber"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Phone Number
-          </label>
-          <input
-            type="text"
-            id="phoneNumber"
-            value={formData.phoneNumber}
-            onChange={handleChange}
-            disabled={!isEditing} // Chỉ cho phép chỉnh sửa khi isEditing là true
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-          />
+          <p>Email</p>
+          <div className={`mt-1 block w-full p-2 border border-gray-300 rounded-md ${user.email ? '' : 'pt-8'}`}>
+            {user.email}
+          </div>
         </div>
         <div>
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Email Address
-          </label>
-          <input
-            type="email"
-            id="email"
-            value={formData.email}
-            onChange={handleChange}
-            disabled={!isEditing} // Chỉ cho phép chỉnh sửa khi isEditing là true
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-          />
+          <p>giới tính</p>
+          <div className={`mt-1 block w-full p-2 border border-gray-300 rounded-md ${user.gender ? '' : 'pt-8'}`}>
+            {user.gender}
+          </div>
         </div>
-        <div className="col-span-2">
-          <label
-            htmlFor="lop"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Address
-          </label>
-          <input
-            type="text"
-            id="lop"
-            value={formData.lop}
-            onChange={handleChange}
-            disabled={!isEditing} // Chỉ cho phép chỉnh sửa khi isEditing là true
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-          />
+        <div>
+          <p>Ngày sinh</p>
+          <div className={`mt-1 block w-full p-2 border border-gray-300 rounded-md ${birthday ? '' : 'pt-8'}`}>
+            {birthday}
+          </div>
         </div>
       </div>
 
@@ -212,25 +143,53 @@ const AccountDetails = () => {
         <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75 z-50">
           <div className="bg-white p-8 rounded-lg w-96 max-h-[90vh] overflow-auto">
             <h2 className="text-xl font-semibold mb-4">Edit Profile</h2>
-            {Object.keys(formData).map((field) => (
-              <div className="mb-4" key={field}>
-                <label
-                  htmlFor={field}
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  {field
-                    .replace(/([A-Z])/g, ' $1')
-                    .replace(/^./, (str) => str.toUpperCase())}
-                </label>
-                <input
-                  type="text"
-                  id={field}
-                  value={formData[field]}
-                  onChange={handleChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                />
-              </div>
-            ))}
+
+            <div className="mb-4" >
+              <p>Họ Tên</p>
+              <input
+                type="text"
+                onChange={(e) => setName(e.target.value)}
+                value={name}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+              />
+            </div>
+
+            <div className="mb-4" >
+              <p>Số điện thoại</p>
+              <input
+                type="number"
+                value={phonenumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+              />
+            </div>
+
+            <div className="mb-4" >
+              <p>Giới tính</p>
+              <select
+                onChange={(e) => setGender(e.target.value)}
+                value={gender}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+              >
+                <option disabled selected>- Chọn Giới Tính</option>
+                <option value="Nam">Nam</option>
+                <option value="Nữ">Nữ</option>
+              </select>
+
+            </div>
+
+            <div className="mb-4" >
+              <p>Ngày Sinh</p>
+              <input
+                value={birthday}
+                type="date"
+                onChange={(e) => setBirthday(e.target.value)}
+
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+              />
+
+            </div>
+
             <div className="flex justify-end gap-4">
               <button
                 className="px-4 py-2 bg-gray-300 text-gray-800 rounded-md"
@@ -249,7 +208,7 @@ const AccountDetails = () => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default AccountDetails
+export default AccountDetails;

@@ -1,15 +1,27 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FaUser } from 'react-icons/fa'
 import { LuBookOpenCheck } from 'react-icons/lu'
 import { FaRegUserCircle } from 'react-icons/fa'
 import { IoMdSettings } from 'react-icons/io'
 import { GoTriangleDown } from 'react-icons/go'
 import { BsFillMortarboardFill } from 'react-icons/bs'
+import axios from 'axios'
 
+// eslint-disable-next-line react/prop-types
 export default function Sidebar({ onSelectSection }) {
   const [active, setActive] = useState('account')
   const [isOpen, setIsOpen] = useState(true)
   const [isOpen2, setIsOpen2] = useState(true)
+  const [user,setUser] = useState([])
+
+useEffect(()=>{
+  axios.get("http://localhost:2000/api/auth/list")
+  .then(res => setUser(res.data))
+  .catch(err => console.error(err)
+  )
+},[])
+
+
   const toggleMenu = () => {
     setIsOpen(!isOpen)
   }
@@ -32,7 +44,7 @@ export default function Sidebar({ onSelectSection }) {
           className="rounded-full w-12 h-12 mr-4"
         />
         <div>
-          <p className="text-lg font-bold">Robert Fox</p>
+          <p className="text-lg font-bold">{user.name}</p>
           <p className="text-gray-500 text-sm">Hello 👋</p>
         </div>
       </div>
