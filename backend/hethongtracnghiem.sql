@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 17, 2024 at 04:25 PM
+-- Generation Time: Nov 21, 2024 at 03:39 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -34,6 +34,20 @@ CREATE TABLE `answeroption` (
   `is_correct` tinyint(1) DEFAULT 0,
   `created_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `answeroption`
+--
+
+INSERT INTO `answeroption` (`option_id`, `question_id`, `option_text`, `is_correct`, `created_at`) VALUES
+(1, 1, '1', 0, '2024-11-19 19:26:49'),
+(2, 1, '2', 0, '2024-11-19 19:26:56'),
+(3, 1, '3', 0, '2024-11-19 19:27:00'),
+(4, 1, '4', 1, '2024-11-19 19:27:06'),
+(5, 2, '2', 0, '2024-11-19 19:40:50'),
+(6, 2, '4', 0, '2024-11-20 10:02:28'),
+(7, 2, '6', 1, '2024-11-20 10:02:43'),
+(8, 2, '7', 0, '2024-11-20 10:02:50');
 
 -- --------------------------------------------------------
 
@@ -91,7 +105,8 @@ CREATE TABLE `question` (
 --
 
 INSERT INTO `question` (`question_id`, `quiz_id`, `question_text`, `difficulty`, `created_at`) VALUES
-(1, 1, 'Câu hỏi ví dụ: 2 + 2 = ?', 'easy', '2024-11-17 19:31:03');
+(1, 1, 'Câu hỏi ví dụ: 2 + 2 = ?', 'easy', '2024-11-17 19:31:03'),
+(2, 1, '3+3 = ?', 'easy', '2024-11-19 19:40:34');
 
 -- --------------------------------------------------------
 
@@ -135,7 +150,8 @@ CREATE TABLE `quiz` (
 --
 
 INSERT INTO `quiz` (`quiz_id`, `subject_id`, `title`, `total_questions`, `duration_minutes`, `created_at`) VALUES
-(1, 1, 'Quiz 1', 10, 30, '2024-11-17 19:22:44');
+(1, 1, 'Quiz 1', 10, 30, '2024-11-17 19:22:44'),
+(19, 11, 'nghia pro', 20, 45, '2024-11-19 19:04:51');
 
 -- --------------------------------------------------------
 
@@ -166,6 +182,18 @@ CREATE TABLE `result` (
   `date_taken` date DEFAULT NULL,
   `time_taken` time DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `result`
+--
+
+INSERT INTO `result` (`result_id`, `user_id`, `quiz_id`, `score`, `date_taken`, `time_taken`) VALUES
+(1, 5, 1, 5, '2024-11-20', '11:16:50'),
+(2, 5, 1, 5, '2024-11-20', '11:17:55'),
+(3, 5, 1, 5, '2024-11-20', '11:18:59'),
+(4, 5, 1, 5, '2024-11-20', '18:20:35'),
+(5, 5, 1, 5, '2024-11-20', '18:22:00'),
+(6, 5, 1, 5, '2024-11-20', '18:22:49');
 
 -- --------------------------------------------------------
 
@@ -248,10 +276,12 @@ CREATE TABLE `tag` (
 
 CREATE TABLE `user` (
   `user_id` int(11) NOT NULL,
-  `surName` varchar(50) NOT NULL,
   `name` varchar(50) NOT NULL,
   `password` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
+  `gender` varchar(20) DEFAULT NULL,
+  `birthday` date DEFAULT NULL,
+  `phonenumber` int(11) DEFAULT NULL,
   `role` enum('student','admin','teacher') NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -260,11 +290,8 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`user_id`, `surName`, `name`, `password`, `email`, `role`, `created_at`) VALUES
-(1, 'le minh ', 'nghia', '$2b$10$MvyBfZ6iDfuZygWubd5cae5vUy3rxeqh8yzxuhCBS4pjPdT5HFFbO', 'nghia@123', 'student', '2024-11-15 10:48:02'),
-(2, 'a', 'b', '$2b$10$HgqgXE6f/sZV3FDzc/YoD.yeYKPPm75IxhrzcCjeSHcmbCcQqCyze', 'a@1', 'student', '2024-11-15 10:51:17'),
-(3, 'Nguyen', 'Anh Tuan', '$2b$10$EeSa0kgr2T81YbqQ25KjtO6WMjLbOujJV.QvrLICQxFjzJEvFtnpu', 'tuan@example.com', 'student', '2024-11-17 19:45:14'),
-(4, 'le', 'minh nghia', '$2b$10$M5uLB4LMOZ6EDHL0OKGWNeMHDQXSW8nbWHxVyX1IfWE8tHh.mGKRm', 'nghia@1234', 'student', '2024-11-17 21:16:38');
+INSERT INTO `user` (`user_id`, `name`, `password`, `email`, `gender`, `birthday`, `phonenumber`, `role`, `created_at`) VALUES
+(5, 'minh nghia pro', '$2b$10$yP0DAor.Qz3disjuu1R.eehhgNlQhy29vT3HNeVCvfL65sKuxN1Bm', 'nghia@111', 'Nam', '2024-11-28', 2147483647, 'student', '2024-11-19 18:24:38');
 
 -- --------------------------------------------------------
 
@@ -280,6 +307,15 @@ CREATE TABLE `useranswer` (
   `is_correct` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `useranswer`
+--
+
+INSERT INTO `useranswer` (`user_answer_id`, `user_quiz_id`, `question_id`, `selected_option_id`, `is_correct`) VALUES
+(51, 53, 1, 2, 0),
+(52, 54, 1, 3, 0),
+(53, 54, 2, 7, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -290,10 +326,19 @@ CREATE TABLE `userquiz` (
   `user_quiz_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `quiz_id` int(11) NOT NULL,
-  `start_time` datetime NOT NULL DEFAULT current_timestamp(),
-  `end_time` datetime DEFAULT NULL,
-  `score` int(11) DEFAULT 0
+  `start_time` time NOT NULL DEFAULT current_timestamp(),
+  `end_time` time DEFAULT NULL,
+  `score` int(11) DEFAULT 0,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `userquiz`
+--
+
+INSERT INTO `userquiz` (`user_quiz_id`, `user_id`, `quiz_id`, `start_time`, `end_time`, `score`, `created_at`) VALUES
+(53, 5, 1, '18:16:08', NULL, 0, '2024-11-20 18:16:08'),
+(54, 5, 1, '18:16:45', '18:22:49', 5, '2024-11-20 18:16:45');
 
 -- --------------------------------------------------------
 
@@ -442,7 +487,7 @@ ALTER TABLE `userrole`
 -- AUTO_INCREMENT for table `answeroption`
 --
 ALTER TABLE `answeroption`
-  MODIFY `option_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `option_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -466,13 +511,13 @@ ALTER TABLE `permission`
 -- AUTO_INCREMENT for table `question`
 --
 ALTER TABLE `question`
-  MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `quiz`
 --
 ALTER TABLE `quiz`
-  MODIFY `quiz_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `quiz_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `quizsetting`
@@ -484,7 +529,7 @@ ALTER TABLE `quizsetting`
 -- AUTO_INCREMENT for table `result`
 --
 ALTER TABLE `result`
-  MODIFY `result_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `result_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `role`
@@ -508,19 +553,19 @@ ALTER TABLE `tag`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `useranswer`
 --
 ALTER TABLE `useranswer`
-  MODIFY `user_answer_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `user_answer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT for table `userquiz`
 --
 ALTER TABLE `userquiz`
-  MODIFY `user_quiz_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `user_quiz_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
 -- Constraints for dumped tables
