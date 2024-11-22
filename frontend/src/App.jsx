@@ -17,9 +17,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import ExamInfo from './page/ExamQuizz/ExamInfo'
 import ExamQuizz from './page/ExamQuizz/ExamQuizz'
 import Result from './page/Result'
-// import Header from './components/Header'
-// import BaoMat from './page/account/settingaccount/BaoMat'
-// import MainAccountDetails from './page/account/settingaccount/mainAccountDetails'
+
 function App() {
   return (
     <div>

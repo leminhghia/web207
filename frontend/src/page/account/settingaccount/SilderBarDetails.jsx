@@ -9,7 +9,7 @@ const SilderBarDetails = ({ setActiveTab }) => {
   }
 
   return (
-    <div className="lg:w-full md:w-full bg-white shadow-lg h-60">
+    <div className="lg:w-full md:w-full bg-white shadow-lg">
       <div className="py-4 px-6">
         <button
           className={`w-full text-left py-2 px-4 rounded-lg

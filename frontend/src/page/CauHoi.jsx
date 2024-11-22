@@ -287,10 +287,10 @@ const CauHoi = () => {
           </div>
         </div>
       ) : (
-        <div className="flex justify-center gap-5 p-5">
+        <div className="flex flex-col md:flex-row justify-center gap-5 p-5">
           {/* Sidebar */}
-          <div className="w-1/4 bg-gray-100">
-            <div className="bg-white	h-auto] shadow-md rounded-lg p-3">
+          <div className="w-full md:w-1/4 bg-gray-100">
+            <div className="bg-white shadow-md rounded-lg p-3">
               <div className="space-y-3">
                 <h1 className="text-lg font-bold">Công nghệ chế tạo máy</h1>
                 <p className="text-sm text-gray-500">Chế độ: Thi thử</p>
@@ -302,19 +302,18 @@ const CauHoi = () => {
                   <span className="font-bold text-red-500">59:36</span>
                 </div>
                 <hr />
-                <div className="flex items-center gap-3">
+                <div className="flex flex-col sm:flex-row items-center gap-3">
                   <div>
                     <button
-                      // onClick={() => setVisible(false)}
                       onClick={() => setShowModal(true)}
-                      className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-md shadow-md 1/6"
+                      className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-md shadow-md w-full sm:w-auto"
                     >
                       Trở về
                     </button>
 
                     {showModal && (
                       <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-                        <div className="bg-white rounded-lg p-6 shadow-lg w-1/3">
+                        <div className="bg-white rounded-lg p-6 shadow-lg w-11/12 md:w-1/3">
                           <h2 className="text-lg font-semibold mb-4">
                             Bạn có muốn trở về?
                           </h2>
@@ -338,18 +337,17 @@ const CauHoi = () => {
                       </div>
                     )}
                   </div>
-                  {/*  */}
                   <button
                     onClick={() => handleUpdate(userQuizId)}
-                    className="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded-md shadow-md w-4/6"
+                    className="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded-md shadow-md w-full sm:w-4/6"
                   >
                     Nộp bài thi
                   </button>
                 </div>
               </div>
             </div>
-            {/*  */}
-            <div className=" bg-white mt-9 h-auto] shadow-md rounded-lg p-3">
+
+            <div className="bg-white mt-9 shadow-md rounded-lg p-3">
               <h2 className="text-lg font-bold mb-4">Danh sách phần thi</h2>
               <ul className="space-y-2">
                 <li className="flex justify-between items-center hover:bg-gray-100 p-2 rounded-lg cursor-pointer">
@@ -386,7 +384,7 @@ const CauHoi = () => {
                       .map((a) => (
                         <li
                           key={a.option_id}
-                          className=" p-2 rounded cursor-pointer"
+                          className="p-2 rounded cursor-pointer"
                         >
                           <button
                             className={`w-full text-left border px-4 py-2 rounded-lg transition-all ${
@@ -406,18 +404,12 @@ const CauHoi = () => {
                 </div>
               ))}
             </ul>
-            {/* <button
-              onClick={() => handleUpdate(userQuizId)}
-              className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 mt-4"
-            >
-              Nộp bài
-            </button> */}
           </div>
 
           {/* Question Navigation */}
           <div className="w-full md:w-1/4 bg-white p-4 rounded-lg shadow">
             <h3 className="text-lg font-bold mb-5">Mục lục câu hỏi</h3>
-            <div className="grid grid-cols-6 gap-2">
+            <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-6 gap-2">
               {Array.from({ length: 48 }).map((_, index) => (
                 <button
                   key={index}
