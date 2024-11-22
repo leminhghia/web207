@@ -32,20 +32,27 @@ const Navbar = () => {
     setMenuOpen(false) // Đóng menu khi click vào một mục
   }
 
-
   return (
-    <div className="w-full bg-gray-50 z-50 border border-gray-200">
+    <div className="w-full bg-gray-50 z-100 border border-gray-200 sticky top-0">
       <div className="flex items-center justify-between gap-4 h-14 p-3 border border-gray-50">
         {/* Logo */}
-        <a href="#">
-          <img src={assets.LOGO} alt="Logo" width="40" height="40" />
-        </a>
+        <NavLink
+          to="/"
+          className="flex items-center gap-2 font-bold text-[30px]"
+        >
+          <img src={assets.LOGO} alt="Logo" width="50" height="50" />
+          <p>
+            <span className="text-blue-600">D</span>
+            <span className="text-orange-500">r</span>
+            <span className="text-blue-600">x</span> Quiz
+          </p>
+        </NavLink>
 
         {/* Navigation Links and Account (on the same row) */}
         <div className="flex items-center ml-auto">
           <ul className="flex gap-6 hidden lg:flex">
-            <NavLink to="/" onClick={handleMenuItemClick}>
-              <p>FPT Polytechnic</p>
+            <NavLink to="/Quiz" onClick={handleMenuItemClick}>
+              <p>DrxQuiz</p>
             </NavLink>
             <NavLink to="/gioi-thieu" onClick={handleMenuItemClick}>
               <p>Giới Thiệu</p>
@@ -165,11 +172,11 @@ const Navbar = () => {
       {menuOpen && (
         <div className="lg:hidden flex flex-col bg-white shadow-md w-full">
           <NavLink
-            to=""
+            to="/Quiz"
             className="p-3 hover:bg-gray-300"
             onClick={handleMenuItemClick}
           >
-            <p>FPT Polytechnic</p>
+            <p>DrxQuiz</p>
           </NavLink>
           <NavLink
             to="/gioi-thieu"

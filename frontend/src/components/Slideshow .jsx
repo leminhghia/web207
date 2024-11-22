@@ -38,7 +38,7 @@ const LogoSlideshow = () => {
   const handlers = useSwipeable({
     onSwipedLeft: () => nextSlide(),
     onSwipedRight: () => prevSlide(),
-    trackMouse: true, // Cho phép vuốt bằng chuột
+    trackMouse: true, 
   })
 
   return (

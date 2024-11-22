@@ -1,74 +1,82 @@
-import { useState, useEffect } from "react";
-import { FaCamera, FaEdit } from "react-icons/fa";
-import axios from "axios";
+import { useState, useEffect } from 'react'
+import { FaCamera, FaEdit } from 'react-icons/fa'
+import axios from 'axios'
 import { toast } from 'react-toastify'
 const AccountDetails = () => {
-  const [avatar, setAvatar] = useState("https://via.placeholder.com/150");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [user, setUser] = useState({});
-  const [name, setName] = useState('');
-  const [phonenumber, setPhoneNumber] = useState('');
-  const [gender, setGender] = useState('');
-  const [birthday, setBirthday] = useState('');
+  const [avatar, setAvatar] = useState('https://via.placeholder.com/150')
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [user, setUser] = useState({})
+  const [name, setName] = useState('')
+  const [phonenumber, setPhoneNumber] = useState('')
+  const [gender, setGender] = useState('')
+  const [birthday, setBirthday] = useState('')
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files[0]
     if (file) {
-      const reader = new FileReader();
+      const reader = new FileReader()
       reader.onloadend = () => {
-        setAvatar(reader.result);
-      };
-      reader.readAsDataURL(file);
+        setAvatar(reader.result)
+      }
+      reader.readAsDataURL(file)
     }
-  };
+  }
 
   useEffect(() => {
-    axios.get("http://localhost:2000/api/auth/list")
+    axios
+      .get('http://localhost:2000/api/auth/list')
       .then((res) => {
-        setUser(res.data);
+        setUser(res.data)
         setName(res.data.name)
         setPhoneNumber(res.data.phonenumber)
         setGender(res.data.gender)
-        const formattedBirthday = res.data.birthday ? new Date(res.data.birthday).toISOString().split('T')[0] : '';
+        const formattedBirthday = res.data.birthday
+          ? new Date(res.data.birthday).toISOString().split('T')[0]
+          : ''
 
         setBirthday(formattedBirthday)
         if (res.data.avatar) {
-          setAvatar(res.data.avatar);
+          setAvatar(res.data.avatar)
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
 
     if (isModalOpen) {
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = 'hidden'
     } else {
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = 'auto'
     }
 
     return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, [isModalOpen]);
+      document.body.style.overflow = 'auto'
+    }
+  }, [isModalOpen])
 
   const handleSave = () => {
-    axios.put("http://localhost:2000/api/auth/update", {
-      name, phonenumber, gender, birthday
-    }, {
-      withCredentials: true,
-    })
+    axios
+      .put(
+        'http://localhost:2000/api/auth/update',
+        {
+          name,
+          phonenumber,
+          gender,
+          birthday,
+        },
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         toast.success(res.data.message)
-        setIsModalOpen(false);
+        setIsModalOpen(false)
       })
       .catch((err) => {
         toast.error(err.data.Error)
-      });
-
-  };
-
-
+      })
+  }
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg border border-gray-300">
+    <div className="max-w-3xl p-6 bg-white shadow-lg rounded-lg border border-gray-300">
       <div className="flex justify-between items-center mb-8">
         <div className="flex items-center space-x-4">
           <div className="relative">
@@ -96,7 +104,7 @@ const AccountDetails = () => {
         <button
           className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800"
           onClick={() => {
-            setIsModalOpen(true);
+            setIsModalOpen(true)
           }}
         >
           <FaEdit />
@@ -107,32 +115,51 @@ const AccountDetails = () => {
       <div className="grid grid-cols-2 gap-4">
         <div>
           <p>Họ tên</p>
-          <div className={`mt-1 block w-full p-2 border border-gray-300 rounded-md ${user.name ? '' : 'pt-8'}`}>
+          <div
+            className={`mt-1 block w-full p-2 border border-gray-300 rounded-md ${
+              user.name ? '' : 'pt-8'
+            }`}
+          >
             {user.name}
           </div>
-
         </div>
         <div>
           <p>Số điện thoại</p>
-          <div className={`mt-1 block w-full p-2 border border-gray-300 rounded-md ${user.phonenumber ? '' : 'pt-8'}`}>
+          <div
+            className={`mt-1 block w-full p-2 border border-gray-300 rounded-md ${
+              user.phonenumber ? '' : 'pt-8'
+            }`}
+          >
             {user.phonenumber}
           </div>
         </div>
         <div>
           <p>Email</p>
-          <div className={`mt-1 block w-full p-2 border border-gray-300 rounded-md ${user.email ? '' : 'pt-8'}`}>
+          <div
+            className={`mt-1 block w-full p-2 border border-gray-300 rounded-md ${
+              user.email ? '' : 'pt-8'
+            }`}
+          >
             {user.email}
           </div>
         </div>
         <div>
           <p>giới tính</p>
-          <div className={`mt-1 block w-full p-2 border border-gray-300 rounded-md ${user.gender ? '' : 'pt-8'}`}>
+          <div
+            className={`mt-1 block w-full p-2 border border-gray-300 rounded-md ${
+              user.gender ? '' : 'pt-8'
+            }`}
+          >
             {user.gender}
           </div>
         </div>
         <div>
           <p>Ngày sinh</p>
-          <div className={`mt-1 block w-full p-2 border border-gray-300 rounded-md ${birthday ? '' : 'pt-8'}`}>
+          <div
+            className={`mt-1 block w-full p-2 border border-gray-300 rounded-md ${
+              birthday ? '' : 'pt-8'
+            }`}
+          >
             {birthday}
           </div>
         </div>
@@ -144,7 +171,7 @@ const AccountDetails = () => {
           <div className="bg-white p-8 rounded-lg w-96 max-h-[90vh] overflow-auto">
             <h2 className="text-xl font-semibold mb-4">Edit Profile</h2>
 
-            <div className="mb-4" >
+            <div className="mb-4">
               <p>Họ Tên</p>
               <input
                 type="text"
@@ -154,7 +181,7 @@ const AccountDetails = () => {
               />
             </div>
 
-            <div className="mb-4" >
+            <div className="mb-4">
               <p>Số điện thoại</p>
               <input
                 type="number"
@@ -164,30 +191,29 @@ const AccountDetails = () => {
               />
             </div>
 
-            <div className="mb-4" >
+            <div className="mb-4">
               <p>Giới tính</p>
               <select
                 onChange={(e) => setGender(e.target.value)}
                 value={gender}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
               >
-                <option disabled selected>- Chọn Giới Tính</option>
+                <option disabled selected>
+                  - Chọn Giới Tính
+                </option>
                 <option value="Nam">Nam</option>
                 <option value="Nữ">Nữ</option>
               </select>
-
             </div>
 
-            <div className="mb-4" >
+            <div className="mb-4">
               <p>Ngày Sinh</p>
               <input
                 value={birthday}
                 type="date"
                 onChange={(e) => setBirthday(e.target.value)}
-
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
               />
-
             </div>
 
             <div className="flex justify-end gap-4">
@@ -208,7 +234,7 @@ const AccountDetails = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default AccountDetails;
+export default AccountDetails
