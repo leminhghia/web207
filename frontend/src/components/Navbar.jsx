@@ -33,7 +33,7 @@ const Navbar = () => {
   }
 
   return (
-    <div className="w-full bg-gray-50 z-100 border border-gray-200 sticky top-0">
+    <div className="w-full bg-gray-50 z-100  border border-gray-200 sticky top-0">
       <div className="flex items-center justify-between gap-4 h-14 p-3 border border-gray-50">
         {/* Logo */}
         <NavLink

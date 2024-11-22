@@ -7,7 +7,7 @@ const MainAccountDetails = () => {
   const [activeTab, setActiveTab] = useState('personal')
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen bg-gray-100 gap-3">
+    <div className="flex flex-col lg:flex-row bg-gray-100 gap-3">
       {/* Sidebar */}
       <div className="lg:w-1/4 bg-white">
         <SilderBarDetails setActiveTab={setActiveTab} />

@@ -33,14 +33,7 @@ const CauHoi = () => {
     { id: 'results', label: 'Kết quả ôn tập' },
     { id: 'statistics', label: 'Thống kê ôn tập' },
   ]
-  const [selectedAnswers, setSelectedAnswers] = useState({})
 
-  const handleOptionClick = (question_id, option_id) => {
-    setSelectedAnswers((prev) => ({
-      ...prev,
-      [question_id]: option_id,
-    }))
-  }
 
   //
   const { id } = useParams()
@@ -390,7 +383,7 @@ const CauHoi = () => {
                         >
                           <button
                             className={`w-full text-left border px-4 py-2 rounded-lg transition-all ${
-                              selectedAnswers[q.question_id] === a.question_id
+                              userAnswer[q.question_id] === a.question_id
                                 ? 'bg-blue-500 text-white'
                                 : 'bg-white hover:bg-blue-100 focus:bg-blue-600'
                             }`}
