@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { FaCamera, FaEdit } from 'react-icons/fa'
 import axios from 'axios'
 import { toast } from 'react-toastify'
+
 const AccountDetails = () => {
   const [avatar, setAvatar] = useState('https://via.placeholder.com/150')
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -77,13 +78,13 @@ const AccountDetails = () => {
 
   return (
     <div className="max-w-3xl p-6 bg-white shadow-lg rounded-lg border border-gray-300">
-      <div className="flex justify-between items-center mb-8">
-        <div className="flex items-center space-x-4">
+      <div className="flex flex-col md:flex-row justify-between items-center mb-8">
+        <div className="flex flex-col md:flex-row items-center space-x-4 mb-4 md:mb-0">
           <div className="relative">
             <img
               src={avatar}
               alt="Avatar"
-              className="w-20 h-20 rounded-full border-2 border-gray-300"
+              className="w-20 h-20 md:w-24 md:h-24 rounded-full border-2 border-gray-300"
             />
             <input
               type="file"
@@ -99,7 +100,7 @@ const AccountDetails = () => {
               <FaCamera className="text-white" />
             </label>
           </div>
-          <h1 className="text-2xl font-bold mb-4">{user.name}</h1>
+          <h1 className="text-xl md:text-2xl font-bold">{user.name}</h1>
         </div>
         <button
           className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800"
@@ -112,54 +113,34 @@ const AccountDetails = () => {
         </button>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <p>Họ tên</p>
-          <div
-            className={`mt-1 block w-full p-2 border border-gray-300 rounded-md ${
-              user.name ? '' : 'pt-8'
-            }`}
-          >
+          <div className="mt-1 block w-full p-2 border border-gray-300 rounded-md">
             {user.name}
           </div>
         </div>
         <div>
           <p>Số điện thoại</p>
-          <div
-            className={`mt-1 block w-full p-2 border border-gray-300 rounded-md ${
-              user.phonenumber ? '' : 'pt-8'
-            }`}
-          >
+          <div className="mt-1 block w-full p-2 border border-gray-300 rounded-md">
             {user.phonenumber}
           </div>
         </div>
         <div>
           <p>Email</p>
-          <div
-            className={`mt-1 block w-full p-2 border border-gray-300 rounded-md ${
-              user.email ? '' : 'pt-8'
-            }`}
-          >
+          <div className="mt-1 block w-full p-2 border border-gray-300 rounded-md">
             {user.email}
           </div>
         </div>
         <div>
-          <p>giới tính</p>
-          <div
-            className={`mt-1 block w-full p-2 border border-gray-300 rounded-md ${
-              user.gender ? '' : 'pt-8'
-            }`}
-          >
+          <p>Giới tính</p>
+          <div className="mt-1 block w-full p-2 border border-gray-300 rounded-md">
             {user.gender}
           </div>
         </div>
         <div>
           <p>Ngày sinh</p>
-          <div
-            className={`mt-1 block w-full p-2 border border-gray-300 rounded-md ${
-              birthday ? '' : 'pt-8'
-            }`}
-          >
+          <div className="mt-1 block w-full p-2 border border-gray-300 rounded-md">
             {birthday}
           </div>
         </div>
@@ -168,7 +149,7 @@ const AccountDetails = () => {
       {/* Edit Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75 z-50">
-          <div className="bg-white p-8 rounded-lg w-96 max-h-[90vh] overflow-auto">
+          <div className="bg-white p-6 md:p-8 rounded-lg w-11/12 md:w-96 max-h-[90vh] overflow-auto">
             <h2 className="text-xl font-semibold mb-4">Edit Profile</h2>
 
             <div className="mb-4">

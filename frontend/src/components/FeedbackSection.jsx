@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useSwipeable } from 'react-swipeable'
+
 const FeedbackSection = () => {
   const feedbacks = [
     {
@@ -62,7 +63,6 @@ const FeedbackSection = () => {
     return () => clearInterval(interval) // Clean up on component unmount
   }, [])
 
-
   return (
     <div
       className="flex flex-col items-center bg-blue-50 py-10 w-full"
@@ -82,7 +82,7 @@ const FeedbackSection = () => {
           {feedbacks.concat(feedbacks).map((item, index) => (
             <div
               key={index}
-              className="w-[33.3333%] px-4 flex-shrink-0" // Each comment takes up 1/3 of the container width
+              className="w-full sm:w-1/2 lg:w-1/3 px-4 flex-shrink-0" // Responsive widths for different screen sizes
               style={{ userSelect: 'none', pointerEvents: 'none' }}
             >
               <div
