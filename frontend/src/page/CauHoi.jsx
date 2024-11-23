@@ -6,6 +6,7 @@ import { BiLike } from 'react-icons/bi'
 import { BiSolidLike } from 'react-icons/bi'
 import { GoHeart } from 'react-icons/go'
 import { FcLike } from 'react-icons/fc'
+import { toast } from 'react-toastify'
 const CauHoi = () => {
   const [activeTab, setActiveTab] = useState('content')
   const [liked, setLiked] = useState(false)
@@ -41,8 +42,8 @@ const CauHoi = () => {
   const [answer, setAnswer] = useState([])
   const [visible, setVisible] = useState(false)
   const [userQuizId, setUserQuizId] = useState(null)
-  const [userAnswer, setUserAnswer] = useState([])
-  console.table(userAnswer)
+  const [data, setData] = useState([])
+  const [color, setColor] = useState({})
   useEffect(() => {
     async function fetchData() {
       try {
@@ -81,50 +82,71 @@ const CauHoi = () => {
     }
   }
 
-  const handleAnswerSelect = async (question_id, option_id) => {
-    if (!userQuizId) {
-      console.error('Không tìm thấy user_quiz_id')
-      return
+  const handleAdd = (question_id, option_id) => {
+    if (!question_id || !option_id) {
+      return;
     }
 
-    try {
-      await axios.post(`http://localhost:2000/api/useranswer/add-Update`, {
+    setColor({ ...color, [question_id]: option_id });
+
+    const check = data.findIndex((item) => item.question_id === question_id);
+
+    if (check !== -1) {
+      const updatedData = [...data];
+      updatedData[check].option_id = option_id; 
+
+      setData(updatedData); 
+    } else {
+      const newData = {
         user_quiz_id: userQuizId,
-        question_id: question_id,
-        selected_option_id: option_id,
-      })
+        question_id,
+        option_id
+      };
 
-      const res2 = await axios.get(
-        `http://localhost:2000/api/useranswer/list/${userQuizId}`
-      )
-
-      setUserAnswer(res2.data)
-    } catch (error) {
-      console.error('Error adding or updating answer:', error)
+      setData([...data, newData]);
     }
-  }
 
-  const handleUpdate = async (userquiz) => {
-    if (!userquiz) {
-      console.error('Không tìm thấy user_quiz_id')
-      return
+   
+  };
+  console.table(data);
+
+
+  const handleSubmit = async (userQuiz) => {
+    if (!userQuiz) {
+      toast.error('Có lỗi khi nộp bài, vui lòng thử lại')
+      return;
     }
     try {
-      await axios.put(`http://localhost:2000/api/userquiz/update`, {
-        score: scorePercentage,
-        user_quiz_id: userquiz,
-        quiz_id: id,
-      })
+      const res = await axios.post(`http://localhost:2000/api/useranswer/add`, { answer: data })
+      toast.success(res.data.message)
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   }
 
-  const clacScore = userAnswer.filter((item) => item.is_correct === 1).length
 
-  const totalQuestions = userAnswer.length
+  // const handleUpdate = async (userquiz) => {
+  //   if (!userquiz) {
+  //     console.error('Không tìm thấy user_quiz_id')
+  //     return
+  //   }
+  //   try {
+  //     window.confirm('bạn muốn nộp bài')
+  //     await axios.put(`http://localhost:2000/api/userquiz/update`, {
+  //       score: scorePercentage,
+  //       user_quiz_id: userquiz,
+  //       quiz_id: id,
+  //     })
+  //   } catch (error) {
+  //     console.error(error)
+  //   }
+  // }
 
-  const scorePercentage = (clacScore / totalQuestions) * 10
+  // const clacScore = userAnswer.filter((item) => item.is_correct === 1).length
+
+  // const totalQuestions = userAnswer.length
+
+  // const scorePercentage = (clacScore / totalQuestions) * 10
 
   return (
     <div className="bg-[#f2f3f5]">
@@ -165,9 +187,8 @@ const CauHoi = () => {
                   <div className="flex space-x-3">
                     <div
                       onClick={() => setLiked(!liked)}
-                      className={`cursor-pointer ${
-                        liked ? 'text-blue-500' : 'text-black'
-                      }`}
+                      className={`cursor-pointer ${liked ? 'text-blue-500' : 'text-black'
+                        }`}
                     >
                       {liked ? <BiSolidLike /> : <BiLike />}
                     </div>
@@ -247,11 +268,10 @@ const CauHoi = () => {
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
-                  className={`flex-1 text-center py-2 ${
-                    activeTab === tab.id
-                      ? 'border-b-2 border-indigo-500 text-indigo-600 font-bold'
-                      : 'text-gray-600'
-                  }`}
+                  className={`flex-1 text-center py-2 ${activeTab === tab.id
+                    ? 'border-b-2 border-indigo-500 text-indigo-600 font-bold'
+                    : 'text-gray-600'
+                    }`}
                   onClick={() => setActiveTab(tab.id)}
                 >
                   {tab.label}
@@ -331,7 +351,7 @@ const CauHoi = () => {
                     )}
                   </div>
                   <button
-                    onClick={() => handleUpdate(userQuizId)}
+                    onClick={() => handleSubmit(userQuizId)}
                     className="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded-md shadow-md w-full sm:w-4/6"
                   >
                     Nộp bài thi
@@ -373,21 +393,18 @@ const CauHoi = () => {
                   <h3 className="mb-5">{q.question_text}</h3>
                   <ul>
                     {answer
-                      .filter((a) => a.question_id === q.question_id)
+                      .filter((a) => a.question_id === q.question_id) // Lọc câu trả lời theo câu hỏi
                       .map((a) => (
                         <li
                           key={a.option_id}
                           className="p-2 rounded cursor-pointer"
                         >
                           <button
-                            className={`w-full text-left border px-4 py-2 rounded-lg transition-all ${
-                              userAnswer[q.question_id] === a.question_id
-                                ? 'bg-blue-500 text-white'
-                                : 'bg-white hover:bg-blue-100 focus:bg-blue-600'
-                            }`}
-                            onClick={() =>
-                              handleAnswerSelect(q.question_id, a.option_id)
-                            }
+                            className={`w-full text-left border px-4 py-2 rounded-lg transition-all ${color[q.question_id] === a.option_id
+                              ? 'bg-blue-500 text-white' // Highlight đáp án đã chọn
+                              : 'bg-white hover:bg-blue-100 focus:bg-blue-600'
+                              }`}
+                            onClick={() => handleAdd(q.question_id, a.option_id)}
                           >
                             {a.option_text}
                           </button>
@@ -399,6 +416,8 @@ const CauHoi = () => {
             </ul>
           </div>
 
+
+
           {/* Question Navigation */}
           <div className="w-full md:w-1/4 bg-white p-4 rounded-lg shadow">
             <h3 className="text-lg font-bold mb-5">Mục lục câu hỏi</h3>
@@ -406,11 +425,10 @@ const CauHoi = () => {
               {Array.from({ length: 48 }).map((_, index) => (
                 <button
                   key={index}
-                  className={`border rounded p-2 text-center ${
-                    index === 0
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-gray-100 hover:bg-blue-100'
-                  }`}
+                  className={`border rounded p-2 text-center ${index === 0
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-gray-100 hover:bg-blue-100'
+                    }`}
                 >
                   {index + 1}
                 </button>

@@ -7,18 +7,33 @@ import { Link } from 'react-router-dom'
 
 const EduQuiz = () => {
   const [data, setData] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState ([])
   const [isSidebarOpen, setIsSidebarOpen] = useState(false) // Trạng thái sidebar
 
   useEffect(() => {
-    axios
+    async function fetchData() {
+      try {
+         await axios.get('http://localhost:2000/api/auth/list')
+          .then(res => setUser(res.data.user_id))
+        
+
+      } catch (error) {
+        console.error(error);
+
+      }
+    }
+    fetchData()
+  },[])
+
+  useEffect(() => {
+  axios
       .get('http://localhost:2000/api/quizzes/list')
       .then((res) => setData(res.data))
       .catch((err) => {
         console.error('Error fetching quizzes:', err)
       })
-      .finally(() => setLoading(false))
-  }, [])
+ 
+  }, [user])
 
   const [isNam, setIsNam] = useState(true)
   const [isNganh, setIsNganh] = useState(true)
@@ -40,9 +55,8 @@ const EduQuiz = () => {
           <FiMenu /> Menu
         </button>
         <aside
-          className={`bg-white p-4 rounded-lg shadow flex flex-col space-y-4 w-full md:w-1/5 ${
-            isSidebarOpen ? 'block' : 'hidden'
-          } md:block`}
+          className={`bg-white p-4 rounded-lg shadow flex flex-col space-y-4 w-full md:w-1/5 ${isSidebarOpen ? 'block' : 'hidden'
+            } md:block`}
         >
           <button
             onClick={toggleNam}
@@ -100,19 +114,18 @@ const EduQuiz = () => {
             />
             <p className="mt-2 sm:mt-0">
               <span className="text-blue-600">
-                {loading ? 'Đang tải...' : data.length}
               </span>{' '}
               kết quả
             </p>
           </header>
           <hr />
 
-          
+
           <main className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-            {loading ? (
-              <div className="col-span-4 text-center">Đang tải đề thi...</div>
+            {!user ? (
+              <div className="col-span-4 text-center">Vui lòng đăng nhập</div>
             ) : (
-              data.map((item,index) => (
+              data.map((item, index) => (
                 <Link to={`${item.quiz_id}`}
                   key={index}
                   className="p-4 bg-white rounded-lg shadow hover:shadow-lg transition flex flex-col justify-between"

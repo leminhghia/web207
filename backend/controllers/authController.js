@@ -18,7 +18,7 @@ export const register = (req, res) => {
     bcrypt.hash(password.toString(), salt, (err, hash) => {
       if (err) return res.json({ Error: "Lỗi mã hóa mật khẩu" });
 
-      const sql = "INSERT INTO user ( name, email, password, role, created_at) VALUES (?, ?, ?, ?, ?, NOW())";
+      const sql = "INSERT INTO user ( name, email, password, role, created_at) VALUES (?, ?, ?, ?, NOW())";
       const values = [name, email, hash, role];
 
       db.query(sql, values, (err, result) => {

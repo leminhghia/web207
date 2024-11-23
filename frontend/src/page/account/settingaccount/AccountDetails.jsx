@@ -179,7 +179,7 @@ const AccountDetails = () => {
                 value={gender}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
               >
-                <option disabled selected>
+                <option disabled>
                   - Chọn Giới Tính
                 </option>
                 <option value="Nam">Nam</option>

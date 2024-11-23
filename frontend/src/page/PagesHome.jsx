@@ -31,6 +31,7 @@ const PagesHome = () => {
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4864fc] to-[#d03cfc] h-auto min-h-[40px] pb-1 text-4xl lg:text-5xl mb-3 mt-3 p-1">
               <ReactTyped
                 strings={[
+                  'phúc gay',
                   'tự động tạo câu hỏi',
                   'tạo nhanh đề thi',
                   'học tập ôn thi',

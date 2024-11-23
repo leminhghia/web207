@@ -19,7 +19,7 @@ const Login = () => {
       )
 
       if (response.data.Status === 'success') {
-        navigate('/dashboard') // Chuyển hướng sau khi đăng nhập thành công
+        navigate('/') // Chuyển hướng sau khi đăng nhập thành công
       } else {
         setError(response.data.Error)
       }

@@ -17,6 +17,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import ExamInfo from './page/ExamQuizz/ExamInfo'
 import ExamQuizz from './page/ExamQuizz/ExamQuizz'
 import Result from './page/Result'
+import Tset from './page/tset'
 
 function App() {
   return (
@@ -40,6 +41,8 @@ function App() {
           <Route path="/quizAdd" element={<QuizzAdd />} />
           <Route path="/examinfo" element={<ExamInfo />} />
           <Route path="/examquizz" element={<ExamQuizz />} />
+          <Route path="/test" element={<Tset />} />
+
           {/* <Route path="/mainAccountDetails" element={<MainAccountDetails />} /> */}
         </Routes>
         <Footer />
