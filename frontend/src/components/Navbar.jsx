@@ -78,7 +78,7 @@ const Navbar = () => {
             <p>Tài Khoản</p>
             {login ? <FaAngleUp /> : <FaAngleDown />}
             <div
-              className={`absolute text-black top-[35px] right-[-14px] shadow-md bottom-0 overflow-hidden bg-white h-[180px] ${
+              className={`absolute text-black top-[35px] right-[-14px] z-50 shadow-md bottom-0 overflow-hidden bg-white h-[180px] ${
                 login ? 'w-[170%] border-2' : 'w-0 border-0'
               }`}
             >
