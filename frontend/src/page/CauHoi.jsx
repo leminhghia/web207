@@ -1,32 +1,43 @@
-import axios from "axios";
-import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { toast } from "react-toastify";
-import Abc from "../components/abc";
-import { QuizContext } from "../context/QuizContext";
+import axios from 'axios'
+import { useContext, useEffect, useRef, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import Abc from '../components/abc'
+import { QuizContext } from '../context/QuizContext'
 const CauHoi = () => {
- 
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false)
   const hancleBack = () => {
-    setShowModal(false);
-  };
-  
-  const { id } = useParams();
-  const [question, setQuestion] = useState([]);
-  const [answer, setAnswer] = useState([]);
-  const [data, setData] = useState([]);
-  const [color, setColor] = useState({});
-  const {visible,userQuizId,setVisible} = useContext(QuizContext)
+    setShowModal(false)
+  }
+
+  const { id } = useParams()
+  const [question, setQuestion] = useState([])
+  const [answer, setAnswer] = useState([])
+  const [data, setData] = useState([])
+  const [color, setColor] = useState({})
+  const [answeredQuestions, setAnsweredQuestions] = useState(new Set())
+  const { visible, userQuizId, setVisible } = useContext(QuizContext)
+  const questionRefs = useRef([])
+  const handleNavigateToQuestion = (index) => {
+    console.log(index)
+    // setCurrentQuestionIndex(index)
+    if (questionRefs.current[index]) {
+      questionRefs.current[index].scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      })
+    }
+  }
   useEffect(() => {
     async function fetchData() {
       try {
         const res1 = await axios.get(
           `http://localhost:2000/api/question/list/${id}`
-        );
-        const questions = res1.data;
-        setQuestion(questions);
+        )
+        const questions = res1.data
+        setQuestion(questions)
 
-        const questionId = questions.map((q) => q.question_id);
+        const questionId = questions.map((q) => q.question_id)
 
         const answers = await Promise.all(
           questionId.map((question_id) =>
@@ -34,27 +45,25 @@ const CauHoi = () => {
               .get(`http://localhost:2000/api/answeroption/list/${question_id}`)
               .then((res) => res.data)
           )
-        );
-        setAnswer(answers.flat());
+        )
+        setAnswer(answers.flat())
       } catch (error) {
-        console.log(error);
+        console.log(error)
       }
     }
-    fetchData();
-  }, [id]);
-
- 
+    fetchData()
+  }, [id])
 
   const handleAdd = (question_id, option_id, isChecked) => {
     if (!question_id || !option_id) {
-      return;
+      return
     }
 
-    const filter = answer.filter((a) => a.question_id === question_id);
+    const filter = answer.filter((a) => a.question_id === question_id)
 
-    const correct = filter.filter((a) => a.is_correct === 1).length;
+    const correct = filter.filter((a) => a.is_correct === 1).length
 
-    const updatedData = [...data];
+    const updatedData = [...data]
 
     if (correct >= 2) {
       if (isChecked) {
@@ -62,56 +71,65 @@ const CauHoi = () => {
           user_quiz_id: userQuizId,
           question_id,
           option_id,
-        };
-        setData([...updatedData, newData]);
-      }
-      else {
-        const check = updatedData.findIndex((item) => item.question_id === question_id && item.option_id === item.option_id);
-        console.log(check);
+        }
+        setData([...updatedData, newData])
+      } else {
+        const check = updatedData.findIndex(
+          (item) =>
+            item.question_id === question_id &&
+            item.option_id === item.option_id
+        )
+        console.log(check)
 
         if (check !== -1) {
-          updatedData.splice(check, 1);
+          updatedData.splice(check, 1)
         }
-        setData(updatedData);
+        setData(updatedData)
       }
     } else {
-      setColor({ ...color, [question_id]: option_id });
+      setColor({ ...color, [question_id]: option_id })
 
-      const check = data.findIndex((item) => item.question_id === question_id);
+      const check = data.findIndex((item) => item.question_id === question_id)
 
       if (check !== -1) {
-        const updatedData = [...data];
-        updatedData[check].option_id = option_id;
-        setData(updatedData);
+        const updatedData = [...data]
+        updatedData[check].option_id = option_id
+        setData(updatedData)
       } else {
         const newData = {
           user_quiz_id: userQuizId,
           question_id,
           option_id,
-        };
-        setData([...data, newData]);
+        }
+        setData([...data, newData])
       }
     }
-  };
+    setAnsweredQuestions((prevAnsweredQuestions) => {
+      const updated = new Set(prevAnsweredQuestions)
+      updated.add(question_id)
+      return updated
+    })
+  }
 
-  console.log(data);
+  console.log(data)
 
   const handleSubmit = async (userQuiz) => {
     if (!userQuiz) {
-      toast.error("Có lỗi khi nộp bài, vui lòng thử lại");
-      return;
+      toast.error('Có lỗi khi nộp bài, vui lòng thử lại')
+      return
     }
     try {
-     const res = await axios.post(`http://localhost:2000/api/useranswer/add`, {
-        answer: data, user_quiz_id: userQuizId
+      const res = await axios.post(`http://localhost:2000/api/useranswer/add`, {
+        answer: data,
+        user_quiz_id: userQuizId,
       })
       toast.success(res.data.message)
 
       // toast.success(res.data.message);
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-  };
+  }
 
   // const handleUpdate = async (userquiz) => {
   //   if (!userquiz) {
@@ -139,7 +157,7 @@ const CauHoi = () => {
   return (
     <div className="bg-[#f2f3f5]">
       {visible == false ? (
-     <Abc/>
+        <Abc />
       ) : (
         <div className="flex flex-col md:flex-row justify-center gap-5 p-5">
           {/* Sidebar */}
@@ -232,14 +250,16 @@ const CauHoi = () => {
               {question.map((q, i) => {
                 const filter = answer.filter(
                   (a) => a.question_id === q.question_id
-                );
+                )
 
-                const iscorret = filter.filter(
-                  (a) => a.is_correct === 1
-                ).length;
+                const iscorret = filter.filter((a) => a.is_correct === 1).length
 
                 return (
-                  <div key={i} className="bg-white">
+                  <div
+                    key={i}
+                    ref={(el) => (questionRefs.current[i] = el)}
+                    className="bg-white"
+                  >
                     <h3 className="mb-5">{q.question_text}</h3>
                     <ul>
                       {filter.map((a) => (
@@ -270,10 +290,11 @@ const CauHoi = () => {
                             </div>
                           ) : (
                             <button
-                              className={`w-full text-left border px-4 py-2 rounded-lg transition-all ${color[q.question_id] === a.option_id
-                                ? "bg-blue-500 text-white"
-                                : "bg-white hover:bg-blue-100 focus:bg-blue-600"
-                                }`}
+                              className={`w-full text-left border px-4 py-2 rounded-lg transition-all ${
+                                color[q.question_id] === a.option_id
+                                  ? 'bg-blue-500 text-white'
+                                  : 'bg-white hover:bg-blue-100 focus:bg-blue-600'
+                              }`}
                               onClick={() =>
                                 handleAdd(q.question_id, a.option_id)
                               }
@@ -285,14 +306,36 @@ const CauHoi = () => {
                       ))}
                     </ul>
                   </div>
-                );
+                )
               })}
             </ul>
+          </div>
+          {/*  */}
+          <div
+            className="w-full md:w-1/4 bg-white p-4 rounded-lg shadow-md mb-4 md:mb-0 sticky"
+            style={{ top: '64px', maxHeight: '80vh', overflow: 'auto' }}
+          >
+            <h3 className="text-lg font-bold mb-5">Mục lục câu hỏi</h3>
+            <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-6 gap-2">
+              {question.map((q, index) => (
+                <button
+                  key={q.question_id}
+                  className={`border rounded p-2 text-center ${
+                    answeredQuestions.has(q.question_id)
+                      ? 'bg-blue-500 text-white'
+                      : 'bg-gray-100 hover:bg-blue-100'
+                  }`}
+                  onClick={() => handleNavigateToQuestion(index)}
+                >
+                  {index + 1}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default CauHoi;
+export default CauHoi
