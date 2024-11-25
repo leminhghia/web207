@@ -1,59 +1,59 @@
-import axios from 'axios'
-import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { IoIosTime } from 'react-icons/io'
-import { BiLike } from 'react-icons/bi'
-import { BiSolidLike } from 'react-icons/bi'
-import { GoHeart } from 'react-icons/go'
-import { FcLike } from 'react-icons/fc'
-import { toast } from 'react-toastify'
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { IoIosTime } from "react-icons/io";
+import { BiLike } from "react-icons/bi";
+import { BiSolidLike } from "react-icons/bi";
+import { GoHeart } from "react-icons/go";
+import { FcLike } from "react-icons/fc";
+import { toast } from "react-toastify";
 const CauHoi = () => {
-  const [activeTab, setActiveTab] = useState('content')
-  const [liked, setLiked] = useState(false)
-  const [hearted, setHearted] = useState(false)
-  const [showModal, setShowModal] = useState(false)
+  const [activeTab, setActiveTab] = useState("content");
+  const [liked, setLiked] = useState(false);
+  const [hearted, setHearted] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const hancleBack = () => {
-    setShowModal(false)
-  }
+    setShowModal(false);
+  };
   const questions = [
     {
       id: 1,
-      title: 'Câu 1: (Một đáp án)',
-      question: 'Quá trình nào sau đây thuộc quá trình sản xuất?',
+      title: "Câu 1: (Một đáp án)",
+      question: "Quá trình nào sau đây thuộc quá trình sản xuất?",
       options: [
-        'Quá trình tạo phôi',
-        'Quá trình gia công cắt gọt',
-        'Quá trình lắp ráp',
-        'Tất cả các quá trình trên',
+        "Quá trình tạo phôi",
+        "Quá trình gia công cắt gọt",
+        "Quá trình lắp ráp",
+        "Tất cả các quá trình trên",
       ],
     },
-  ]
+  ];
 
   const tabs = [
-    { id: 'content', label: 'Nội dung đề thi' },
-    { id: 'results', label: 'Kết quả ôn tập' },
-    { id: 'statistics', label: 'Thống kê ôn tập' },
-  ]
-
+    { id: "content", label: "Nội dung đề thi" },
+    { id: "results", label: "Kết quả ôn tập" },
+    { id: "statistics", label: "Thống kê ôn tập" },
+  ];
 
   //
-  const { id } = useParams()
-  const [question, setQuestion] = useState([])
-  const [answer, setAnswer] = useState([])
-  const [visible, setVisible] = useState(false)
-  const [userQuizId, setUserQuizId] = useState(null)
-  const [data, setData] = useState([])
-  const [color, setColor] = useState({})
+  const { id } = useParams();
+  const [question, setQuestion] = useState([]);
+  const [answer, setAnswer] = useState([]);
+  const [visible, setVisible] = useState(false);
+  const [userQuizId, setUserQuizId] = useState(null);
+  const [data, setData] = useState([]);
+  const [color, setColor] = useState({});
+
   useEffect(() => {
     async function fetchData() {
       try {
         const res1 = await axios.get(
           `http://localhost:2000/api/question/list/${id}`
-        )
-        const questions = res1.data
-        setQuestion(questions)
+        );
+        const questions = res1.data;
+        setQuestion(questions);
 
-        const questionId = questions.map((q) => q.question_id)
+        const questionId = questions.map((q) => q.question_id);
 
         const answers = await Promise.all(
           questionId.map((question_id) =>
@@ -61,69 +61,94 @@ const CauHoi = () => {
               .get(`http://localhost:2000/api/answeroption/list/${question_id}`)
               .then((res) => res.data)
           )
-        )
-        setAnswer(answers.flat())
+        );
+        setAnswer(answers.flat());
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     }
-    fetchData()
-  }, [id])
+    fetchData();
+  }, [id]);
 
   const handlePostData = async () => {
-    setVisible(true)
+    setVisible(true);
     try {
       const res = await axios.post(`http://localhost:2000/api/userquiz/add`, {
         quiz_id: id,
-      })
-      setUserQuizId(res.data.user_quiz_id)
+      });
+      setUserQuizId(res.data.user_quiz_id);
     } catch (error) {
-      console.error('Error posting data:', error)
+      console.error("Error posting data:", error);
     }
-  }
+  };
 
-  const handleAdd = (question_id, option_id) => {
+  const handleAdd = (question_id, option_id, isChecked) => {
     if (!question_id || !option_id) {
       return;
     }
 
-    setColor({ ...color, [question_id]: option_id });
+    const filter = answer.filter((a) => a.question_id === question_id);
 
-    const check = data.findIndex((item) => item.question_id === question_id);
+    const correct = filter.filter((a) => a.is_correct === 1).length;
 
-    if (check !== -1) {
-      const updatedData = [...data];
-      updatedData[check].option_id = option_id; 
+    const updatedData = [...data];
 
-      setData(updatedData); 
+    if (correct >= 2) {
+      if (isChecked) {
+        const newData = {
+          user_quiz_id: userQuizId,
+          question_id,
+          option_id,
+        };
+        setData([...updatedData, newData]);
+      }
+      else {
+        const check = updatedData.findIndex((item) => item.question_id === question_id && item.option_id === item.option_id);
+        console.log(check);
+
+        if (check !== -1) {
+          updatedData.splice(check, 1);
+        }
+        setData(updatedData);
+      }
     } else {
-      const newData = {
-        user_quiz_id: userQuizId,
-        question_id,
-        option_id
-      };
+      setColor({ ...color, [question_id]: option_id });
 
-      setData([...data, newData]);
+      const check = data.findIndex((item) => item.question_id === question_id);
+
+      if (check !== -1) {
+        const updatedData = [...data];
+        updatedData[check].option_id = option_id;
+        setData(updatedData);
+      } else {
+        const newData = {
+          user_quiz_id: userQuizId,
+          question_id,
+          option_id,
+        };
+        setData([...data, newData]);
+      }
     }
-
-   
   };
-  console.table(data);
 
+  console.log(data);
 
   const handleSubmit = async (userQuiz) => {
     if (!userQuiz) {
-      toast.error('Có lỗi khi nộp bài, vui lòng thử lại')
+      toast.error("Có lỗi khi nộp bài, vui lòng thử lại");
       return;
     }
     try {
-      const res = await axios.post(`http://localhost:2000/api/useranswer/add`, { answer: data })
+     const res = await axios.post(`http://localhost:2000/api/useranswer/add`, {
+        answer: data, user_quiz_id: userQuizId
+      })
       toast.success(res.data.message)
+
+      // toast.success(res.data.message);
     } catch (error) {
       console.error(error);
     }
-  }
-
+  };
 
   // const handleUpdate = async (userquiz) => {
   //   if (!userquiz) {
@@ -169,7 +194,7 @@ const CauHoi = () => {
                 {/* Thông tin */}
                 <div className="space-y-4">
                   <h1 className="text-xl font-bold text-gray-700">
-                    Công nghệ chế tạo máy
+                    Quiz 1
                   </h1>
                   <p className="text-sm text-black flex items-center gap-2 font-medium">
                     <img
@@ -180,14 +205,14 @@ const CauHoi = () => {
                     Hải Nguyễn
                   </p>
                   <p className="text-sm text-black flex items-center gap-1 font-medium">
-                    <IoIosTime size={20} style={{ color: 'black' }} />
+                    <IoIosTime size={20} style={{ color: "black" }} />
                     12/11/2024
                   </p>
                   {/* like */}
                   <div className="flex space-x-3">
                     <div
                       onClick={() => setLiked(!liked)}
-                      className={`cursor-pointer ${liked ? 'text-blue-500' : 'text-black'
+                      className={`cursor-pointer ${liked ? "text-blue-500" : "text-black"
                         }`}
                     >
                       {liked ? <BiSolidLike /> : <BiLike />}
@@ -269,8 +294,8 @@ const CauHoi = () => {
                 <button
                   key={tab.id}
                   className={`flex-1 text-center py-2 ${activeTab === tab.id
-                    ? 'border-b-2 border-indigo-500 text-indigo-600 font-bold'
-                    : 'text-gray-600'
+                    ? "border-b-2 border-indigo-500 text-indigo-600 font-bold"
+                    : "text-gray-600"
                     }`}
                   onClick={() => setActiveTab(tab.id)}
                 >
@@ -280,7 +305,7 @@ const CauHoi = () => {
             </div>
             {/*  */}
             <div className="p-6">
-              {activeTab === 'content' && (
+              {activeTab === "content" && (
                 <div>
                   <h2 className="text-lg font-semibold mb-4">Phần thi</h2>
                   {questions.map((question) => (
@@ -388,57 +413,70 @@ const CauHoi = () => {
           {/* Question Section */}
           <div className="w-full md:w-2/4 bg-white p-4 rounded-lg shadow">
             <ul className="space-y-3">
-              {question.map((q, i) => (
-                <div key={i} className="bg-white">
-                  <h3 className="mb-5">{q.question_text}</h3>
-                  <ul>
-                    {answer
-                      .filter((a) => a.question_id === q.question_id) // Lọc câu trả lời theo câu hỏi
-                      .map((a) => (
+              {question.map((q, i) => {
+                const filter = answer.filter(
+                  (a) => a.question_id === q.question_id
+                );
+
+                const iscorret = filter.filter(
+                  (a) => a.is_correct === 1
+                ).length;
+
+                return (
+                  <div key={i} className="bg-white">
+                    <h3 className="mb-5">{q.question_text}</h3>
+                    <ul>
+                      {filter.map((a) => (
                         <li
                           key={a.option_id}
                           className="p-2 rounded cursor-pointer"
                         >
-                          <button
-                            className={`w-full text-left border px-4 py-2 rounded-lg transition-all ${color[q.question_id] === a.option_id
-                              ? 'bg-blue-500 text-white' // Highlight đáp án đã chọn
-                              : 'bg-white hover:bg-blue-100 focus:bg-blue-600'
-                              }`}
-                            onClick={() => handleAdd(q.question_id, a.option_id)}
-                          >
-                            {a.option_text}
-                          </button>
+                          {iscorret > 1 ? (
+                            <div className="flex items-center space-x-2">
+                              <input
+                                type="checkbox"
+                                id={`checkbox-${a.option_id}`}
+                                className="w-4 h-4"
+                                onChange={(e) =>
+                                  handleAdd(
+                                    q.question_id,
+                                    a.option_id,
+                                    e.target.checked
+                                  )
+                                }
+                              />
+                              <label
+                                htmlFor={`checkbox-${a.option_id}`}
+                                className="text-left"
+                              >
+                                {a.option_text}
+                              </label>
+                            </div>
+                          ) : (
+                            <button
+                              className={`w-full text-left border px-4 py-2 rounded-lg transition-all ${color[q.question_id] === a.option_id
+                                ? "bg-blue-500 text-white"
+                                : "bg-white hover:bg-blue-100 focus:bg-blue-600"
+                                }`}
+                              onClick={() =>
+                                handleAdd(q.question_id, a.option_id)
+                              }
+                            >
+                              {a.option_text}
+                            </button>
+                          )}
                         </li>
                       ))}
-                  </ul>
-                </div>
-              ))}
+                    </ul>
+                  </div>
+                );
+              })}
             </ul>
-          </div>
-
-
-
-          {/* Question Navigation */}
-          <div className="w-full md:w-1/4 bg-white p-4 rounded-lg shadow">
-            <h3 className="text-lg font-bold mb-5">Mục lục câu hỏi</h3>
-            <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-6 gap-2">
-              {Array.from({ length: 48 }).map((_, index) => (
-                <button
-                  key={index}
-                  className={`border rounded p-2 text-center ${index === 0
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-gray-100 hover:bg-blue-100'
-                    }`}
-                >
-                  {index + 1}
-                </button>
-              ))}
-            </div>
           </div>
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default CauHoi
+export default CauHoi;
