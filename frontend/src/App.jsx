@@ -16,7 +16,7 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import ExamInfo from './page/ExamQuizz/ExamInfo'
 import ExamQuizz from './page/ExamQuizz/ExamQuizz'
-import Result from './page/Result'
+import ResultOnpage from './page/ResultOnpage'
 import Tset from './page/tset'
 
 function App() {
@@ -31,7 +31,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/account" element={<Account />} />
-          <Route path="/result" element={<Result />} />
+          <Route path="/resultonpage/:id" element={<ResultOnpage />} />
           <Route path="/gioi-thieu" element={<IntroductionPage />} />
           <Route path="/gop-y" element={<FeedbackPage />} />
           <Route path="/hoi-dap" element={<FAQPage />} />

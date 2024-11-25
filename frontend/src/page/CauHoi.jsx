@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useContext, useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import Abc from '../components/abc'
 import { QuizContext } from '../context/QuizContext'
@@ -9,7 +9,6 @@ const CauHoi = () => {
   const hancleBack = () => {
     setShowModal(false)
   }
-
   const { id } = useParams()
   const [question, setQuestion] = useState([])
   const [answer, setAnswer] = useState([])
@@ -18,8 +17,8 @@ const CauHoi = () => {
   const [answeredQuestions, setAnsweredQuestions] = useState(new Set())
   const { visible, userQuizId, setVisible } = useContext(QuizContext)
   const questionRefs = useRef([])
+  const [isTableVisible, setIsTableVisible] = useState(false);
   const handleNavigateToQuestion = (index) => {
-    console.log(index)
     // setCurrentQuestionIndex(index)
     if (questionRefs.current[index]) {
       questionRefs.current[index].scrollIntoView({
@@ -28,6 +27,8 @@ const CauHoi = () => {
       })
     }
   }
+
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -111,9 +112,9 @@ const CauHoi = () => {
     })
   }
 
-  console.log(data)
 
   const handleSubmit = async (userQuiz) => {
+    setIsTableVisible(true)
     if (!userQuiz) {
       toast.error('Có lỗi khi nộp bài, vui lòng thử lại')
       return
@@ -123,36 +124,23 @@ const CauHoi = () => {
         answer: data,
         user_quiz_id: userQuizId,
       })
-      toast.success(res.data.message)
 
-      // toast.success(res.data.message);
+      await axios.put(`http://localhost:2000/api/userquiz/update`, {
+        score: res.data.score,
+        user_quiz_id: userQuizId,
+        quiz_id: id,
+      })
+      toast.success(res.data.message)
+      // navigate("/resultonpage", { state: { userQuizId } });
+
     } catch (error) {
       console.error(error)
     }
   }
 
-  // const handleUpdate = async (userquiz) => {
-  //   if (!userquiz) {
-  //     console.error('Không tìm thấy user_quiz_id')
-  //     return
-  //   }
-  //   try {
-  //     window.confirm('bạn muốn nộp bài')
-  //     await axios.put(`http://localhost:2000/api/userquiz/update`, {
-  //       score: scorePercentage,
-  //       user_quiz_id: userquiz,
-  //       quiz_id: id,
-  //     })
-  //   } catch (error) {
-  //     console.error(error)
-  //   }
-  // }
-
-  // const clacScore = userAnswer.filter((item) => item.is_correct === 1).length
-
-  // const totalQuestions = userAnswer.length
-
-  // const scorePercentage = (clacScore / totalQuestions) * 10
+  const chitiet = () => {
+    
+  };
 
   return (
     <div className="bg-[#f2f3f5]">
@@ -211,13 +199,42 @@ const CauHoi = () => {
                   </div>
                   <button
                     onClick={() => handleSubmit(userQuizId)}
+
                     className="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded-md shadow-md w-full sm:w-4/6"
                   >
                     Nộp bài thi
                   </button>
+
+                  {/* Hiển thị bảng nhỏ nếu trạng thái là true */}
+                  {isTableVisible && (
+                    <div className="mt-4 bg-white shadow-lg rounded-lg p-4 w-11/12 sm:w-1/2">
+                      <h3 className="text-lg font-semibold mb-4 text-center">Chọn hành động</h3>
+                      <div className="flex justify-between">
+                        <button
+                          className="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded-md"
+                        >
+                          Quay lại
+                        </button>
+                        <Link to={`/resultonpage/${userQuizId}`}
+                          
+                           onClick={chitiet}
+                          className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
+                        >
+                          Xem chi tiết
+                        </Link>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
+
+
+
+
+
+
+
 
             <div className="bg-white mt-9 shadow-md rounded-lg p-3">
               <h2 className="text-lg font-bold mb-4">Danh sách phần thi</h2>
@@ -290,11 +307,10 @@ const CauHoi = () => {
                             </div>
                           ) : (
                             <button
-                              className={`w-full text-left border px-4 py-2 rounded-lg transition-all ${
-                                color[q.question_id] === a.option_id
-                                  ? 'bg-blue-500 text-white'
-                                  : 'bg-white hover:bg-blue-100 focus:bg-blue-600'
-                              }`}
+                              className={`w-full text-left border px-4 py-2 rounded-lg transition-all ${color[q.question_id] === a.option_id
+                                ? 'bg-blue-500 text-white'
+                                : 'bg-white hover:bg-blue-100 focus:bg-blue-600'
+                                }`}
                               onClick={() =>
                                 handleAdd(q.question_id, a.option_id)
                               }
@@ -320,11 +336,10 @@ const CauHoi = () => {
               {question.map((q, index) => (
                 <button
                   key={q.question_id}
-                  className={`border rounded p-2 text-center ${
-                    answeredQuestions.has(q.question_id)
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-gray-100 hover:bg-blue-100'
-                  }`}
+                  className={`border rounded p-2 text-center ${answeredQuestions.has(q.question_id)
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-gray-100 hover:bg-blue-100'
+                    }`}
                   onClick={() => handleNavigateToQuestion(index)}
                 >
                   {index + 1}
@@ -333,8 +348,9 @@ const CauHoi = () => {
             </div>
           </div>
         </div>
-      )}
-    </div>
+      )
+      }
+    </div >
   )
 }
 

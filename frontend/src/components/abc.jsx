@@ -13,7 +13,7 @@ const Abc = () => {
     const [activeTab, setActiveTab] = useState("content");
     const [liked, setLiked] = useState(false);
     const [hearted, setHearted] = useState(false);
-    const {setVisible,setUserQuizId} = useContext(QuizContext)
+    const {setVisible,setUserQuizId } = useContext(QuizContext)
 
     const questions = [
         {
@@ -42,6 +42,7 @@ const Abc = () => {
             quiz_id: id,
           });
           setUserQuizId(res.data.user_quiz_id);
+        
         } catch (error) {
           console.error("Error posting data:", error);
         }

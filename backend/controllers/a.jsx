@@ -1,16 +1,3 @@
-import db from "../config/db.js";
-
-export const getUsetAnswer = (req, res) => {
-  const { user_quiz_id } = req.params;
-
-  const sql = `SELECT * FROM useranswer WHERE user_quiz_id = ? `;
-  db.query(sql, [user_quiz_id], (err, data) => {
-    if (err) return console.error("ko get dc", err);
-    return res.json(data);
-  });
-};
-
-
 export const addUserAnswer = (req, res) => {
   const { user_quiz_id, answer: answers } = req.body;
 
@@ -121,11 +108,14 @@ export const addUserAnswer = (req, res) => {
           });
 
           // Tính phần trăm điểm
-          const scorePercentage = ((correctCount / totalQuestions) * 10).toFixed(2);
+          const scorePercentage = ((correctCount / totalQuestions) * 100).toFixed(2);
 
           // Gửi kết quả về client
           return res.json({
-            message: "Nộp bài thành công", score: scorePercentage,
+            message: "Nộp bài thành công",
+            totalQuestions,
+            correctCount,
+            scorePercentage: `${scorePercentage}%`,
           });
         });
       });
