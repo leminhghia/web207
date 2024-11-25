@@ -31,8 +31,8 @@ export const updateUserQuiz = (req, res) => {
       if (err) return res.json({ Error: "Lưu kết quả quiz thất bại" });
 
       const insertResultSql =
-        "INSERT INTO result (user_id, quiz_id, score, date_taken, time_taken) VALUES (?, ?, ?,NOW(),NOW())";
-      db.query(insertResultSql, [user_id, quiz_id, score], (err, result) => {
+        "INSERT INTO result (user_id, quiz_id,user_quiz_id, score, date_taken, time_taken) VALUES (?, ?, ?, ?,NOW(),NOW())";
+      db.query(insertResultSql, [user_id, quiz_id,user_quiz_id, score], (err, result) => {
         if (err) {
           return res.json({ Error: "Lưu kết quả vào bảng result thất bại" });
         }
@@ -47,10 +47,22 @@ export const getResult = (req, res) => {
   const { user_id } = req.user;
   const { id } = req.params;
   const sql = `
-  SELECT  u.name, u.email, u.user_id,uq.user_quiz_id, uq.quiz_id,  r.result_id,r.score AS result_score, r.date_taken          
-  FROM  user u JOIN  userquiz uq ON u.user_id = uq.user_id
-  LEFT JOIN result r ON uq.user_id = r.user_id AND u.user_id = r.user_id  WHERE u.user_id = ? AND uq.user_quiz_id = ?
-  ORDER BY  r.date_taken DESC;      
+SELECT 
+    u.name,
+    u.email,
+    u.user_id,
+    uq.user_quiz_id,
+    r.score,
+    r.date_taken
+FROM 
+    user u
+JOIN 
+    userquiz uq ON u.user_id = uq.user_id
+JOIN 
+    result r ON uq.user_quiz_id = r.user_quiz_id
+WHERE 
+    u.user_id = ? AND uq.user_quiz_id = ?;
+  
 `;
 
   db.query(sql, [user_id,id], (err, data) => {
