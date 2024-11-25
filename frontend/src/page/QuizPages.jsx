@@ -4,18 +4,21 @@ import { FaCirclePlay } from 'react-icons/fa6'
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md'
 import { FiMenu } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
+import { useContext } from 'react'
+import { QuizContext } from '../context/QuizContext'
 
 const EduQuiz = () => {
   const [data, setData] = useState([])
-  const [user, setUser] = useState ([])
+  const [user, setUser] = useState([])
   const [isSidebarOpen, setIsSidebarOpen] = useState(false) // Trạng thái sidebar
-
+  const { setVisible } = useContext(QuizContext)
   useEffect(() => {
     async function fetchData() {
       try {
-         await axios.get('http://localhost:2000/api/auth/list')
+        setVisible(false)
+        await axios.get('http://localhost:2000/api/auth/list')
           .then(res => setUser(res.data.user_id))
-        
+
 
       } catch (error) {
         console.error(error);
@@ -23,16 +26,16 @@ const EduQuiz = () => {
       }
     }
     fetchData()
-  },[])
+  }, [setVisible])
 
   useEffect(() => {
-  axios
+    axios
       .get('http://localhost:2000/api/quizzes/list')
       .then((res) => setData(res.data))
       .catch((err) => {
         console.error('Error fetching quizzes:', err)
       })
- 
+
   }, [user])
 
   const [isNam, setIsNam] = useState(true)
