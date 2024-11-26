@@ -7,13 +7,15 @@ const QuizContextProvider = (props) => {
   const [reload, setReload] = useState(false)
   const [visible, setVisible] = useState(false) //constext
   const [userQuizId, setUserQuizId] = useState(null) //conteext
+  const [idthemquiz,setIdthemquiz] = useState(0)
+  const [tab, setTab] = useState(1)
   const value = {
     reload,
     setReload,
     visible,
     setVisible,
     userQuizId,
-    setUserQuizId,
+    setUserQuizId, tab, setTab,idthemquiz,setIdthemquiz
   }
 
   return (

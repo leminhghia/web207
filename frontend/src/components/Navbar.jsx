@@ -29,7 +29,6 @@ const Navbar = () => {
     setReload(false)
     window.location.reload(true)
   }
-  console.log(reload)
 
   const handleDelete = () => {
     axios
@@ -43,7 +42,6 @@ const Navbar = () => {
   const handleMenuItemClick = () => {
     setMenuOpen(false) // Đóng menu khi click vào một mục
   }
-console.log(user);
 
   return (
     <div className="w-full bg-gray-50 z-100  border border-gray-200 sticky top-0">

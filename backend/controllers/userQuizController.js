@@ -53,7 +53,8 @@ SELECT
     u.user_id,
     uq.user_quiz_id,
     r.score,
-    r.date_taken
+    r.date_taken,
+    r.time_taken
 FROM 
     user u
 JOIN 

@@ -20,7 +20,7 @@ import ResultOnpage from './page/ResultOnpage'
 import Tset from './page/tset'
 import AccountFooter from './page/account/AccountFooter'
 import AccountHeader from './page/account/AccountHeader'
-
+import QuestionAdd from './page/QuestionAdd'
 function App() {
   const location = useLocation()
   const pagesWithCustomHeaderFooter = ['/account']
@@ -67,6 +67,7 @@ function App() {
               <Route path="/examinfo" element={<ExamInfo />} />
               <Route path="/examquizz" element={<ExamQuizz />} />
               <Route path="/test" element={<Tset />} />
+              <Route path="/quizadd/:id" element={<QuestionAdd />} />
               {/* <Route path="/mainAccountDetails" element={<MainAccountDetails />} /> */}
             </Routes>
           </div>
