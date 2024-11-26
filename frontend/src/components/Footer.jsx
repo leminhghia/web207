@@ -6,7 +6,7 @@ import { TfiCheck } from 'react-icons/tfi'
 
 const Footer = () => {
   return (
-    <footer className="relative bg-[#333333] text-gray-300 pt-16 pb-10 mt-72">
+    <footer className="relative bg-[#333333] text-gray-300 pt-16 pb-10 mt-72 z-[-1]">
       {/* Phần bo tròn dè lên trên */}
       <div className="absolute -top-60 left-1/2 transform -translate-x-1/2 h-[300px] md:h-[400px] bg-gradient-to-r from-[#d03cfc] to-[#4864fc] rounded-xl w-11/12 md:w-4/5">
         <div className="p-6 sm:p-8 md:p-14">
