@@ -1,14 +1,16 @@
 // src/pages/Login.jsx
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { QuizContext } from '../context/QuizContext'
 
 const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const { reload, setReload } = useContext(QuizContext)
+
   const navigate = useNavigate()
-	
 
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -19,6 +21,7 @@ const Login = () => {
       )
 
       if (response.data.Status === 'success') {
+        setReload(true)
         navigate('/') // Chuyển hướng sau khi đăng nhập thành công
       } else {
         setError(response.data.Error)
@@ -71,6 +74,12 @@ const Login = () => {
           </button>
         </form>
         {error && <p className="mt-4 text-red-500 text-center">{error}</p>}
+        <p className="mt-6 text-sm text-center text-gray-600">
+          Chưa có tài khoản?{' '}
+          <Link to="/register" className="text-blue-500 hover:underline">
+            Đăng ký ngay
+          </Link>
+        </p>
       </div>
     </div>
   )
