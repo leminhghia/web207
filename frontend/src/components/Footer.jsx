@@ -121,7 +121,7 @@ const Footer = () => {
         <div className="flex justify-center mb-6">
           <hr className="border border-[#433753] w-4/5" />
         </div>
-        <p>Copyright © 2022-2024 PTCorp Software</p>
+        <p>Copyright © 2024-2025 DRX Software</p>
       </div>
     </footer>
   )

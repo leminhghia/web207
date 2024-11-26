@@ -38,14 +38,14 @@ const ContactPage = () => {
                 <span className="text-gray-500 flex flex-col">Văn phòng</span>{' '}
                 Tầng 5, số 33, TP Biên Hòa - Đồng Nai
               </p>
-              <p>
+              <div>
                 <span className="text-gray-500">Cộng đồng</span>
                 <div className="flex gap-2 mt-2">
                   <LiaFacebookSquare size={30} style={{ color: 'blue' }} />
                   <AiFillTikTok size={30} style={{ color: 'blue' }} />
                   <FaYoutube size={30} style={{ color: 'blue' }} />
                 </div>
-              </p>
+              </div>
             </div>
 
             <div className="mt-4 flex space-x-3">

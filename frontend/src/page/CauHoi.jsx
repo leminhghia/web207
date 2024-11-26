@@ -149,17 +149,18 @@ const CauHoi = () => {
       ) : (
         <div className="flex flex-col md:flex-row justify-center gap-5 p-5">
           {/* Sidebar */}
-          <div className="w-full md:w-1/4 bg-gray-100">
+          <div   className="w-full md:w-1/4 bg-white p-4 rounded-lg shadow-md mb-4 md:mb-0 sticky"
+            style={{ top: '64px', maxHeight: '80vh', overflow: 'auto' }}>
             <div className="bg-white shadow-md rounded-lg p-3">
               <div className="space-y-3">
-                <h1 className="text-lg font-bold">Công nghệ chế tạo máy</h1>
+                <h1 className="text-lg font-bold">quiz 1</h1>
                 <p className="text-sm text-gray-500">Chế độ: Thi thử</p>
                 <hr />
               </div>
               <div className="flex flex-col space-y-3">
                 <div className="text-gray-700 flex flex-col space-y-2 mt-2">
                   <span className="mr-2">Thời gian còn lại:</span>
-                  <span className="font-bold text-red-500">59:36</span>
+                  <span className="font-bold text-red-500"></span>
                 </div>
                 <hr />
                 <div className="flex flex-col sm:flex-row items-center gap-3">

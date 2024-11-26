@@ -24,9 +24,12 @@ function App() {
     <div>
       <div className="">
         <ToastContainer />
-        <Navbar />
+       <div className='sticky top-0 z-10'>
+       <Navbar />
+       </div>
         {/* <Navbar /> */}
-        <Routes>
+      <div className='relative z-0'>
+      <Routes>
           <Route index path="/" element={<PagesHome />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -45,6 +48,7 @@ function App() {
 
           {/* <Route path="/mainAccountDetails" element={<MainAccountDetails />} /> */}
         </Routes>
+      </div>
         <Footer />
       </div>
     </div>

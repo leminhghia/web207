@@ -17,7 +17,6 @@ const ResultOnpage = () => {
         }
         fetchData()
     }, [id])
-  console.table(data)
     return (
         <div>
             {
@@ -25,8 +24,10 @@ const ResultOnpage = () => {
                     const formatDate = new Date(item.date_taken).toLocaleDateString('vi-VN');
                     return (
                         <div key={index}>
-                            <p>{item.name}</p>
+                            <p>{item.email}</p>
                             <p>{formatDate}</p>
+                            <p>{item.time_taken}</p>
+                            <p>{item.score}</p>
                         </div>
                     );
                 })
