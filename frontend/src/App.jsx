@@ -49,8 +49,10 @@ function App() {
         </>
       ) : (
         <>
-          <Navbar />
-          <div className="flex-grow">
+       <div className='sticky top-0 z-10'>
+       <Navbar />
+       </div>
+          <div className="flex-grow relative z-0">
             <Routes>
               <Route index path="/" element={<PagesHome />} />
               <Route path="/login" element={<Login />} />
