@@ -9,13 +9,14 @@ const QuizContextProvider = (props) => {
   const [userQuizId, setUserQuizId] = useState(null) //conteext
   const [idthemquiz,setIdthemquiz] = useState(0)
   const [tab, setTab] = useState(1)
+  const [checkId,setCheckId] = useState('')
   const value = {
     reload,
     setReload,
     visible,
     setVisible,
     userQuizId,
-    setUserQuizId, tab, setTab,idthemquiz,setIdthemquiz
+    setUserQuizId, tab, setTab,idthemquiz,setIdthemquiz,checkId,setCheckId
   }
 
   return (

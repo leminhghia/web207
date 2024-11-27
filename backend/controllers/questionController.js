@@ -11,10 +11,10 @@ export const getSubject = (req, res) => {
 };
 
 export const getQuestion = (req, res) => {
-  const { quiz_id, question_id } = req.query;
+  const { id } = req.params;
 
-  const sql = ` SELECT * FROM question WHERE quiz_id = ? AND question_id = ?`;
-  db.query(sql, [quiz_id, question_id], (err, data) => {
+  const sql = ` SELECT * FROM question WHERE quiz_id = ?`;
+  db.query(sql, [id], (err, data) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ error: "Lỗi khi thêm câu trả lời" });
@@ -23,9 +23,53 @@ export const getQuestion = (req, res) => {
   });
 };
 
+export const getQuestionbyId = (req, res) => {
+  const { id } = req.params;
+
+  const sql = `
+    SELECT 
+      q.question_id, 
+      q.question_text, 
+      a.option_id, 
+      a.option_text, 
+      a.is_correct
+    FROM 
+      question q
+    JOIN 
+      answeroption a ON q.question_id = a.question_id
+    WHERE 
+      q.question_id = ?
+  `;
+
+  db.query(sql, [id], (err, data) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Lỗi khi lấy câu hỏi và lựa chọn" });
+    }
+
+    // Tạo đối tượng để chứa câu hỏi và lựa chọn
+    const questionData = {
+      question_id: data[0]?.question_id,
+      question_text: data[0]?.question_text,
+      options: [],
+    };
+
+    // thêm dữ liệu option vào mảng
+    data.forEach((row) => {
+      questionData.options.push({
+        option_id: row.option_id,
+        option_text: row.option_text,
+        is_correct: row.is_correct,
+      });
+    });
+
+    return res.json(questionData);
+  });
+};
+
 export const addQuestion = (req, res) => {
   const { quiz_id, question, answers } = req.body;
-
+  console.log(req.body);
   const questionSql = `INSERT INTO question (quiz_id, question_text) VALUES (?, ?)`;
   db.query(questionSql, [quiz_id, question], (err, result) => {
     if (err) {
@@ -52,6 +96,42 @@ export const addQuestion = (req, res) => {
         message: "Câu hỏi và câu trả lời được thêm thành công",
         question_id: result.insertId,
       });
+    });
+  });
+};
+
+export const updateQuestion = (req, res) => {
+  const { question_id, question, answers } = req.body;
+
+
+  // Cập nhật câu hỏi
+  const questionSql = `UPDATE question SET  question_text = ? WHERE question_id = ?`;
+  db.query(questionSql, [ question, question_id], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Lỗi khi cập nhật câu hỏi" });
+    }
+
+    // Cập nhật các câu trả lời
+    const answerSql = `UPDATE answeroption SET option_text = ?, is_correct = ? WHERE question_id = ? AND option_id = ?`;
+    answers.forEach((answer) => {
+      db.query(
+        answerSql,
+        [answer.answer_text, answer.is_correct, question_id, answer.option_id],
+        (err) => {
+          if (err) {
+            console.error(err);
+            return res
+              .status(500)
+              .json({ error: "Lỗi khi cập nhật câu trả lời" });
+          }
+        }
+      );
+    });
+
+    return res.json({
+      message: "Cập nhật câu hỏi và câu trả lời thành công",
+      question_id,
     });
   });
 };
