@@ -1,15 +1,26 @@
-import axios from "axios";
-import { useContext, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { toast } from "react-toastify";
-import DanhSachPhanThi from './DanhSachPhanThi';
-import { QuizContext } from "../../context/QuizContext";
-import { useNavigate } from "react-router-dom";
+import axios from 'axios'
+import { useContext, useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import DanhSachPhanThi from './DanhSachPhanThi'
+import { QuizContext } from '../../context/QuizContext'
+import { useNavigate } from 'react-router-dom'
+import { IoIosAdd } from 'react-icons/io'
 const Soancauhoi = () => {
-  const { id } = useParams();
+  const { id } = useParams()
   const naviagte = useNavigate()
   const { checkId } = useContext(QuizContext)
-
+  // const [answersCauhoi, setAnswersCauhoi] = useState([
+  //   {
+  //     text: '',
+  //     style: {
+  //       fontSize: 'normal',
+  //       fontWeight: 'normal',
+  //       fontStyle: 'normal',
+  //       textDecoration: 'none',
+  //     },
+  //   },
+  // ])
   const [answers, setAnswers] = useState([
     {
       text: '',
@@ -47,96 +58,100 @@ const Soancauhoi = () => {
         textDecoration: 'none',
       },
     },
-  ]);
+  ])
 
-
-  const [data, setData] = useState([]);
-  const [question, setQuestion] = useState('');
+  const [data, setData] = useState([])
+  const [question, setQuestion] = useState('')
   const [userAnswers, setUserAnswers] = useState([
     { option_id: null, answer_text: '', is_correct: 0 },
     { option_id: null, answer_text: '', is_correct: 0 },
     { option_id: null, answer_text: '', is_correct: 0 },
     { option_id: null, answer_text: '', is_correct: 0 },
-  ]);
+  ])
 
   useEffect(() => {
     if (!checkId) {
-      console.error("ID không hợp lệ!");
-      return;
+      console.error('ID không hợp lệ!')
+      return
     }
 
     const fetchData = async () => {
       try {
-        const res = await axios.get(`http://localhost:2000/api/question/getid/${checkId}`);
-        setData(res.data);
+        const res = await axios.get(
+          `http://localhost:2000/api/question/getid/${checkId}`
+        )
+        setData(res.data)
 
         // Cập nhật câu hỏi
-        setQuestion(res.data.question_text);
+        setQuestion(res.data.question_text)
 
-        const answers = res.data.options.map(option => ({
+        const answers = res.data.options.map((option) => ({
           option_id: option.option_id,
           answer_text: option.option_text,
-          is_correct: option.is_correct
-        }));
+          is_correct: option.is_correct,
+        }))
 
-        setUserAnswers(answers);
+        setUserAnswers(answers)
       } catch (error) {
-        console.error('Lỗi khi lấy dữ liệu:', error);
+        console.error('Lỗi khi lấy dữ liệu:', error)
       }
-    };
+    }
 
-    fetchData();
-  }, [checkId]);
-
+    fetchData()
+  }, [checkId])
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!question.trim()) return;
+    e.preventDefault()
+    if (!question.trim()) return
 
-    const correctAnswer = userAnswers.some(answer => answer.is_correct);
-    if (!correctAnswer) return;
+    const correctAnswer = userAnswers.some((answer) => answer.is_correct)
+    if (!correctAnswer) return
 
-    const allAnswersFilled = userAnswers.every(answer => answer.answer_text.trim());
-    if (!allAnswersFilled) return;
+    const allAnswersFilled = userAnswers.every((answer) =>
+      answer.answer_text.trim()
+    )
+    if (!allAnswersFilled) return
 
     try {
       const res = await axios.post(`http://localhost:2000/api/question/add`, {
         quiz_id: id,
         question,
         answers: userAnswers,
-      });
-      toast.success(res.data.message);
+      })
+      toast.success(res.data.message)
 
       naviagte(0)
     } catch (err) {
-      console.error(err);
+      console.error(err)
     }
-  };
+  }
 
   const handleUpdate = async (e) => {
-    e.preventDefault();
-    if (!question.trim()) return;
+    e.preventDefault()
+    if (!question.trim()) return
 
-    const correctAnswer = userAnswers.some(answer => answer.is_correct);
-    if (!correctAnswer) return;
+    const correctAnswer = userAnswers.some((answer) => answer.is_correct)
+    if (!correctAnswer) return
 
-    const allAnswersFilled = userAnswers.every(answer => answer.answer_text.trim() && answer.option_id !== null);
-    if (!allAnswersFilled) return;
+    const allAnswersFilled = userAnswers.every(
+      (answer) => answer.answer_text.trim() && answer.option_id !== null
+    )
+    if (!allAnswersFilled) return
 
     try {
       const res = await axios.put(`http://localhost:2000/api/question/update`, {
-        question_id:checkId,
+        question_id: checkId,
         question,
         answers: userAnswers,
-      });
-      toast.success(res.data.message);
+      })
+      toast.success(res.data.message)
 
       naviagte(0)
     } catch (err) {
-      console.error(err);
+      console.error(err)
     }
-  };
-  
+  }
+
   const handleAddAnswer = () => {
     setAnswers([
       ...answers,
@@ -149,82 +164,200 @@ const Soancauhoi = () => {
           textDecoration: 'none',
         },
       },
-    ]);
+    ])
     setUserAnswers([
       ...userAnswers,
       { option_id: null, answer_text: '', is_correct: 0 },
-    ]);
-  };
+    ])
+  }
 
   const handleDeleteAnswer = (index) => {
-    setAnswers(answers.filter((_, i) => i !== index));
-    setUserAnswers(userAnswers.filter((_, i) => i !== index));
-  };
+    setAnswers(answers.filter((_, i) => i !== index))
+    setUserAnswers(userAnswers.filter((_, i) => i !== index))
+  }
 
   const handleFontSizeChange = (index, e) => {
-    const updatedAnswers = [...answers];
-    updatedAnswers[index].style.fontSize = e.target.value;
-    setAnswers(updatedAnswers);
-  };
+    const updatedAnswers = [...answers]
+    updatedAnswers[index].style.fontSize = e.target.value
+    setAnswers(updatedAnswers)
+  }
 
   const handleFontWeightChange = (index) => {
-    const updatedAnswers = [...answers];
+    const updatedAnswers = [...answers]
     updatedAnswers[index].style.fontWeight =
-      updatedAnswers[index].style.fontWeight === 'bold' ? 'normal' : 'bold';
-    setAnswers(updatedAnswers);
-  };
+      updatedAnswers[index].style.fontWeight === 'bold' ? 'normal' : 'bold'
+    setAnswers(updatedAnswers)
+  }
 
   const handleFontStyleChange = (index) => {
-    const updatedAnswers = [...answers];
+    const updatedAnswers = [...answers]
     updatedAnswers[index].style.fontStyle =
-      updatedAnswers[index].style.fontStyle === 'italic' ? 'normal' : 'italic';
-    setAnswers(updatedAnswers);
-  };
+      updatedAnswers[index].style.fontStyle === 'italic' ? 'normal' : 'italic'
+    setAnswers(updatedAnswers)
+  }
 
   const handleTextDecorationChange = (index) => {
-    const updatedAnswers = [...answers];
+    const updatedAnswers = [...answers]
     updatedAnswers[index].style.textDecoration =
-      updatedAnswers[index].style.textDecoration === 'underline' ? 'none' : 'underline';
-    setAnswers(updatedAnswers);
-  };
+      updatedAnswers[index].style.textDecoration === 'underline'
+        ? 'none'
+        : 'underline'
+    setAnswers(updatedAnswers)
+  }
 
   const handleAnswerChange = (index, value) => {
-    const newAnswers = [...userAnswers];
-    newAnswers[index].answer_text = value;
-    setUserAnswers(newAnswers);
-  };
+    const newAnswers = [...userAnswers]
+    newAnswers[index].answer_text = value
+    setUserAnswers(newAnswers)
+  }
 
   const handleIsCorrectChange = (index) => {
-    const newAnswers = [...userAnswers];
+    const newAnswers = [...userAnswers]
     newAnswers.forEach((answer, idx) => {
-      answer.is_correct = idx === index ? 1 : 0;
-    });
-    setUserAnswers(newAnswers);
-  };
+      answer.is_correct = idx === index ? 1 : 0
+    })
+    setUserAnswers(newAnswers)
+  }
+  //
+  const [questionStyle, setQuestionStyle] = useState({
+    fontSize: 'normal',
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+    textDecoration: 'none',
+  })
+  const handleQuestionFontSizeChange = (e) => {
+    setQuestionStyle({ ...questionStyle, fontSize: e.target.value })
+  }
 
+  const handleQuestionFontWeightChange = () => {
+    setQuestionStyle({
+      ...questionStyle,
+      fontWeight: questionStyle.fontWeight === 'bold' ? 'normal' : 'bold',
+    })
+  }
 
+  const handleQuestionFontStyleChange = () => {
+    setQuestionStyle({
+      ...questionStyle,
+      fontStyle: questionStyle.fontStyle === 'italic' ? 'normal' : 'italic',
+    })
+  }
+
+  const handleQuestionTextDecorationChange = () => {
+    setQuestionStyle({
+      ...questionStyle,
+      textDecoration:
+        questionStyle.textDecoration === 'underline' ? 'none' : 'underline',
+    })
+  }
+  //update image
+  const [uploadedImage, setUploadedImage] = useState(null)
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onload = () => {
+        setUploadedImage(reader.result) // Lưu đường dẫn hình ảnh vào state
+      }
+      reader.readAsDataURL(file)
+    }
+  }
   return (
-    <div className="grid grid-cols-[2fr_4fr] gap-4 mt-10 mx-4">
-      <div className="sticky top-[64px] overflow-auto max-h-[80vh]">
+    <div className="grid grid-cols-[2fr_4fr] gap-4 mt-10 mx-4 bg-gray-100 p-4">
+      <div className="sticky top-[64px] overflow-auto max-h-[80vh] ">
         <DanhSachPhanThi />
       </div>
-
-      <form onSubmit={checkId && data ? handleUpdate : handleSubmit} className="bg-gray-100 p-4 rounded shadow flex flex-col">
+      <form
+        onSubmit={checkId && data ? handleUpdate : handleSubmit}
+        className="bg-white p-4 rounded shadow-md flex flex-col"
+      >
         <p className="font-semibold text-lg mb-4">Chỉnh sửa câu hỏi</p>
-        <p className="font-medium mb-2">Loại câu hỏi</p>
-        <select className="border border-gray-300 rounded px-2 py-1 mb-4">
-          <option value="">Một đáp án</option>
-          <option value="">Nhiều đáp án</option>
-          <option value="">Đúng / Sai</option>
-        </select>
+        <div>
+          <p className="font-medium mb-2">Loại câu hỏi</p>
+          <select className="w-2/12 border border-gray-300 rounded px-2 py-1 mb-4 focus:outline-none hover:shadow-sm hover:shadow-purple-400 hover:border-blue-500 focus:border-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+            <option value="">Một đáp án</option>
+            <option value="">Nhiều đáp án</option>
+            <option value="">Đúng / Sai</option>
+          </select>
+        </div>
+        {/* Soạn câu hỏi */}
         <p className="font-medium mb-2">Soạn câu hỏi</p>
-        <input
-          className="outline"
-          type="text"
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-        />
-
+        <div>
+          <div className="border border-gray-300 rounded-t-xl flex items-center p-2 gap-2 bg-gray-50">
+            <select
+              className="border border-gray-300 rounded px-2 py-1 text-sm"
+              onChange={handleQuestionFontSizeChange}
+              value={questionStyle.fontSize}
+            >
+              <option value="normal">Normal</option>
+              <option value="heading1">Heading 1</option>
+              <option value="heading2">Heading 2</option>
+            </select>
+            <button
+              type="button"
+              onClick={handleQuestionFontWeightChange}
+              className="px-2 py-1 text-black hover:text-blue-600"
+            >
+              <b>B</b>
+            </button>
+            <button
+              type="button"
+              onClick={handleQuestionFontStyleChange}
+              className="px-2 py-1 text-black hover:text-blue-600"
+            >
+              <i>I</i>
+            </button>
+            <button
+              type="button"
+              onClick={handleQuestionTextDecorationChange}
+              className="px-2 py-1 text-black hover:text-blue-600"
+            >
+              <u>U</u>
+            </button>
+            <label
+              htmlFor="upload-image"
+              className="px-2 py-1 text-black hover:text-blue-600 cursor-pointer"
+            >
+              📷
+            </label>
+            <input
+              id="upload-image"
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleImageUpload}
+            />
+          </div>
+          <textarea
+            className="border border-gray-300 rounded-b-xl w-full h-32 p-2 mb-2 hover:border-blue-500 focus:border-blue-500 focus:outline-none"
+            type="text"
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+            style={{
+              fontSize:
+                questionStyle.fontSize === 'normal'
+                  ? '16px'
+                  : questionStyle.fontSize === 'heading1'
+                  ? '24px'
+                  : '20px',
+              fontWeight: questionStyle.fontWeight,
+              fontStyle: questionStyle.fontStyle,
+              textDecoration: questionStyle.textDecoration,
+            }}
+            placeholder="Nhập câu hỏi"
+          />
+          {uploadedImage && (
+            <div className="mt-2">
+              <img
+                src={uploadedImage}
+                alt="Uploaded"
+                className="max-w-full max-h-64 border rounded"
+              />
+            </div>
+          )}
+        </div>
+        {/* đáp án */}
         <div>
           <p className="font-medium mb-2">Câu trả lời</p>
           {answers.map((answer, index) => (
@@ -236,6 +369,7 @@ const Soancauhoi = () => {
                     name="answer"
                     checked={userAnswers[index]?.is_correct}
                     onChange={() => handleIsCorrectChange(index)}
+                    className="w-3 h-3 transform scale-150"
                   />
                   <p>{`Đáp án ${index + 1}`}</p>
                 </div>
@@ -280,7 +414,7 @@ const Soancauhoi = () => {
                   </button>
                 </div>
                 <textarea
-                  className="border border-gray-300 rounded-b-xl w-full h-32 p-2 mb-2"
+                  className="border border-gray-300 rounded-b-xl w-full h-32 p-2 mb-2 hover:border-blue-500 focus:border-blue-500 focus:outline-none"
                   placeholder="Nhập nội dung đáp án"
                   value={userAnswers[index]?.answer_text}
                   onChange={(e) => handleAnswerChange(index, e.target.value)}
@@ -289,8 +423,8 @@ const Soancauhoi = () => {
                       answer.style.fontSize === 'normal'
                         ? '16px'
                         : answer.style.fontSize === 'heading1'
-                          ? '24px'
-                          : '20px',
+                        ? '24px'
+                        : '20px',
                     fontWeight: answer.style.fontWeight,
                     fontStyle: answer.style.fontStyle,
                     textDecoration: answer.style.textDecoration,
@@ -302,22 +436,28 @@ const Soancauhoi = () => {
           <button
             onClick={handleAddAnswer}
             type="button"
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+            className="relative group bg-gradient-to-r from-[#ff80cb] to-[#fc9470] text-white px-4 py-2 rounded-md flex items-center justify-center hover:shadow-md"
           >
+            <IoIosAdd className="mr-1" />
             Thêm đáp án
+            <div className="absolute mt-2 top-full bg-gray-700 text-white text-[12px] rounded-md px-3 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-400 shadow-md">
+              Thêm một đáp án mới
+            </div>
           </button>
         </div>
-        <button
-          type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-4"
-        >
-          {checkId && data ?
-            'Cập nhật câu hỏi' : 'lưu câu hỏi và tiếp tục tạo mới'
-          }
-        </button>
+        <div className=" flex justify-center">
+          <button
+            type="submit"
+            className="w-1/2  bg-gradient-to-r from-[#4864fc] to-[#d03cfc] text-white px-4 py-2 rounded mt-4 transition-transform duration-200 ease-in-out hover:scale-105 active:scale-95"
+          >
+            {checkId && data
+              ? 'Cập nhật câu hỏi'
+              : 'Lưu câu hỏi và tiếp tục tạo mới'}
+          </button>
+        </div>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default Soancauhoi;
+export default Soancauhoi
