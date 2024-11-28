@@ -66,7 +66,7 @@ export const addQuiz = (req, res) => {
 
         const insertsql = `INSERT INTO user_quiz_creator (user_id , quiz_id , created_at)
         VALUES (?,?,NOW())`;
-        db.query(insertsql, [user_id, quiz_id], (err, data) => {
+        db.query(insertsql, [user_id, quiz_id], (err, result) => {
           if (err) {
             return res.json({ Error: "Thêm quiz thất bại" });
           }

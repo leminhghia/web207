@@ -71,7 +71,6 @@ export const getQuestionbyId = (req, res) => {
 
 export const addQuestion = (req, res) => {
   const { quiz_id, question, question_type, answers } = req.body;
-  console.log(req.body);
 
   const questionSql = `INSERT INTO question (quiz_id, question_text,question_type) VALUES (?, ?,?)`;
   db.query(questionSql, [quiz_id, question, question_type], (err, result) => {
@@ -141,7 +140,6 @@ export const updateQuestion = (req, res) => {
 
 export const DeleteQuestion = (req, res) => {
   const { id, checkId } = req.params;
-  console.log(req.params);
   
   const sql = `DELETE FROM question WHERE quiz_id = ? AND question_id = ?`;
   db.query(sql,[id,checkId],(err)=>{

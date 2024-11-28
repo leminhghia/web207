@@ -1,4 +1,5 @@
 import db from "../config/db.js";
+import { login } from "./authController.js";
 export const addUserQuiz = (req, res) => {
   const { user_id } = req.user;
   const { quiz_id } = req.body;
@@ -22,28 +23,65 @@ export const updateUserQuiz = (req, res) => {
 
   const checkSql = "SELECT * FROM userquiz WHERE user_quiz_id = ?";
   db.query(checkSql, [user_quiz_id], (err, data) => {
-    if (err) return res.json({ Error: "Không tìm thấy quiz" });
+    if (err || data.length === 0)
+      return res.json({ Error: "Không tìm thấy quiz" });
 
-    const end_time = new Date();
+    const start_time = data[0].start_time;
+
     const updateSql =
-      "UPDATE userquiz SET end_time = ?, score = ? WHERE user_quiz_id = ?";
-    db.query(updateSql, [end_time, score, user_quiz_id], (err, result) => {
+      "UPDATE userquiz SET end_time = NOW(),time_taken = NOW(), score = ? WHERE user_quiz_id = ?";
+    db.query(updateSql, [score, user_quiz_id], (err, result) => {
       if (err) return res.json({ Error: "Lưu kết quả quiz thất bại" });
 
-      const insertResultSql =
-        "INSERT INTO result (user_id, quiz_id,user_quiz_id, score, date_taken, time_taken) VALUES (?, ?, ?, ?,NOW(),NOW())";
-      db.query(insertResultSql, [user_id, quiz_id,user_quiz_id, score], (err, result) => {
-        if (err) {
-          return res.json({ Error: "Lưu kết quả vào bảng result thất bại" });
+      // Truy vấn lại để lấy end_time
+      const getEndTimeSql =
+        "SELECT end_time FROM userquiz WHERE user_quiz_id = ?";
+      db.query(getEndTimeSql, [user_quiz_id], (err, resultData) => {
+        if (err || resultData.length === 0)
+          return res.json({ Error: "Không thể lấy end_time" });
+
+        const end_time = resultData[0].end_time;
+        function timeToSeconds(time) {
+          const [hours, minutes, seconds] = time.split(":").map(Number);
+          return hours * 3600 + minutes * 60 + seconds;
+        }
+        const timeTaken = timeToSeconds(end_time) - timeToSeconds(start_time);
+
+        let rating = "";
+        if (score > 8.4) {
+          rating = "giỏi";
+        } else if (score > 6.9) {
+          rating = "Khá";
+        } else if (score > 5.4) {
+          rating = "Trung bình";
+        } else if (score > 3.9) {
+          rating = "Yếu";
+        } else {
+          rating = "Kém";
         }
 
-        res.json({ message: "Thanh cong", score });
+        // Lưu kết quả vào bảng result
+        const insertResultSql =
+          "INSERT INTO result (user_id, quiz_id, user_quiz_id, score, rating, date_taken, time_taken) VALUES (?, ?, ?, ?, ?, NOW(),?)";
+        db.query(
+          insertResultSql,
+          [user_id, quiz_id, user_quiz_id, score, rating, timeTaken],
+          (err, insertResult) => {
+            if (err) {
+              return res.json({
+                Error: "Lưu kết quả vào bảng result thất bại",
+              });
+            }
+
+            res.json({ message: "Thành công", score });
+          }
+        );
       });
     });
   });
 };
 
-export const getResult = (req, res) => {
+export const getResultById = (req, res) => {
   const { user_id } = req.user;
   const { id } = req.params;
   const sql = `
@@ -54,7 +92,8 @@ SELECT
     uq.user_quiz_id,
     r.score,
     r.date_taken,
-    r.time_taken
+    r.time_taken,
+    r.rating
 FROM 
     user u
 JOIN 
@@ -66,7 +105,28 @@ WHERE
   
 `;
 
-  db.query(sql, [user_id,id], (err, data) => {
+  db.query(sql, [user_id, id], (err, data) => {
+    if (err) {
+      return res.json({ Error: "lay that bai", err });
+    }
+    res.json(data);
+  });
+};
+
+export const getResult = (req, res) => {
+  const { user_id } = req.user;
+  const sql = `
+  SELECT 
+     r.*,
+     q.title,
+     q.quiz_id
+  FROM 
+      result r
+  JOIN
+    quiz q ON r.quiz_id = q.quiz_id
+    WHERE r.user_id = ?
+  `;
+  db.query(sql, [user_id], (err, data) => {
     if (err) {
       return res.json({ Error: "lay that bai", err });
     }

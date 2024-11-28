@@ -11,6 +11,7 @@ import { RiDeleteBin6Line } from 'react-icons/ri'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 const EditQuestion = () => {
   const [data, setData] = useState([])
   const navigate = useNavigate()
@@ -33,17 +34,16 @@ const EditQuestion = () => {
   };
 
   const handleDelete = async (quiz_id) => {
-      window.confirm('bạn có muốn xóa ?')
-      if (window.confirm) {
-        try {
-          await axios.delete(`http://localhost:2000/api/quizzes/delete/${quiz_id}`);
-          alert("Câu hỏi đã được xóa thành công!");
-
-          navigate(0)
-        } catch (error) {
-          console.error("lỗi khi xóa câu hỏi:", error)
-        }
+    const isConfirmed = window.confirm('bạn có muốn xóa ?')
+    if (isConfirmed) {
+      try {
+        await axios.delete(`http://localhost:2000/api/quizzes/delete/${quiz_id}`);
+        toast.success('xóa thành công')
+        navigate(0)
+      } catch (error) {
+        console.error("lỗi khi xóa câu hỏi:", error)
       }
+    }
   };
 
   return (
@@ -185,12 +185,9 @@ const EditQuestion = () => {
 
                 {/* Actions */}
                 <div className="flex justify-between p-4 mt-4">
-                  <button className="px-2 py-2 bg-gradient-to-r from-[#4663fe] to-[#cd3dff] text-white rounded-md hover:shadow-md">
+                  <Link to={`/Quiz/${item.quiz_id}`} className="px-2 py-2 bg-gradient-to-r from-[#4663fe] to-[#cd3dff] text-white rounded-md hover:shadow-md">
                     Vào ôn thi
-                  </button>
-                  <button className="px-2 py-2 bg-gradient-to-r from-[#4663fe] to-[#cd3dff] text-white rounded-md hover:shadow-md">
-                    Giao bài tập
-                  </button>
+                  </Link>
                 </div>
               </div>
             ))

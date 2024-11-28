@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 25, 2024 at 04:43 PM
+-- Generation Time: Nov 28, 2024 at 04:07 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -40,18 +40,10 @@ CREATE TABLE `answeroption` (
 --
 
 INSERT INTO `answeroption` (`option_id`, `question_id`, `option_text`, `is_correct`, `created_at`) VALUES
-(1, 1, '1', 0, '2024-11-19 19:26:49'),
-(2, 1, '2', 0, '2024-11-19 19:26:56'),
-(3, 1, '3', 0, '2024-11-19 19:27:00'),
-(4, 1, '4', 1, '2024-11-19 19:27:06'),
-(5, 2, '2', 0, '2024-11-19 19:40:50'),
-(6, 2, '4', 0, '2024-11-20 10:02:28'),
-(7, 2, '6', 1, '2024-11-20 10:02:43'),
-(8, 2, '7', 0, '2024-11-20 10:02:50'),
-(9, 3, '20', 1, '2024-11-23 16:31:52'),
-(10, 3, 'hai mươi', 1, '2024-11-23 16:32:03'),
-(11, 3, '15', 0, '2024-11-23 16:32:22'),
-(12, 3, '13', 0, '2024-11-23 16:32:45');
+(229, 78, '423', 0, '2024-11-28 21:55:29'),
+(230, 78, '234', 0, '2024-11-28 21:55:29'),
+(231, 78, '123', 1, '2024-11-28 21:55:29'),
+(232, 78, '132', 0, '2024-11-28 21:55:29');
 
 -- --------------------------------------------------------
 
@@ -99,6 +91,7 @@ CREATE TABLE `permission` (
 CREATE TABLE `question` (
   `question_id` int(11) NOT NULL,
   `quiz_id` int(11) NOT NULL,
+  `question_type` varchar(20) DEFAULT NULL,
   `question_text` text NOT NULL,
   `difficulty` enum('easy','medium','hard') DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp()
@@ -108,10 +101,8 @@ CREATE TABLE `question` (
 -- Dumping data for table `question`
 --
 
-INSERT INTO `question` (`question_id`, `quiz_id`, `question_text`, `difficulty`, `created_at`) VALUES
-(1, 1, 'Câu hỏi ví dụ: 2 + 2 = ?', 'easy', '2024-11-17 19:31:03'),
-(2, 1, '3+3 = ?', 'easy', '2024-11-19 19:40:34'),
-(3, 1, ' 10 + 10 = ?', 'easy', '2024-11-23 16:31:34');
+INSERT INTO `question` (`question_id`, `quiz_id`, `question_type`, `question_text`, `difficulty`, `created_at`) VALUES
+(78, 85, 'single', '222', NULL, '2024-11-28 21:55:29');
 
 -- --------------------------------------------------------
 
@@ -147,7 +138,7 @@ CREATE TABLE `quiz` (
   `title` varchar(100) NOT NULL,
   `total_questions` int(11) DEFAULT NULL,
   `duration_minutes` int(11) DEFAULT NULL,
-  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+  `created_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -155,8 +146,7 @@ CREATE TABLE `quiz` (
 --
 
 INSERT INTO `quiz` (`quiz_id`, `subject_id`, `title`, `total_questions`, `duration_minutes`, `created_at`) VALUES
-(1, 1, 'Quiz 1', 10, 30, '2024-11-17 19:22:44'),
-(19, 11, 'nghia pro', 20, 45, '2024-11-19 19:04:51');
+(85, 2, '80 ', 30, 45, '2024-11-28 21:47:36');
 
 -- --------------------------------------------------------
 
@@ -167,7 +157,6 @@ INSERT INTO `quiz` (`quiz_id`, `subject_id`, `title`, `total_questions`, `durati
 CREATE TABLE `quizsetting` (
   `setting_id` int(11) NOT NULL,
   `quiz_id` int(11) NOT NULL,
-  `allow_backtracking` tinyint(1) DEFAULT 1,
   `shuffle_questions` tinyint(1) DEFAULT 1,
   `shuffle_options` tinyint(1) DEFAULT 1,
   `time_limit` int(11) DEFAULT NULL
@@ -185,21 +174,10 @@ CREATE TABLE `result` (
   `quiz_id` int(11) NOT NULL,
   `user_quiz_id` int(11) DEFAULT NULL,
   `score` float DEFAULT NULL,
-  `date_taken` date DEFAULT NULL,
+  `rating` varchar(20) DEFAULT NULL,
+  `date_taken` datetime DEFAULT NULL,
   `time_taken` time DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `result`
---
-
-INSERT INTO `result` (`result_id`, `user_id`, `quiz_id`, `user_quiz_id`, `score`, `date_taken`, `time_taken`) VALUES
-(49, 5, 1, NULL, 6.67, '2024-11-25', '22:12:23'),
-(50, 5, 1, NULL, 6.67, '2024-11-25', '22:14:00'),
-(51, 5, 1, NULL, 3.33, '2024-11-25', '22:14:58'),
-(52, 5, 1, 310, 10, '2024-11-25', '22:24:07'),
-(53, 5, 1, 311, 6.67, '2024-11-25', '22:24:22'),
-(54, 5, 1, 312, 6.67, '2024-11-25', '22:25:13');
 
 -- --------------------------------------------------------
 
@@ -297,7 +275,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_id`, `name`, `password`, `email`, `gender`, `birthday`, `phonenumber`, `role`, `created_at`) VALUES
-(5, 'minh nghia 123', '$2b$10$yP0DAor.Qz3disjuu1R.eehhgNlQhy29vT3HNeVCvfL65sKuxN1Bm', 'nghia@111', 'Nam', '2024-11-28', 12309999, 'student', '2024-11-19 18:24:38');
+(5, 'minh nghia 1233', '$2b$10$yP0DAor.Qz3disjuu1R.eehhgNlQhy29vT3HNeVCvfL65sKuxN1Bm', 'nghia@111', 'Nam', '2024-11-27', 12309999, 'admin', '2024-11-19 18:24:38');
 
 -- --------------------------------------------------------
 
@@ -313,54 +291,6 @@ CREATE TABLE `useranswer` (
   `is_correct` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `useranswer`
---
-
-INSERT INTO `useranswer` (`user_answer_id`, `user_quiz_id`, `question_id`, `selected_option_id`, `is_correct`) VALUES
-(518, 299, 1, 4, '1'),
-(519, 299, 2, 7, '1'),
-(520, 299, 3, 10, '0'),
-(521, 300, 1, 4, '1'),
-(522, 300, 2, 7, '1'),
-(523, 300, 3, 10, '1'),
-(524, 300, 3, 9, '1'),
-(525, 301, 1, 4, '1'),
-(526, 301, 2, 6, '0'),
-(527, 302, 1, 4, '1'),
-(528, 302, 2, 7, '1'),
-(529, 302, 3, 9, '1'),
-(530, 302, 3, 10, '1'),
-(531, 303, 1, 4, '1'),
-(532, 303, 2, 7, '1'),
-(533, 303, 3, 9, '1'),
-(534, 303, 3, 10, '1'),
-(535, 304, 1, 4, '1'),
-(536, 304, 2, 7, '1'),
-(537, 304, 3, 9, '0'),
-(538, 305, 1, 4, '1'),
-(539, 305, 2, 7, '1'),
-(540, 305, 3, 10, '0'),
-(541, 306, 1, 4, '1'),
-(542, 306, 2, 8, '0'),
-(543, 306, 3, 9, '0'),
-(544, 308, 1, 4, '1'),
-(545, 308, 2, 7, '1'),
-(546, 308, 3, 10, '0'),
-(547, 309, 1, 4, '1'),
-(548, 309, 2, 7, '1'),
-(549, 309, 3, 9, '0'),
-(550, 310, 1, 4, '1'),
-(551, 310, 2, 7, '1'),
-(552, 310, 3, 9, '1'),
-(553, 310, 3, 10, '1'),
-(554, 311, 1, 4, '1'),
-(555, 311, 2, 7, '1'),
-(556, 311, 3, 10, '0'),
-(557, 312, 1, 4, '1'),
-(558, 312, 2, 7, '1'),
-(559, 312, 3, 9, '0');
-
 -- --------------------------------------------------------
 
 --
@@ -371,31 +301,12 @@ CREATE TABLE `userquiz` (
   `user_quiz_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `quiz_id` int(11) NOT NULL,
-  `start_time` time NOT NULL DEFAULT current_timestamp(),
+  `start_time` time DEFAULT NULL,
   `end_time` time DEFAULT NULL,
+  `time_taken` datetime DEFAULT NULL,
   `score` float DEFAULT 0,
   `created_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `userquiz`
---
-
-INSERT INTO `userquiz` (`user_quiz_id`, `user_id`, `quiz_id`, `start_time`, `end_time`, `score`, `created_at`) VALUES
-(299, 5, 1, '21:24:23', '21:24:27', 6.67, '2024-11-25 21:24:23'),
-(300, 5, 1, '21:24:33', '21:24:38', 10, '2024-11-25 21:24:33'),
-(301, 5, 1, '21:30:07', '21:30:09', 3.33, '2024-11-25 21:30:07'),
-(302, 5, 1, '22:09:44', '22:09:47', 10, '2024-11-25 22:09:44'),
-(303, 5, 1, '22:11:38', '22:11:41', 10, '2024-11-25 22:11:38'),
-(304, 5, 1, '22:12:21', '22:12:23', 6.67, '2024-11-25 22:12:21'),
-(305, 5, 1, '22:13:58', '22:14:00', 6.67, '2024-11-25 22:13:58'),
-(306, 5, 1, '22:14:38', '22:14:58', 3.33, '2024-11-25 22:14:38'),
-(307, 5, 1, '22:15:48', NULL, 0, '2024-11-25 22:15:48'),
-(308, 5, 1, '22:21:39', '22:21:42', 6.67, '2024-11-25 22:21:39'),
-(309, 5, 1, '22:22:17', '22:22:25', 6.67, '2024-11-25 22:22:17'),
-(310, 5, 1, '22:24:03', '22:24:07', 10, '2024-11-25 22:24:03'),
-(311, 5, 1, '22:24:20', '22:24:22', 6.67, '2024-11-25 22:24:20'),
-(312, 5, 1, '22:25:11', '22:25:13', 6.67, '2024-11-25 22:25:11');
 
 -- --------------------------------------------------------
 
@@ -407,6 +318,26 @@ CREATE TABLE `userrole` (
   `user_id` int(11) NOT NULL,
   `role_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_quiz_creator`
+--
+
+CREATE TABLE `user_quiz_creator` (
+  `user_quiz_creator_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `quiz_id` int(11) NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `user_quiz_creator`
+--
+
+INSERT INTO `user_quiz_creator` (`user_quiz_creator_id`, `user_id`, `quiz_id`, `created_at`) VALUES
+(21, 5, 85, '2024-11-28 21:47:36');
 
 --
 -- Indexes for dumped tables
@@ -479,8 +410,8 @@ ALTER TABLE `quizsetting`
 ALTER TABLE `result`
   ADD PRIMARY KEY (`result_id`),
   ADD KEY `FK_result_user` (`user_id`),
-  ADD KEY `FK_result_quiz` (`quiz_id`),
-  ADD KEY `user_quiz_id` (`user_quiz_id`);
+  ADD KEY `user_quiz_id` (`user_quiz_id`),
+  ADD KEY `FK_result_quiz` (`quiz_id`);
 
 --
 -- Indexes for table `role`
@@ -518,9 +449,9 @@ ALTER TABLE `user`
 --
 ALTER TABLE `useranswer`
   ADD PRIMARY KEY (`user_answer_id`),
-  ADD KEY `FK_useranswer_userquiz` (`user_quiz_id`),
   ADD KEY `FK_useranswer_question` (`question_id`),
-  ADD KEY `FK_useranswer_answeroption` (`selected_option_id`);
+  ADD KEY `FK_useranswer_answeroption` (`selected_option_id`),
+  ADD KEY `FK_useranswer_userquiz` (`user_quiz_id`);
 
 --
 -- Indexes for table `userquiz`
@@ -538,6 +469,14 @@ ALTER TABLE `userrole`
   ADD KEY `FK_userrole_role` (`role_id`);
 
 --
+-- Indexes for table `user_quiz_creator`
+--
+ALTER TABLE `user_quiz_creator`
+  ADD PRIMARY KEY (`user_quiz_creator_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `quiz_id` (`quiz_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -545,7 +484,7 @@ ALTER TABLE `userrole`
 -- AUTO_INCREMENT for table `answeroption`
 --
 ALTER TABLE `answeroption`
-  MODIFY `option_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `option_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=241;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -569,13 +508,13 @@ ALTER TABLE `permission`
 -- AUTO_INCREMENT for table `question`
 --
 ALTER TABLE `question`
-  MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
 
 --
 -- AUTO_INCREMENT for table `quiz`
 --
 ALTER TABLE `quiz`
-  MODIFY `quiz_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `quiz_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
 
 --
 -- AUTO_INCREMENT for table `quizsetting`
@@ -587,7 +526,7 @@ ALTER TABLE `quizsetting`
 -- AUTO_INCREMENT for table `result`
 --
 ALTER TABLE `result`
-  MODIFY `result_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `result_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
 
 --
 -- AUTO_INCREMENT for table `role`
@@ -617,13 +556,19 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `useranswer`
 --
 ALTER TABLE `useranswer`
-  MODIFY `user_answer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=560;
+  MODIFY `user_answer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=666;
 
 --
 -- AUTO_INCREMENT for table `userquiz`
 --
 ALTER TABLE `userquiz`
-  MODIFY `user_quiz_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=313;
+  MODIFY `user_quiz_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=363;
+
+--
+-- AUTO_INCREMENT for table `user_quiz_creator`
+--
+ALTER TABLE `user_quiz_creator`
+  MODIFY `user_quiz_creator_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- Constraints for dumped tables
@@ -633,7 +578,7 @@ ALTER TABLE `userquiz`
 -- Constraints for table `answeroption`
 --
 ALTER TABLE `answeroption`
-  ADD CONSTRAINT `FK_answeroption_question` FOREIGN KEY (`question_id`) REFERENCES `question` (`question_id`);
+  ADD CONSTRAINT `FK_answeroption_question` FOREIGN KEY (`question_id`) REFERENCES `question` (`question_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `feedback`
@@ -669,9 +614,9 @@ ALTER TABLE `quizsetting`
 -- Constraints for table `result`
 --
 ALTER TABLE `result`
-  ADD CONSTRAINT `FK_result_quiz` FOREIGN KEY (`quiz_id`) REFERENCES `quiz` (`quiz_id`),
+  ADD CONSTRAINT `FK_result_quiz` FOREIGN KEY (`quiz_id`) REFERENCES `quiz` (`quiz_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_result_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
-  ADD CONSTRAINT `result_ibfk_1` FOREIGN KEY (`user_quiz_id`) REFERENCES `userquiz` (`user_quiz_id`);
+  ADD CONSTRAINT `result_ibfk_1` FOREIGN KEY (`user_quiz_id`) REFERENCES `userquiz` (`user_quiz_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `rolepermission`
@@ -684,15 +629,15 @@ ALTER TABLE `rolepermission`
 -- Constraints for table `useranswer`
 --
 ALTER TABLE `useranswer`
-  ADD CONSTRAINT `FK_useranswer_answeroption` FOREIGN KEY (`selected_option_id`) REFERENCES `answeroption` (`option_id`),
-  ADD CONSTRAINT `FK_useranswer_question` FOREIGN KEY (`question_id`) REFERENCES `question` (`question_id`),
-  ADD CONSTRAINT `FK_useranswer_userquiz` FOREIGN KEY (`user_quiz_id`) REFERENCES `userquiz` (`user_quiz_id`);
+  ADD CONSTRAINT `FK_useranswer_answeroption` FOREIGN KEY (`selected_option_id`) REFERENCES `answeroption` (`option_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_useranswer_question` FOREIGN KEY (`question_id`) REFERENCES `question` (`question_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_useranswer_userquiz` FOREIGN KEY (`user_quiz_id`) REFERENCES `userquiz` (`user_quiz_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `userquiz`
 --
 ALTER TABLE `userquiz`
-  ADD CONSTRAINT `FK_userquiz_quiz` FOREIGN KEY (`quiz_id`) REFERENCES `quiz` (`quiz_id`),
+  ADD CONSTRAINT `FK_userquiz_quiz` FOREIGN KEY (`quiz_id`) REFERENCES `quiz` (`quiz_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_userquiz_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
 --
@@ -701,6 +646,13 @@ ALTER TABLE `userquiz`
 ALTER TABLE `userrole`
   ADD CONSTRAINT `FK_userrole_role` FOREIGN KEY (`role_id`) REFERENCES `role` (`role_id`),
   ADD CONSTRAINT `FK_userrole_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
+
+--
+-- Constraints for table `user_quiz_creator`
+--
+ALTER TABLE `user_quiz_creator`
+  ADD CONSTRAINT `FK_user_quiz_creator` FOREIGN KEY (`quiz_id`) REFERENCES `quiz` (`quiz_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `user_quiz_creator_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

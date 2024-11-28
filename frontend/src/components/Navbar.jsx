@@ -62,12 +62,12 @@ const Navbar = () => {
         <div className="flex items-center ml-auto">
           <ul className="flex gap-6 hidden lg:flex">
           {
-              user.role !== 'student' ?
-              <NavLink to="/quizadd" onClick={handleMenuItemClick}>
-              <p>Tạo quiz</p>
-            </NavLink>
-            :
+              user.role === 'student' ?
             <div></div>
+            :
+            <NavLink to="/quizadd" onClick={handleMenuItemClick}>
+            <p>Tạo quiz</p>
+          </NavLink>
             }
             <NavLink to="/Quiz" onClick={handleMenuItemClick}>
               <p>DrxQuiz</p>
