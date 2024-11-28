@@ -10,6 +10,8 @@ const Soancauhoi = () => {
   const { id } = useParams()
   const naviagte = useNavigate()
   const { checkId } = useContext(QuizContext)
+  const [selectedOption, setSelectedOption] = useState('single')
+
   // const [answersCauhoi, setAnswersCauhoi] = useState([
   //   {
   //     text: '',
@@ -82,9 +84,10 @@ const Soancauhoi = () => {
         )
         setData(res.data)
 
+
         // Cập nhật câu hỏi
         setQuestion(res.data.question_text)
-
+        setSelectedOption(res.data.question_type)
         const answers = res.data.options.map((option) => ({
           option_id: option.option_id,
           answer_text: option.option_text,
@@ -116,6 +119,7 @@ const Soancauhoi = () => {
       const res = await axios.post(`http://localhost:2000/api/question/add`, {
         quiz_id: id,
         question,
+        question_type: selectedOption,
         answers: userAnswers,
       })
       toast.success(res.data.message)
@@ -142,6 +146,7 @@ const Soancauhoi = () => {
       const res = await axios.put(`http://localhost:2000/api/question/update`, {
         question_id: checkId,
         question,
+        question_type: selectedOption,
         answers: userAnswers,
       })
       toast.success(res.data.message)
@@ -211,13 +216,36 @@ const Soancauhoi = () => {
     setUserAnswers(newAnswers)
   }
 
+  const handleOptionChange = (e) => {
+    const newType = e.target.value;
+    setSelectedOption(newType);
+
+    const resetAnswers = userAnswers.map((answer) => ({
+      ...answer,
+      is_correct: 0,
+    }));
+
+    setUserAnswers(resetAnswers);
+  };
+
   const handleIsCorrectChange = (index) => {
-    const newAnswers = [...userAnswers]
-    newAnswers.forEach((answer, idx) => {
-      answer.is_correct = idx === index ? 1 : 0
-    })
-    setUserAnswers(newAnswers)
-  }
+    const updatedAnswers = [...userAnswers];
+
+    if (selectedOption === "multiple") {
+      // Checkbox
+      updatedAnswers[index].is_correct =
+        updatedAnswers[index].is_correct === 1 ? 0 : 1;
+    } else {
+      // Radio
+      updatedAnswers.forEach((answer, i) => {
+        updatedAnswers[i].is_correct = i === index ? 1 : 0;
+      });
+    }
+
+    setUserAnswers(updatedAnswers);
+  };
+
+
   //
   const [questionStyle, setQuestionStyle] = useState({
     fontSize: 'normal',
@@ -265,7 +293,7 @@ const Soancauhoi = () => {
   }
   return (
     <div className="grid grid-cols-[2fr_4fr] gap-4 mt-10 mx-4 bg-gray-100 p-4">
-      <div className="sticky top-[64px] overflow-auto max-h-[80vh] ">
+      <div className="sticky top-[64px] overflow-auto max-h-[50vh] ">
         <DanhSachPhanThi />
       </div>
       <form
@@ -275,10 +303,9 @@ const Soancauhoi = () => {
         <p className="font-semibold text-lg mb-4">Chỉnh sửa câu hỏi</p>
         <div>
           <p className="font-medium mb-2">Loại câu hỏi</p>
-          <select className="w-2/12 border border-gray-300 rounded px-2 py-1 mb-4 focus:outline-none hover:shadow-sm hover:shadow-purple-400 hover:border-blue-500 focus:border-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-            <option value="">Một đáp án</option>
-            <option value="">Nhiều đáp án</option>
-            <option value="">Đúng / Sai</option>
+          <select value={selectedOption} onChange={handleOptionChange} className="w-3/12 border border-gray-300 rounded px-2 py-1 mb-4 focus:outline-none hover:shadow-sm hover:shadow-purple-400 hover:border-blue-500 focus:border-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+            <option value="single">Một đáp án</option>
+            <option value="multiple">Nhiều đáp án</option>
           </select>
         </div>
         {/* Soạn câu hỏi */}
@@ -339,8 +366,8 @@ const Soancauhoi = () => {
                 questionStyle.fontSize === 'normal'
                   ? '16px'
                   : questionStyle.fontSize === 'heading1'
-                  ? '24px'
-                  : '20px',
+                    ? '24px'
+                    : '20px',
               fontWeight: questionStyle.fontWeight,
               fontStyle: questionStyle.fontStyle,
               textDecoration: questionStyle.textDecoration,
@@ -365,8 +392,8 @@ const Soancauhoi = () => {
               <div className="flex justify-between">
                 <div className="flex items-center gap-3 mb-2">
                   <input
-                    type="radio"
-                    name="answer"
+                    type={selectedOption === "multiple" ? "checkbox" : "radio"}
+                    name={selectedOption === "multiple" ? `answer-${index}` : "answer"}
                     checked={userAnswers[index]?.is_correct}
                     onChange={() => handleIsCorrectChange(index)}
                     className="w-3 h-3 transform scale-150"
@@ -423,8 +450,8 @@ const Soancauhoi = () => {
                       answer.style.fontSize === 'normal'
                         ? '16px'
                         : answer.style.fontSize === 'heading1'
-                        ? '24px'
-                        : '20px',
+                          ? '24px'
+                          : '20px',
                     fontWeight: answer.style.fontWeight,
                     fontStyle: answer.style.fontStyle,
                     textDecoration: answer.style.textDecoration,

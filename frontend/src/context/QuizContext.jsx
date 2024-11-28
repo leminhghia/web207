@@ -10,6 +10,8 @@ const QuizContextProvider = (props) => {
   const [idthemquiz,setIdthemquiz] = useState(0)
   const [tab, setTab] = useState(1)
   const [checkId,setCheckId] = useState('')
+ 
+
   const value = {
     reload,
     setReload,

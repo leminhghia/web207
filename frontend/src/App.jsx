@@ -18,42 +18,19 @@ import ExamInfo from './page/ExamQuizz/ExamInfo'
 import ExamQuizz from './page/ExamQuizz/ExamQuizz'
 import ResultOnpage from './page/ResultOnpage'
 import Tset from './page/tset'
-import AccountFooter from './page/account/AccountFooter'
-import AccountHeader from './page/account/AccountHeader'
 import QuestionAdd from './page/QuestionAdd'
 function App() {
-  const location = useLocation()
-  const pagesWithCustomHeaderFooter = ['/account']
-  const isCustomHeaderFooter = pagesWithCustomHeaderFooter.includes(
-    location.pathname
-  )
+
   return (
     <div className="flex flex-col min-h-screen">
       <ToastContainer />
-      {isCustomHeaderFooter ? (
-        <>
-          {/* Account */}
-          {location.pathname === '/account' && (
-            <>
-              <AccountHeader />
-              <div className="flex-grow">
-                <Routes>
-                  <Route path="/account" element={<Account />} />
-                </Routes>
-              </div>
-              <AccountFooter />
-            </>
-          )}
-          {location.pathname}
-          {/*  */}
-        </>
-      ) : (
-        <>
+    
        <div className='sticky top-0 z-10'>
        <Navbar />
        </div>
           <div className="flex-grow relative z-0">
             <Routes>
+            <Route path="/account" element={<Account />} />
               <Route index path="/" element={<PagesHome />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
@@ -74,8 +51,7 @@ function App() {
             </Routes>
           </div>
           <Footer />
-        </>
-      )}
+
     </div>
   )
 }

@@ -5,7 +5,7 @@ import MainAccountDetails from './settingaccount/mainAccountDetails'
 import TestHistory from './TestHistory'
 import Settings from './Settings'
 import { FaBars } from 'react-icons/fa'
-import ExamQuestion from './ExamQuestion'
+import EditQuestion from './EditQuestion'
 import KhoaHoc from './KhoaHoc'
 
 export default function AccountPage() {
@@ -41,7 +41,7 @@ export default function AccountPage() {
         {activeTab === 'account' && <MainAccountDetails />}
         {activeTab === 'tests' && <TestHistory />}
         {activeTab === 'settings' && <Settings />}
-        {activeTab === 'examquestion' && <ExamQuestion />}
+        {activeTab === 'examquestion' && <EditQuestion />}
         {activeTab === 'khoahoc' && <KhoaHoc />}
       </div>
 

@@ -30,6 +30,7 @@ export const getQuestionbyId = (req, res) => {
     SELECT 
       q.question_id, 
       q.question_text, 
+      q.question_type,
       a.option_id, 
       a.option_text, 
       a.is_correct
@@ -51,6 +52,7 @@ export const getQuestionbyId = (req, res) => {
     const questionData = {
       question_id: data[0]?.question_id,
       question_text: data[0]?.question_text,
+      question_type: data[0]?.question_type,
       options: [],
     };
 
@@ -68,10 +70,11 @@ export const getQuestionbyId = (req, res) => {
 };
 
 export const addQuestion = (req, res) => {
-  const { quiz_id, question, answers } = req.body;
+  const { quiz_id, question, question_type, answers } = req.body;
   console.log(req.body);
-  const questionSql = `INSERT INTO question (quiz_id, question_text) VALUES (?, ?)`;
-  db.query(questionSql, [quiz_id, question], (err, result) => {
+
+  const questionSql = `INSERT INTO question (quiz_id, question_text,question_type) VALUES (?, ?,?)`;
+  db.query(questionSql, [quiz_id, question, question_type], (err, result) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ error: "Lỗi khi thêm câu hỏi" });
@@ -103,10 +106,9 @@ export const addQuestion = (req, res) => {
 export const updateQuestion = (req, res) => {
   const { question_id, question, answers } = req.body;
 
-
   // Cập nhật câu hỏi
   const questionSql = `UPDATE question SET  question_text = ? WHERE question_id = ?`;
-  db.query(questionSql, [ question, question_id], (err, result) => {
+  db.query(questionSql, [question, question_id], (err, result) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ error: "Lỗi khi cập nhật câu hỏi" });
@@ -132,8 +134,23 @@ export const updateQuestion = (req, res) => {
     return res.json({
       message: "Cập nhật câu hỏi và câu trả lời thành công",
       question_id,
+      question_type,
     });
   });
+};
+
+export const DeleteQuestion = (req, res) => {
+  const { id, checkId } = req.params;
+  console.log(req.params);
+  
+  const sql = `DELETE FROM question WHERE quiz_id = ? AND question_id = ?`;
+  db.query(sql,[id,checkId],(err)=>{
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Lỗi khi xoa cau hoi" });
+    }
+    return res.json({message: 'xoa thanh cong'})
+  })
 };
 
 // export const addQuizQuestions = (req, res) => {

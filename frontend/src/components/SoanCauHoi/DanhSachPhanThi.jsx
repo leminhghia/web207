@@ -8,7 +8,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { QuizContext } from '../../context/QuizContext'
 
 const DanhSachPhanThi = () => {
-  const { id } = useParams()
+  const { id } = useParams()//id quiz
   const [data, setData] = useState([])
   const { setCheckId, checkId } = useContext(QuizContext)
   const navigate = useNavigate()
@@ -35,27 +35,35 @@ const DanhSachPhanThi = () => {
     fetchData()
   }, [id])
 
+  const handleDelete = async () => {
+    if (!checkId) {
+      alert("Vui lòng chọn câu hỏi cần xóa!");
+      return;
+    }
+    try {
+      await axios.delete(`http://localhost:2000/api/question/delete/quiz/${id}/question/${checkId}`);
+      alert("Câu hỏi đã được xóa thành công!");
+
+      navigate(0)
+    } catch (error) {
+      console.error("lỗi khi xóa câu hỏi:", error)}
+  };
+
   return (
     <div className="bg-white p-4 rounded shadow">
-      <div className="mx-2 flex justify-between items-center mb-4">
-        <p className="font-semibold text-lg">Danh sách phần thi</p>
-        <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-          Thêm mới
-        </button>
-      </div>
       <p className="font-medium">Phần 1</p>
       <button className="text-blue-500 hover:underline mb-3">Sửa</button>
       <hr className="my-3 border-gray-300" />
       <p className="font-medium">Danh mục câu hỏi</p>
       <div className="flex justify-start gap-2 mt-4">
         <button
-          className="border border-gray-300 px-4 py-2 rounded hover:bg-[#01579b] flex items-center gap-2 justify-center bg-blue-500"
+          className="border border-gray-300 px-4 py-2 rounded hover:bg-green-500 flex items-center gap-2 justify-center bg-green-400"
           onClick={rest}
         >
           <IoIosAdd />
           Thêm câu hỏi
         </button>
-        <button className="border border-gray-300 px-4 py-2 rounded hover:bg-[#01579b] flex items-center gap-2 justify-center bg-[#0288d1]">
+        {/* <button className="border border-gray-300 px-4 py-2 rounded hover:bg-[#01579b] flex items-center gap-2 justify-center bg-[#0288d1]">
           <TfiPencilAlt />
           Thêm bằng văn bản
         </button>
@@ -64,8 +72,8 @@ const DanhSachPhanThi = () => {
         <button className="border border-gray-300 px-4 py-2 rounded hover:bg-[#01579b] flex items-center gap-2 justify-center bg-[#0288d1]">
           <LuCalendarRange />
           Sắp xếp câu hỏi
-        </button>
-        <button className="border border-gray-300 px-4 py-2 rounded hover:bg-[#01579b]mt-4 flex items-center gap-2 justify-center bg-[#0288d1]">
+        </button> */}
+        <button onClick={handleDelete} className="border border-gray-300 px-4 py-2 rounded hover:bg-[#01579b]mt-4 flex items-center gap-2 justify-center bg-red-400 hover:bg-red-500 ">
           <MdDelete />
           Xóa câu hỏi
         </button>
@@ -74,9 +82,8 @@ const DanhSachPhanThi = () => {
         {data.map((item, index) => (
           <div
             key={item.question_id}
-            className={`border rounded p-2 text-center cursor-pointer transition-all ${
-              item.question_id == checkId ? 'bg-blue-600 text-white' : ''
-            }`}
+            className={`border-2 rounded p-2 text-center cursor-pointer transition-all  ${item.question_id == checkId ? 'bg-blue-600 text-white' : ''
+              }`}
             onClick={() => setCheckId(item.question_id)}
           >
             {index + 1}
