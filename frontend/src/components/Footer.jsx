@@ -9,33 +9,68 @@ const Footer = () => {
     <footer className="relative bg-[#333333] text-gray-300 pt-16 pb-10 mt-72 z-[-1]">
       {/* Phần bo tròn dè lên trên */}
       <div className="absolute -top-60 left-1/2 transform -translate-x-1/2 h-[300px] md:h-[400px] bg-gradient-to-r from-[#d03cfc] to-[#4864fc] rounded-xl w-11/12 md:w-4/5">
-        <div className="p-6 sm:p-8 md:p-14">
-          <p className="text-[#ffffff] font-medium text-xl sm:text-2xl md:text-4xl leading-6 sm:leading-8 md:leading-10">
-            Tạo nhanh <span className="text-[#aff8c8]">đề thi</span> trắc
-            <br className="hidden md:block" /> nghiệm với tính năng hoàn
-            <br className="hidden md:block" /> hảo
-          </p>
-          <button className="bg-[#2e7d32] shadow-md hover:bg-[#1b5e20] text-white font-semibold py-2 px-4 rounded-lg flex items-center gap-2 mt-4 sm:mt-6 md:mt-8">
-            Bắt đầu ngay
-          </button>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-7 mt-4 sm:mt-6 md:mt-8">
-            <span className="flex items-center gap-2">
-              <div className="rounded-full w-[30px] h-[30px] flex items-center justify-center bg-[rgba(70,60,90,0.5)] backdrop-blur-md">
-                <TfiCheck className="text-white" />
-              </div>
-              <p className="text-[#ffffff] text-sm sm:text-base md:text-lg">
-                Tạo đề thi nhanh
-              </p>
-            </span>
+        <div className="p-6 sm:p-8 md:p-14 flex flex-col sm:flex-row">
+          <div className="flex-1">
+            <p className="text-[#ffffff] font-medium text-xl sm:text-2xl md:text-4xl leading-6 sm:leading-8 md:leading-10">
+              Tạo nhanh <span className="text-[#aff8c8]">đề thi</span> trắc
+              <br className="hidden md:block" /> nghiệm với tính năng hoàn
+              <br className="hidden md:block" /> hảo
+            </p>
+            <button className="bg-[#2e7d32] shadow-md hover:bg-[#1b5e20] text-white font-semibold py-2 px-4 rounded-lg flex items-center gap-2 mt-4 sm:mt-6 md:mt-8 ">
+              Bắt đầu ngay
+            </button>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-7 mt-4 sm:mt-6 md:mt-8">
+              <span className="flex items-center gap-2">
+                <div className="rounded-full w-[30px] h-[30px] flex items-center justify-center bg-[rgba(70,60,90,0.5)] backdrop-blur-md">
+                  <TfiCheck className="text-white" />
+                </div>
+                <p className="text-[#ffffff] text-sm sm:text-base md:text-lg">
+                  Tạo đề thi nhanh
+                </p>
+              </span>
 
-            <span className="flex items-center gap-2">
-              <div className="rounded-full w-[30px] h-[30px] flex items-center justify-center bg-[rgba(70,60,90,0.5)] backdrop-blur-md">
-                <TfiCheck className="text-white" />
+              <span className="flex items-center gap-2">
+                <div className="rounded-full w-[30px] h-[30px] flex items-center justify-center bg-[rgba(70,60,90,0.5)] backdrop-blur-md">
+                  <TfiCheck className="text-white" />
+                </div>
+                <p className="text-[#ffffff] text-sm sm:text-base md:text-lg">
+                  AI thông minh, linh hoạt
+                </p>
+              </span>
+            </div>
+          </div>
+          {/* cau hoi */}
+          <div className="flex-1 sm:ml-4 mt-6 sm:mt-0 flex justify-evenly">
+            <div className="bg-gray-200 p-4 sm:p-6 rounded-lg shadow-md hover:shadow-lg hover:bg-gray-300 transition-all duration-300 w-[250px] sm:w-[250px] max-w-[250px]">
+              <img
+                src="https://via.placeholder.com/150"
+                alt=""
+                className="w-full h-40 sm:h-44 object-cover rounded-lg transition-transform transform hover:scale-105 cursor-pointer"
+              />
+              <div className="flex flex-col mt-2">
+                <p className="text-black text-base font-medium sm:mt-3">
+                  Câu hỏi 1
+                </p>
+                <p className="text-sm text-gray-700 break-words">
+                  Phương pháp siêu hình thống trị triết học vào thời kì nào?
+                </p>
               </div>
-              <p className="text-[#ffffff] text-sm sm:text-base md:text-lg">
-                AI thông minh, linh hoạt
-              </p>
-            </span>
+            </div>
+            <div className="bg-gray-200 p-4 sm:p-6 rounded-lg shadow-md hover:shadow-lg hover:bg-gray-300 transition-all duration-300 w-[250px] sm:w-[250px] max-w-[250px]">
+              <img
+                src="https://via.placeholder.com/150"
+                alt=""
+                className="w-full h-40 sm:h-44 object-cover rounded-lg transition-transform transform hover:scale-105 cursor-pointer"
+              />
+              <div className="flex flex-col mt-2">
+                <p className="text-black text-base font-medium sm:mt-3">
+                  Câu hỏi 1
+                </p>
+                <p className="text-sm text-gray-700 break-words">
+                  Ai đẹp trai nhất thế Giới
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

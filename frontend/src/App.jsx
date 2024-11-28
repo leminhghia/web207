@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import PagesHome from './page/PagesHome'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
@@ -19,39 +19,41 @@ import ExamQuizz from './page/ExamQuizz/ExamQuizz'
 import ResultOnpage from './page/ResultOnpage'
 import Tset from './page/tset'
 import QuestionAdd from './page/QuestionAdd'
+import EditQuestion from './page/account/EditQuestion'
+import BlogPost from './page/BLOG/BlogPost'
 function App() {
-
   return (
     <div className="flex flex-col min-h-screen">
       <ToastContainer />
-    
-       <div className='sticky top-0 z-10'>
-       <Navbar />
-       </div>
-          <div className="flex-grow relative z-0">
-            <Routes>
-            <Route path="/account" element={<Account />} />
-              <Route index path="/" element={<PagesHome />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              {/* <Route path="/account" element={<Account />} /> */}
-              <Route path="/resultonpage/:id" element={<ResultOnpage />} />
-              <Route path="/gioi-thieu" element={<IntroductionPage />} />
-              <Route path="/gop-y" element={<FeedbackPage />} />
-              <Route path="/hoi-dap" element={<FAQPage />} />
-              <Route path="/lien-he" element={<ContactPage />} />
-              <Route path="/quiz" element={<QuizPages />} />
-              <Route path="/quiz/:id" element={<CauHoi />} />
-              <Route path="/quizadd" element={<QuizzAdd />} />
-              <Route path="/examinfo" element={<ExamInfo />} />
-              <Route path="/examquizz" element={<ExamQuizz />} />
-              <Route path="/test" element={<Tset />} />
-              <Route path="/quizadd/:id" element={<QuestionAdd />} />
-              {/* <Route path="/mainAccountDetails" element={<MainAccountDetails />} /> */}
-            </Routes>
-          </div>
-          <Footer />
 
+      <div className="sticky top-0 z-10">
+        <Navbar />
+      </div>
+      <div className="flex-grow relative z-0">
+        <Routes>
+          <Route path="/account" element={<Account />} />
+          <Route index path="/" element={<PagesHome />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          {/* <Route path="/account" element={<Account />} /> */}
+          <Route path="/resultonpage/:id" element={<ResultOnpage />} />
+          <Route path="/gioi-thieu" element={<IntroductionPage />} />
+          <Route path="/gop-y" element={<FeedbackPage />} />
+          <Route path="/hoi-dap" element={<FAQPage />} />
+          <Route path="/lien-he" element={<ContactPage />} />
+          <Route path="/quiz" element={<QuizPages />} />
+          <Route path="/quiz/:id" element={<CauHoi />} />
+          <Route path="/quizadd" element={<QuizzAdd />} />
+          <Route path="/examinfo" element={<ExamInfo />} />
+          <Route path="/examquizz" element={<ExamQuizz />} />
+          <Route path="/test" element={<Tset />} />
+          <Route path="/quizadd/:id" element={<QuestionAdd />} />
+          <Route path="/taoDeThi" element={<EditQuestion />} />
+          <Route path="/docThemBlog" element={<BlogPost />} />
+          {/* <Route path="/mainAccountDetails" element={<MainAccountDetails />} /> */}
+        </Routes>
+      </div>
+      <Footer />
     </div>
   )
 }

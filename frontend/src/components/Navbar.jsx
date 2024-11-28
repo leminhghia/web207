@@ -6,7 +6,8 @@ import { FaBars, FaTimes, FaAngleDown, FaAngleUp } from 'react-icons/fa'
 import { BiSolidUserRectangle } from 'react-icons/bi'
 import { IoFolderOpen } from 'react-icons/io5'
 import { QuizContext } from '../context/QuizContext'
-
+import { FaUserCircle } from 'react-icons/fa'
+import { IoExitOutline } from 'react-icons/io5'
 const Navbar = () => {
   const [login, setLogin] = useState(false)
   const [user, setUser] = useState([])
@@ -44,7 +45,7 @@ const Navbar = () => {
   }
 
   return (
-    <div className="w-full bg-gray-50 z-100  border border-gray-200 sticky top-0">
+    <div className="w-full h-[70px] bg-gray-50 z-100  border border-gray-200 sticky top-0 items-center">
       <div className="flex items-center justify-between gap-4 h-14 p-3 border border-gray-50">
         {/* Logo */}
         <NavLink
@@ -59,33 +60,72 @@ const Navbar = () => {
           </p>
         </NavLink>
 
-        <div className="flex items-center ml-auto">
+        <div className="flex items-center ml-auto mr-4">
           <ul className="flex gap-6 hidden lg:flex">
-          {
-              user.role === 'student' ?
-            <div></div>
-            :
-            <NavLink to="/quizadd" onClick={handleMenuItemClick}>
-            <p>Tạo quiz</p>
-          </NavLink>
-            }
-            <NavLink to="/Quiz" onClick={handleMenuItemClick}>
-              <p>DrxQuiz</p>
+            {user.role !== 'student' && (
+              <NavLink
+                to="/quizadd"
+                onClick={handleMenuItemClick}
+                className="relative p-3 group"
+              >
+                <p className="group-hover:text-transparent group-hover bg-clip-text bg-gradient-to-r from-[#4864fc] to-[#d03cfc] font-medium">
+                  Tạo quiz
+                </p>
+                <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-gradient-to-r from-[#4864fc] to-[#d03cfc] transition-all group-hover:w-full"></span>
+              </NavLink>
+            )}
+            <NavLink
+              to="/Quiz"
+              onClick={handleMenuItemClick}
+              className="relative p-3 group"
+            >
+              <p className="group-hover:text-transparent group-hover bg-clip-text bg-gradient-to-r from-[#4864fc] to-[#d03cfc] font-medium">
+                DrxQuiz
+              </p>
+              <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-gradient-to-r from-[#4864fc] to-[#d03cfc] transition-all group-hover:w-full"></span>
             </NavLink>
-            <NavLink to="/gioi-thieu" onClick={handleMenuItemClick}>
-              <p>Giới Thiệu</p>
+            <NavLink
+              to="/gioi-thieu"
+              onClick={handleMenuItemClick}
+              className="relative p-3 group"
+            >
+              <p className="group-hover:text-transparent group-hover bg-clip-text bg-gradient-to-r from-[#4864fc] to-[#d03cfc] font-medium">
+                Giới Thiệu
+              </p>
+              <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-gradient-to-r from-[#4864fc] to-[#d03cfc] transition-all group-hover:w-full"></span>
             </NavLink>
-            <NavLink to="/lien-he" onClick={handleMenuItemClick}>
-              <p>Liên Hệ</p>
+            <NavLink
+              to="/lien-he"
+              onClick={handleMenuItemClick}
+              className="relative p-3 group"
+            >
+              <p className="group-hover:text-transparent group-hover bg-clip-text bg-gradient-to-r from-[#4864fc] to-[#d03cfc] font-medium">
+                Liên Hệ
+              </p>
+              <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-gradient-to-r from-[#4864fc] to-[#d03cfc] transition-all group-hover:w-full"></span>
             </NavLink>
-            <NavLink to="/gop-y" onClick={handleMenuItemClick}>
-              <p>Góp Ý</p>
+            <NavLink
+              to="/gop-y"
+              onClick={handleMenuItemClick}
+              className="relative p-3 group"
+            >
+              <p className="group-hover:text-transparent group-hover bg-clip-text bg-gradient-to-r from-[#4864fc] to-[#d03cfc] font-medium">
+                Góp Ý
+              </p>
+              <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-gradient-to-r from-[#4864fc] to-[#d03cfc] transition-all group-hover:w-full"></span>
             </NavLink>
-            <NavLink to="/hoi-dap" onClick={handleMenuItemClick}>
-              <p>Hỏi Đáp</p>
+            <NavLink
+              to="/hoi-dap"
+              onClick={handleMenuItemClick}
+              className="relative p-3 group"
+            >
+              <p className="group-hover:text-transparent group-hover bg-clip-text bg-gradient-to-r from-[#4864fc] to-[#d03cfc] font-medium">
+                Hỏi Đáp
+              </p>
+              <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-gradient-to-r from-[#4864fc] to-[#d03cfc] transition-all group-hover:w-full"></span>
             </NavLink>
-       
           </ul>
+
           {/* Tài khoản dropdown */}
           <div
             onClick={() => {
@@ -95,49 +135,58 @@ const Navbar = () => {
                 setLogin(!login) // Toggle menu khi đã đăng nhập
               }
             }}
-            className={`flex items-center justify-between cursor-pointer relative transition-all ${
+            className={`flex items-center justify-center cursor-pointer relative transition-all hover:bg-[#f4f4f5] w-[200px] h-[55px]${
               login ? 'text-blue-500' : ''
             } ml-6 hidden lg:flex`}
           >
-            <p className="">{user.user_id ? user.name : 'Đăng nhập'}</p>
-            {user.user_id && (login ? <FaAngleUp /> : <FaAngleDown />)}
+            <div className="flex items-center gap-1">
+              <FaUserCircle size={35} />
+              <p>{user.user_id ? user.name : 'Đăng nhập'}</p>
+            </div>
+
+            {/* Dropdown menu */}
             {user.user_id && (
               <div
-                className={`absolute text-black top-[35px] right-[-14px] shadow-md bottom-0 overflow-hidden bg-white h-[180px] ${
-                  login ? 'w-[170%] border-2' : 'w-0 border-0'
+                className={`absolute top-[40px] right-0 shadow-md bg-white w-full overflow-hidden transition-all duration-300 ease-in-out ${
+                  login
+                    ? 'max-h-[300px] translate-y-[0%] border-2'
+                    : 'max-h-0 border-0 translate-y-[20%]'
                 }`}
               >
-                <div className="flex flex-col gap-4">
-                  <div>
-                    <div className="flex flex-col space-y-1 p-1">
-                      <Link
-                        to="/account"
-                        onClick={handleMenuItemClick}
-                        className="hover:bg-gray-300 transition-all w-full text-start flex items-center gap-1"
-                      >
-                        <BiSolidUserRectangle />
-                        <p>Hồ sơ</p>
-                      </Link>
-                      <Link
-                        className="hover:bg-gray-300 transition-all w-full text-start flex items-center"
-                        to="/ThuVien"
-                        onClick={handleMenuItemClick}
-                      >
-                        <IoFolderOpen />
-                        <p>Thư viện của tôi</p>
-                      </Link>
-                      <hr className="w-[full] border-none h-[1.5px] bg-gray-300 " />
-                      <button
-                        className="hover:bg-gray-300"
-                        onClick={() => {
-                          handleDelete()
-                          window.location.reload(true) // Reload trang khi đăng xuất
-                        }}
-                      >
-                        Đăng xuất
-                      </button>
-                    </div>
-                  </div>
+                <div className="flex flex-col gap-2 p-1 ">
+                  {/* Profile Link */}
+                  <Link
+                    to="/account"
+                    onClick={handleMenuItemClick}
+                    className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 transition-colors w-full text-start"
+                  >
+                    <BiSolidUserRectangle />
+                    <p>Hồ sơ</p>
+                  </Link>
+
+                  {/* Library Link */}
+                  <Link
+                    to="/ThuVien"
+                    onClick={handleMenuItemClick}
+                    className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 transition-colors w-full text-start"
+                  >
+                    <IoFolderOpen />
+                    <p>Thư viện của tôi</p>
+                  </Link>
+
+                  <hr className="w-full border-none h-[1.5px] bg-gray-300" />
+
+                  {/* Logout Button */}
+                  <button
+                    className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors flex items-center gap-2"
+                    onClick={() => {
+                      handleDelete()
+                      window.location.reload(true) // Reload trang khi đăng xuất
+                    }}
+                  >
+                    <IoExitOutline style={{ color: 'red' }} />
+                    Đăng xuất
+                  </button>
                 </div>
               </div>
             )}

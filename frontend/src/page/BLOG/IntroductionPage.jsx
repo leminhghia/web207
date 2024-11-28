@@ -1,5 +1,6 @@
+import { useState } from 'react'
 import { assets } from '../../assets/assets'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 
 const IntroductionPage = () => {
   const posts = [
@@ -36,7 +37,17 @@ const IntroductionPage = () => {
         'Trong bối cảnh giáo dục không ngừng phát triển, giáo viên và phụ huynh...',
     },
   ]
+  const [selected, setSelected] = useState('Tất cả')
 
+  const categories = [
+    'Tất cả',
+    'Bài viết mới nhất',
+    'Cẩm nang ôn thi THPTQG',
+    'Công cụ học tập',
+    'Hoạt động cộng đồng',
+    'Kinh nghiệm ôn thi',
+    'Tổng hợp đề thi',
+  ]
   return (
     <div className="flex flex-col items-center w-full py-6 bg-white">
       {/* Main Wrapper */}
@@ -51,20 +62,21 @@ const IntroductionPage = () => {
           <div className="flex justify-center">
             <div className="flex justify-center bg-white py-4 rounded-full shadow-md px-2 sm:px-4">
               <ul className="flex flex-wrap space-x-2 sm:space-x-3 text-xs sm:text-sm font-medium text-gray-500">
-                {[
-                  'Tất cả',
-                  'Bài viết mới nhất',
-                  'Cẩm nang ôn thi THPTQG',
-                  'Công cụ học tập',
-                  'Hoạt động cộng đồng',
-                  'Kinh nghiệm ôn thi',
-                  'Tổng hợp đề thi',
-                ].map((item, index) => (
+                {categories.map((item, index) => (
                   <li
                     key={index}
-                    className="hover:text-transparent hover:bg-gradient-to-r hover:from-blue-500 hover:to-pink-500 hover:bg-clip-text"
+                    className={`${
+                      selected === item
+                        ? 'text-transparent bg-gradient-to-r from-blue-500 to-pink-500 bg-clip-text'
+                        : ''
+                    } hover:text-transparent hover:bg-gradient-to-r hover:from-blue-500 hover:to-pink-500 hover:bg-clip-text`}
                   >
-                    <Link to="#">{item}</Link>
+                    <Link
+                      to="#"
+                      onClick={() => setSelected(item)} // Cập nhật mục được chọn khi click
+                    >
+                      {item}
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -94,8 +106,8 @@ const IntroductionPage = () => {
                 Hình thức thi trắc nghiệm ngày càng được áp dụng rộng rãi trong
                 các kỳ thi quan trọng...
               </p>
-              <button className="mt-4 bg-gradient-to-r from-blue-500 to-pink-500 text-white py-2 px-4 rounded-3xl hover:shadow-lg">
-                Đọc thêm
+              <button className="mt-4 bg-gradient-to-r from-blue-500 to-pink-500 text-white py-2 px-4 rounded-3xl hover:shadow-lg transition-all duration-200 ease-in-out active:scale-95 active:opacity-80">
+                <NavLink to="/docThemBlog"> Đọc thêm</NavLink>
               </button>
             </div>
           </div>
@@ -112,19 +124,22 @@ const IntroductionPage = () => {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {posts.map((post) => (
-            <div key={post.id} className="bg-gray-200 p-4 rounded-lg shadow-md">
+            <div
+              key={post.id}
+              className="bg-gray-200 p-4 rounded-lg shadow-md hover:shadow-xl hover:bg-gray-300 transition-all duration-300"
+            >
               <img
                 src={post.image}
                 alt={post.title}
-                className="w-full h-36 sm:h-40 object-cover rounded-lg"
+                className="w-full h-36 sm:h-40 object-cover rounded-lg transition-transform transform hover:scale-105 cursor-pointer"
               />
-              <h3 className="mt-2 text-sm sm:text-lg font-semibold">
+              <h3 className="mt-2 text-sm sm:text-lg font-semibold transition-color">
                 {post.title}
               </h3>
               <p className="mt-1 text-xs sm:text-sm text-gray-600">
                 {post.description}
               </p>
-              <button className="mt-4 bg-gradient-to-r from-blue-500 to-pink-500 text-white py-2 px-3 sm:px-4 rounded-3xl hover:shadow-lg text-xs sm:text-sm">
+              <button className="mt-4 bg-gradient-to-r from-blue-500 to-pink-500 text-white py-2 px-3 sm:px-4 rounded-3xl hover:shadow-lg text-xs sm:text-sm transition-all duration-200 ease-in-out active:scale-95 active:opacity-80 hover:scale-105 ">
                 Đọc thêm
               </button>
             </div>
