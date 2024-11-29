@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 28, 2024 at 04:07 PM
+-- Generation Time: Nov 29, 2024 at 04:18 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -40,10 +40,14 @@ CREATE TABLE `answeroption` (
 --
 
 INSERT INTO `answeroption` (`option_id`, `question_id`, `option_text`, `is_correct`, `created_at`) VALUES
-(229, 78, '423', 0, '2024-11-28 21:55:29'),
-(230, 78, '234', 0, '2024-11-28 21:55:29'),
-(231, 78, '123', 1, '2024-11-28 21:55:29'),
-(232, 78, '132', 0, '2024-11-28 21:55:29');
+(253, 85, '12', 1, '2024-11-29 09:51:02'),
+(254, 85, '2', 0, '2024-11-29 09:51:02'),
+(255, 85, '4', 0, '2024-11-29 09:51:02'),
+(256, 85, '5', 0, '2024-11-29 09:51:02'),
+(257, 86, '11', 1, '2024-11-29 09:51:29'),
+(258, 86, '11', 1, '2024-11-29 09:51:29'),
+(259, 86, '22', 0, '2024-11-29 09:51:29'),
+(260, 86, '44', 0, '2024-11-29 09:51:29');
 
 -- --------------------------------------------------------
 
@@ -91,6 +95,7 @@ CREATE TABLE `permission` (
 CREATE TABLE `question` (
   `question_id` int(11) NOT NULL,
   `quiz_id` int(11) NOT NULL,
+  `question_img` varchar(200) NOT NULL,
   `question_type` varchar(20) DEFAULT NULL,
   `question_text` text NOT NULL,
   `difficulty` enum('easy','medium','hard') DEFAULT NULL,
@@ -101,8 +106,9 @@ CREATE TABLE `question` (
 -- Dumping data for table `question`
 --
 
-INSERT INTO `question` (`question_id`, `quiz_id`, `question_type`, `question_text`, `difficulty`, `created_at`) VALUES
-(78, 85, 'single', '222', NULL, '2024-11-28 21:55:29');
+INSERT INTO `question` (`question_id`, `quiz_id`, `question_img`, `question_type`, `question_text`, `difficulty`, `created_at`) VALUES
+(85, 90, '1732848703324-INMA.jpg', 'single', '11 +1 = ?', NULL, '2024-11-29 09:51:02'),
+(86, 90, '1732848689267-BannerBlog.png', 'multiple', '1+ 10 = ? ', NULL, '2024-11-29 09:51:29');
 
 -- --------------------------------------------------------
 
@@ -136,6 +142,7 @@ CREATE TABLE `quiz` (
   `quiz_id` int(11) NOT NULL,
   `subject_id` int(11) DEFAULT NULL,
   `title` varchar(100) NOT NULL,
+  `quiz_image` varchar(200) DEFAULT NULL,
   `total_questions` int(11) DEFAULT NULL,
   `duration_minutes` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT current_timestamp()
@@ -145,8 +152,8 @@ CREATE TABLE `quiz` (
 -- Dumping data for table `quiz`
 --
 
-INSERT INTO `quiz` (`quiz_id`, `subject_id`, `title`, `total_questions`, `duration_minutes`, `created_at`) VALUES
-(85, 2, '80 ', 30, 45, '2024-11-28 21:47:36');
+INSERT INTO `quiz` (`quiz_id`, `subject_id`, `title`, `quiz_image`, `total_questions`, `duration_minutes`, `created_at`) VALUES
+(90, 2, 'quiz 8', NULL, 20, 45, '2024-11-29 09:50:36');
 
 -- --------------------------------------------------------
 
@@ -262,6 +269,7 @@ CREATE TABLE `user` (
   `user_id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
   `password` varchar(100) NOT NULL,
+  `user_image` varchar(200) DEFAULT NULL,
   `email` varchar(100) NOT NULL,
   `gender` varchar(20) DEFAULT NULL,
   `birthday` date DEFAULT NULL,
@@ -274,8 +282,9 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`user_id`, `name`, `password`, `email`, `gender`, `birthday`, `phonenumber`, `role`, `created_at`) VALUES
-(5, 'minh nghia 1233', '$2b$10$yP0DAor.Qz3disjuu1R.eehhgNlQhy29vT3HNeVCvfL65sKuxN1Bm', 'nghia@111', 'Nam', '2024-11-27', 12309999, 'admin', '2024-11-19 18:24:38');
+INSERT INTO `user` (`user_id`, `name`, `password`, `user_image`, `email`, `gender`, `birthday`, `phonenumber`, `role`, `created_at`) VALUES
+(5, 'minh nghia 1233', '$2b$10$yP0DAor.Qz3disjuu1R.eehhgNlQhy29vT3HNeVCvfL65sKuxN1Bm', '', 'nghia@111', 'Nam', '2024-11-27', 12309999, 'admin', '2024-11-19 18:24:38'),
+(7, 'nghia', '$2b$10$zAkXhO1O1skjtpv8HrdOnOrVMZq1rHCy33olvKFGrbMJpSlSrxF7C', '', 'test@gmail.com', 'Nam', '2024-11-18', 99999, 'admin', '2024-11-28 22:08:37');
 
 -- --------------------------------------------------------
 
@@ -308,6 +317,15 @@ CREATE TABLE `userquiz` (
   `created_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `userquiz`
+--
+
+INSERT INTO `userquiz` (`user_quiz_id`, `user_id`, `quiz_id`, `start_time`, `end_time`, `time_taken`, `score`, `created_at`) VALUES
+(367, 5, 90, '09:52:36', NULL, NULL, 0, '2024-11-29 09:52:36'),
+(368, 5, 90, '10:12:34', NULL, NULL, 0, '2024-11-29 10:12:34'),
+(369, 5, 90, '10:14:22', NULL, NULL, 0, '2024-11-29 10:14:22');
+
 -- --------------------------------------------------------
 
 --
@@ -337,7 +355,7 @@ CREATE TABLE `user_quiz_creator` (
 --
 
 INSERT INTO `user_quiz_creator` (`user_quiz_creator_id`, `user_id`, `quiz_id`, `created_at`) VALUES
-(21, 5, 85, '2024-11-28 21:47:36');
+(26, 5, 90, '2024-11-29 09:50:36');
 
 --
 -- Indexes for dumped tables
@@ -484,7 +502,7 @@ ALTER TABLE `user_quiz_creator`
 -- AUTO_INCREMENT for table `answeroption`
 --
 ALTER TABLE `answeroption`
-  MODIFY `option_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=241;
+  MODIFY `option_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=261;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -508,13 +526,13 @@ ALTER TABLE `permission`
 -- AUTO_INCREMENT for table `question`
 --
 ALTER TABLE `question`
-  MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
+  MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
 
 --
 -- AUTO_INCREMENT for table `quiz`
 --
 ALTER TABLE `quiz`
-  MODIFY `quiz_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
+  MODIFY `quiz_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
 
 --
 -- AUTO_INCREMENT for table `quizsetting`
@@ -526,7 +544,7 @@ ALTER TABLE `quizsetting`
 -- AUTO_INCREMENT for table `result`
 --
 ALTER TABLE `result`
-  MODIFY `result_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
+  MODIFY `result_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
 
 --
 -- AUTO_INCREMENT for table `role`
@@ -550,25 +568,25 @@ ALTER TABLE `tag`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `useranswer`
 --
 ALTER TABLE `useranswer`
-  MODIFY `user_answer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=666;
+  MODIFY `user_answer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=667;
 
 --
 -- AUTO_INCREMENT for table `userquiz`
 --
 ALTER TABLE `userquiz`
-  MODIFY `user_quiz_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=363;
+  MODIFY `user_quiz_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=370;
 
 --
 -- AUTO_INCREMENT for table `user_quiz_creator`
 --
 ALTER TABLE `user_quiz_creator`
-  MODIFY `user_quiz_creator_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `user_quiz_creator_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- Constraints for dumped tables
