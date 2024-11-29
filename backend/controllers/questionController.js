@@ -31,6 +31,7 @@ export const getQuestionbyId = (req, res) => {
       q.question_id, 
       q.question_text, 
       q.question_type,
+      q.question_img,
       a.option_id, 
       a.option_text, 
       a.is_correct
@@ -53,6 +54,7 @@ export const getQuestionbyId = (req, res) => {
       question_id: data[0]?.question_id,
       question_text: data[0]?.question_text,
       question_type: data[0]?.question_type,
+      question_img: data[0]?.question_img,
       options: [],
     };
 
@@ -70,51 +72,74 @@ export const getQuestionbyId = (req, res) => {
 };
 
 export const addQuestion = (req, res) => {
-  const { quiz_id, question, question_type, answers } = req.body;
+  try {
+    const { quiz_id, question, question_type } = req.body;
 
-  const questionSql = `INSERT INTO question (quiz_id, question_text,question_type) VALUES (?, ?,?)`;
-  db.query(questionSql, [quiz_id, question, question_type], (err, result) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: "Lỗi khi thêm câu hỏi" });
+    // Parse answers từ chuỗi JSON sang mảng
+    let answers;
+    try {
+      answers = JSON.parse(req.body.answers);
+    } catch (err) {
+      return res.status(400).json({ error: "Dữ liệu answers không hợp lệ" });
     }
+    const image = req.file ? req.file.filename : null;
 
-    const question_id = result.insertId;
-
-    const answerSql = `INSERT INTO answeroption (question_id, option_text, is_correct) VALUES ?`;
-    const answerValues = answers.map((answer) => [
-      question_id,
-      answer.answer_text,
-      answer.is_correct,
-    ]);
-
-    db.query(answerSql, [answerValues], (err) => {
+    const questionSql = `INSERT INTO question (quiz_id, question_img, question_text, question_type) VALUES (?, ?, ?, ?)`;
+    db.query(questionSql, [quiz_id, image, question, question_type], (err, result) => {
       if (err) {
         console.error(err);
-        return res.status(500).json({ error: "Lỗi khi thêm câu trả lời" });
+        return res.status(500).json({ error: "Lỗi khi thêm câu hỏi" });
       }
 
-      return res.json({
-        message: "Câu hỏi và câu trả lời được thêm thành công",
-        question_id: result.insertId,
+      const question_id = result.insertId;
+
+      const answerSql = `INSERT INTO answeroption (question_id, option_text, is_correct) VALUES ?`;
+      const answerValues = answers.map((answer) => [
+        question_id,
+        answer.answer_text,
+        answer.is_correct,
+      ]);
+
+      db.query(answerSql, [answerValues], (err) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).json({ error: "Lỗi khi thêm câu trả lời" });
+        }
+
+        return res.json({
+          message: "Câu hỏi và câu trả lời được thêm thành công",
+          question_id,
+        });
       });
     });
-  });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Đã xảy ra lỗi trong server" });
+  }
 };
 
-export const updateQuestion = (req, res) => {
-  const { question_id, question, answers } = req.body;
 
-  // Cập nhật câu hỏi
-  const questionSql = `UPDATE question SET  question_text = ? WHERE question_id = ?`;
-  db.query(questionSql, [question, question_id], (err, result) => {
+export const updateQuestion = (req, res) => {
+  const { question_id, question, question_type } = req.body;
+  const image = req.file ? req.file.filename : null;
+ 
+  let answers;
+  try {
+    answers = JSON.parse(req.body.answers);
+  } catch (err) {
+    return res.status(400).json({ error: "Dữ liệu answers không hợp lệ" });
+  }
+  const questionSql = `UPDATE question SET question_text = ?, question_type = ? ${image ? ", question_img = ?" : ""} WHERE question_id = ?`;
+  const questionValues = [question, question_type, ...(image ? [image] : []), question_id];
+
+  db.query(questionSql, questionValues, (err, result) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ error: "Lỗi khi cập nhật câu hỏi" });
     }
 
-    // Cập nhật các câu trả lời
     const answerSql = `UPDATE answeroption SET option_text = ?, is_correct = ? WHERE question_id = ? AND option_id = ?`;
+    
     answers.forEach((answer) => {
       db.query(
         answerSql,
@@ -138,17 +163,18 @@ export const updateQuestion = (req, res) => {
   });
 };
 
+
 export const DeleteQuestion = (req, res) => {
   const { id, checkId } = req.params;
-  
+
   const sql = `DELETE FROM question WHERE quiz_id = ? AND question_id = ?`;
-  db.query(sql,[id,checkId],(err)=>{
+  db.query(sql, [id, checkId], (err) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ error: "Lỗi khi xoa cau hoi" });
     }
-    return res.json({message: 'xoa thanh cong'})
-  })
+    return res.json({ message: "xoa thanh cong" });
+  });
 };
 
 // export const addQuizQuestions = (req, res) => {

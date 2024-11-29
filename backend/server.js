@@ -22,13 +22,18 @@ app.use(
 )
 app.use(cookieParser())
 
+
+
+app.use("/uploads", express.static("uploads"));
+
+
 app.use('/api/auth', authRoutes)
 app.use('/api/quizzes', quizRoutes)
 app.use('/api/question', questionRoutes)
 app.use('/api/answeroption', answerOptionRoutes)
 app.use('/api/useranswer', userAnswerRoutes)
-
 app.use('/api/userquiz', userQuizRoutes)
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`)

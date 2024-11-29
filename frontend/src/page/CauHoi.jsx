@@ -30,6 +30,7 @@ const CauHoi = () => {
       })
     }
   }
+console.log(question);
 
   useEffect(() => {
     async function fetchData() {
@@ -137,7 +138,7 @@ const CauHoi = () => {
     }
   }
 
-  const chitiet = () => {}
+  const chitiet = () => { }
 
   return (
     <div className="bg-[#f2f3f5]">
@@ -149,7 +150,7 @@ const CauHoi = () => {
 
           <div
             className="w-full md:w-1/4 bg-gray-100 sticky top-[64px] max-h-[80vh] overflow-auto"
-            // style={{ top: '64px', maxHeight: '80vh', overflow: 'auto' }}
+          // style={{ top: '64px', maxHeight: '80vh', overflow: 'auto' }}
           >
             <div className="bg-white shadow-md rounded-lg p-3">
               <div className="space-y-3">
@@ -302,10 +303,17 @@ const CauHoi = () => {
                     ref={(el) => (questionRefs.current[i] = el)}
                     className="bg-white"
                   >
+                   
+              
                     <h3 className="mb-5">
                       {/*&nbsp tạo khoảng trắng */}
                       Câu {i + 1}:&nbsp;{q.question_text}
                     </h3>
+                    {
+                      q.question_img ? <div>
+                        <img src={'http://localhost:2000/uploads/' + q.question_img} alt="" />
+                      </div> : <div>a</div>
+                    }
                     <ul>
                       {filter.map((a) => (
                         <li
@@ -335,11 +343,10 @@ const CauHoi = () => {
                             </div>
                           ) : (
                             <button
-                              className={`w-full text-left border px-4 py-2 rounded-lg transition-all ${
-                                color[q.question_id] === a.option_id
+                              className={`w-full text-left border px-4 py-2 rounded-lg transition-all ${color[q.question_id] === a.option_id
                                   ? 'bg-blue-500 text-white'
                                   : 'bg-white hover:bg-blue-100 focus:bg-blue-600'
-                              }`}
+                                }`}
                               onClick={() =>
                                 handleAdd(q.question_id, a.option_id)
                               }
@@ -359,18 +366,17 @@ const CauHoi = () => {
           {/*  */}
           <div
             className="w-full md:w-1/4 bg-white p-4 rounded-lg shadow-md mb-4 md:mb-0 sticky top-[64px] max-h-[80vh] overflow-auto z-0 "
-            // style={{ top: '64px', maxHeight: '80vh', overflow: 'auto' }}
+          // style={{ top: '64px', maxHeight: '80vh', overflow: 'auto' }}
           >
             <h3 className="text-lg font-bold mb-5">Mục lục câu hỏi</h3>
             <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-6 gap-2">
               {question.map((q, index) => (
                 <button
                   key={q.question_id}
-                  className={`border rounded p-2 text-center ${
-                    answeredQuestions.has(q.question_id)
+                  className={`border rounded p-2 text-center ${answeredQuestions.has(q.question_id)
                       ? 'bg-blue-500 text-white'
                       : 'bg-gray-100 hover:bg-blue-100'
-                  }`}
+                    }`}
                   onClick={() => handleNavigateToQuestion(index)}
                 >
                   {index + 1}

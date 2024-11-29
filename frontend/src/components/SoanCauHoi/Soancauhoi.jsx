@@ -11,7 +11,8 @@ const Soancauhoi = () => {
   const naviagte = useNavigate()
   const { checkId } = useContext(QuizContext)
   const [selectedOption, setSelectedOption] = useState('single')
-
+  const [oldImage, setOldImage] = useState("")
+  const [file, setFile] = useState(null);
   // const [answersCauhoi, setAnswersCauhoi] = useState([
   //   {
   //     text: '',
@@ -93,7 +94,7 @@ const Soancauhoi = () => {
           answer_text: option.option_text,
           is_correct: option.is_correct,
         }))
-
+        setOldImage(res.data.question_img)
         setUserAnswers(answers)
       } catch (error) {
         console.error('Lỗi khi lấy dữ liệu:', error)
@@ -101,7 +102,7 @@ const Soancauhoi = () => {
     }
 
     fetchData()
-  }, [checkId])
+  }, [checkId, oldImage])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -116,12 +117,20 @@ const Soancauhoi = () => {
     if (!allAnswersFilled) return
 
     try {
-      const res = await axios.post(`http://localhost:2000/api/question/add`, {
-        quiz_id: id,
-        question,
-        question_type: selectedOption,
-        answers: userAnswers,
-      })
+      console.log(file);
+      
+      const formData = new FormData();
+
+      // Thêm các trường dữ liệu
+      formData.append("image", file);
+      formData.append("quiz_id", id);
+      formData.append("question", question);
+      formData.append("question_type", selectedOption);
+      formData.append("answers", JSON.stringify(userAnswers));
+
+   
+
+      const res = await axios.post(`http://localhost:2000/api/question/add`, formData)
       toast.success(res.data.message)
 
       naviagte(0)
@@ -137,17 +146,32 @@ const Soancauhoi = () => {
     const correctAnswer = userAnswers.some((answer) => answer.is_correct)
     if (!correctAnswer) return
 
-    const allAnswersFilled = userAnswers.every(
+    const allAnswersFilled = userAnswers.every( 
       (answer) => answer.answer_text.trim() && answer.option_id !== null
     )
     if (!allAnswersFilled) return
 
     try {
-      const res = await axios.put(`http://localhost:2000/api/question/update`, {
-        question_id: checkId,
-        question,
-        question_type: selectedOption,
-        answers: userAnswers,
+      const formData = new FormData();
+
+
+      formData.append("image", file);
+      formData.append("question_id", checkId);
+      formData.append("question", question);
+      formData.append("question_type", selectedOption);
+      formData.append("answers", JSON.stringify(userAnswers));
+
+      for (let [key, value] of formData.entries()) {
+        if (value instanceof File) {
+          console.log(`${key}: ${value.name}`); // Nếu giá trị là file, log tên file
+        } else {
+          console.log(`${key}: ${value}`); // Nếu không phải file, log giá trị
+        }
+      }
+      const res = await axios.put(`http://localhost:2000/api/question/update`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',  // Quan trọng
+        },
       })
       toast.success(res.data.message)
 
@@ -278,19 +302,10 @@ const Soancauhoi = () => {
         questionStyle.textDecoration === 'underline' ? 'none' : 'underline',
     })
   }
-  //update image
-  const [uploadedImage, setUploadedImage] = useState(null)
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onload = () => {
-        setUploadedImage(reader.result) // Lưu đường dẫn hình ảnh vào state
-      }
-      reader.readAsDataURL(file)
-    }
-  }
+
+
+
   return (
     <div className="grid grid-cols-[2fr_4fr] gap-4 mt-10 mx-4 bg-gray-100 p-4">
       <div className="sticky top-[64px] overflow-auto max-h-[50vh] ">
@@ -348,13 +363,7 @@ const Soancauhoi = () => {
             >
               📷
             </label>
-            <input
-              id="upload-image"
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={handleImageUpload}
-            />
+            <input type="file" onChange={(e) => setFile(e.target.files[0])} />
           </div>
           <textarea
             className="border border-gray-300 rounded-b-xl w-full h-32 p-2 mb-2 hover:border-blue-500 focus:border-blue-500 focus:outline-none"
@@ -374,13 +383,9 @@ const Soancauhoi = () => {
             }}
             placeholder="Nhập câu hỏi"
           />
-          {uploadedImage && (
-            <div className="mt-2">
-              <img
-                src={uploadedImage}
-                alt="Uploaded"
-                className="max-w-full max-h-64 border rounded"
-              />
+          {oldImage && (
+            <div>
+              <img src={`http://localhost:2000/uploads/${oldImage}`} alt="Old Image" />
             </div>
           )}
         </div>
