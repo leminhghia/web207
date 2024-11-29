@@ -88,20 +88,6 @@ export default function Sidebar({ onSelectSection }) {
             Bài kiểm tra đã làm
           </span>
         </button>
-
-        {/* <button
-          onClick={() => handleSelect('settings')}
-          className={`flex items-center p-3 my-2 rounded-lg text-left w-full ${
-            active === 'settings'
-              ? 'bg-blue-100 text-blue-500 font-semibold'
-              : 'text-gray-600 hover:bg-blue-100 hover:text-blue-500 focus:bg-blue-100 focus:text-blue-500'
-          }`}
-        >
-          <span className="material-icons mr-3 flex items-center gap-3">
-            <IoMdSettings />
-            Cài đặt tài khoản
-          </span>
-        </button> */}
       </div>
       <button
         className="w-full h-[50px] text-start material-icons mr-3 flex items-center gap-3 justify-between rounded-lg hover:bg-gray-50"

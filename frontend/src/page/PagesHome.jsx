@@ -9,6 +9,7 @@ import { MdKeyboardArrowRight } from 'react-icons/md'
 import { MdOutlineAirplay } from 'react-icons/md'
 import LogoSlideshow from '../components/Slideshow '
 import FeedbackSection from '../components/FeedbackSection'
+import { NavLink } from 'react-router-dom'
 const PagesHome = () => {
   return (
     <div className="flex-col w-full">
@@ -91,7 +92,7 @@ const PagesHome = () => {
               </div>
             </div>
             {/* Text */}
-            <div>
+            <div className="mb-6">
               <p className="text-base font-medium bg-clip-text text-transparent bg-gradient-to-r from-[#4864fc] to-[#d03cfc]">
                 Hơn 200.000+ khách hàng đã yêu thích sử dụng
               </p>
@@ -100,12 +101,18 @@ const PagesHome = () => {
 
           {/* Action Buttons */}
           <div className="flex gap-4 mb-12 ml-4 lg:ml-16 mt-3">
-            <button className="bg-gradient-to-r from-[#4864fc] to-[#d03cfc] text-white py-2 px-4 rounded-3xl flex items-center gap-2">
+            <NavLink
+              to="/taoDeThi"
+              className="bg-gradient-to-r from-[#4864fc] to-[#d03cfc] text-white py-2 px-4 rounded-3xl flex items-center gap-2 transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg hover:opacity-90 active:scale-95"
+            >
               <TbPencilHeart /> Tạo đề thi ngay
-            </button>
-            <button className="bg-blue-600 text-white py-2 px-4 rounded-3xl flex items-center gap-2">
+            </NavLink>
+            <NavLink
+              to="/Quiz"
+              className="bg-blue-600 text-white py-2 px-4 rounded-3xl flex items-center gap-2 transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg hover:opacity-90 active:scale-95"
+            >
               <GoSearch /> Tìm kiếm đề thi
-            </button>
+            </NavLink>
           </div>
         </div>
 
@@ -142,9 +149,13 @@ const PagesHome = () => {
                 tạo đề, sinh viên có thể tự học với bộ tài liệu phù hợp đồng
                 thời chia sẻ cho nhóm học tập.
               </p>
-              <button className="mt-3 bg-clip-text text-transparent bg-gradient-to-r from-[#4864fc] to-[#d03cfc] flex items-center gap-1">
+              <NavLink
+                to="taoDeThi"
+                className="mt-3 bg-clip-text text-transparent bg-gradient-to-r from-[#4864fc] to-[#d03cfc] flex items-center gap-1"
+              >
+                Bắt đầu
                 <MdKeyboardArrowRight style={{ color: '#8F82FC' }} size={20} />
-              </button>
+              </NavLink>
             </div>
 
             <div className="w-full sm:w-1/3 lg:w-1/4 text-center">
@@ -157,10 +168,13 @@ const PagesHome = () => {
                 hiệu quả, giúp giảng viên dễ dàng quản lý bài giảng và chất
                 lượng giảng dạy.
               </p>
-              <button className="mt-3 bg-clip-text text-transparent bg-gradient-to-r from-[#4864fc] to-[#d03cfc] flex items-center gap-1">
+              <NavLink
+                to="taoDeThi"
+                className="mt-3 bg-clip-text text-transparent bg-gradient-to-r from-[#4864fc] to-[#d03cfc] flex items-center gap-1"
+              >
                 Bắt đầu
                 <MdKeyboardArrowRight style={{ color: '#8F82FC' }} size={20} />
-              </button>
+              </NavLink>
             </div>
 
             <div className="w-full sm:w-1/3 lg:w-1/4 text-center">
@@ -174,13 +188,16 @@ const PagesHome = () => {
                 nhân viên.
               </p>
               <div className="flex justify-start">
-                <button className="mt-3 bg-clip-text text-transparent bg-gradient-to-r from-[#4864fc] to-[#d03cfc] flex items-center gap-1">
+                <NavLink
+                  to="taoDeThi"
+                  className="mt-3 bg-clip-text text-transparent bg-gradient-to-r from-[#4864fc] to-[#d03cfc] flex items-center gap-1"
+                >
                   Bắt đầu
                   <MdKeyboardArrowRight
                     style={{ color: '#8F82FC' }}
                     size={20}
                   />
-                </button>
+                </NavLink>
               </div>
             </div>
           </div>
@@ -192,7 +209,7 @@ const PagesHome = () => {
           {/* Nội dung text */}
           <div className="lg:w-1/2 flex justify-center">
             <div>
-              <button className="w-[78px] mb-4 text-[13px] font-medium text-white text-transparent bg-gradient-to-r from-[#4864fc] to-[#d03cfc] rounded-md p-1">
+              <button className="w-[78px] mb-4 text-[13px] font-medium text-white text-transparent bg-gradient-to-r from-[#4864fc] to-[#d03cfc] rounded-md p-1 transition-all duration-200 ease-in-out active:scale-95 active:opacity-80">
                 NHANH
               </button>
               <p className="text-3xl font-medium">
@@ -213,8 +230,8 @@ const PagesHome = () => {
                 Tối ưu trải nghiệm, tiết kiệm thời gian, công sức, đảm bảo tính
                 khách quan và có thêm thời gian nghiên cứu, học tập.
               </p>
-              <button className="mt-4 w-[110px] h-10 text-[13px] font-medium text-white text-transparent bg-gradient-to-r from-[#4864fc] to-[#d03cfc] rounded-3xl p-1">
-                Bắt đầu ngay
+              <button className="mt-4 w-[110px] h-10 text-[13px] font-medium text-white text-transparent bg-gradient-to-r from-[#4864fc] to-[#d03cfc] rounded-3xl p-1 transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg hover:opacity-90 active:scale-95">
+                <NavLink to="/taoDeThi">Bắt đầu ngay</NavLink>
               </button>
             </div>
           </div>
@@ -249,7 +266,7 @@ const PagesHome = () => {
           {/* Nội dung văn bản */}
           <div className="lg:w-1/2 flex justify-center order-1 lg:order-2">
             <div>
-              <button className="w-[78px] mb-4 text-[13px] font-medium text-white text-transparent bg-gradient-to-r from-[#4864fc] to-[#d03cfc] rounded-md p-1">
+              <button className="w-[78px] mb-4 text-[13px] font-medium text-white text-transparent bg-gradient-to-r from-[#4864fc] to-[#d03cfc] rounded-md p-1 transition-all duration-200 ease-in-out active:scale-95 active:opacity-80">
                 TỐI ƯU
               </button>
               <p className="text-3xl font-medium">
@@ -270,8 +287,8 @@ const PagesHome = () => {
                 Tối ưu trải nghiệm, tiết kiệm thời gian, công sức, đảm bảo tính
                 khách quan và có thêm thời gian nghiên cứu, học tập.
               </p>
-              <button className="mt-4 w-[110px] h-10 text-[13px] font-medium text-white text-transparent bg-gradient-to-r from-[#4864fc] to-[#d03cfc] rounded-3xl p-1">
-                Bắt đầu ngay
+              <button className="mt-4 w-[110px] h-10 text-[13px] font-medium text-white text-transparent bg-gradient-to-r from-[#4864fc] to-[#d03cfc] rounded-3xl p-1 transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg hover:opacity-90 active:scale-95">
+                <NavLink to="/taoDeThi">Bắt đầu ngay</NavLink>
               </button>
             </div>
           </div>
@@ -282,11 +299,12 @@ const PagesHome = () => {
       <div className="w-full mt-8 bg-[#F6F8FF] p-7">
         <div className="flex flex-col lg:flex-row w-full justify-center items-center lg:items-start space-y-5 lg:space-y-0">
           {/* Nội dung văn bản */}
-          <div className="lg:w-1/2 flex justify-center lg:justify-end order-1 lg:order-2">
+          <div className="lg:w-1/2 flex justify-center order-1 lg:order-1">
             <div>
-              <button className="w-[78px] mb-4 text-[13px] font-medium text-white text-transparent bg-gradient-to-r from-[#4864fc] to-[#d03cfc] rounded-md p-1">
+              <button className="w-[78px] mb-4 text-[13px] font-medium text-white text-transparent bg-gradient-to-r from-[#4864fc] to-[#d03cfc] rounded-md p-1 transition-all duration-200 ease-in-out active:scale-95 active:opacity-80">
                 HIỆU QUẢ
               </button>
+
               <p className="text-3xl font-medium">
                 <span className="text-3xl text-transparent bg-clip-text bg-gradient-to-r from-[#4864fc] to-[#d03cfc]">
                   Phòng thi ảo
@@ -304,15 +322,15 @@ const PagesHome = () => {
                 Tối ưu trải nghiệm, tiết kiệm thời gian, công sức, đảm bảo tính
                 khách quan và có thêm thời gian nghiên cứu, học tập.
               </p>
-              <button className="mt-4 w-[110px] h-10 text-[13px] font-medium text-white text-transparent bg-gradient-to-r from-[#4864fc] to-[#d03cfc] rounded-3xl p-1">
-                Bắt đầu ngay
+              <button className="mt-4 w-[110px] h-10 text-[13px] font-medium text-white text-transparent bg-gradient-to-r from-[#4864fc] to-[#d03cfc] rounded-3xl p-1 transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg hover:opacity-90 active:scale-95">
+                <NavLink to="/taoDeThi">Bắt đầu ngay</NavLink>
               </button>
             </div>
           </div>
 
           {/* Hình ảnh */}
-          <div className="lg:w-1/2 flex justify-center order-2 lg:order-1">
-            <div className="lg:ml-5">
+          <div className="lg:w-1/2 flex justify-center order-2 lg:order-2 lg:ml-5">
+            <div>
               <img
                 src={assets.AIBANNER}
                 alt="Phòng thi ảo trực tuyến"
@@ -340,7 +358,7 @@ const PagesHome = () => {
           {/* Nội dung văn bản */}
           <div className="lg:w-1/2 flex justify-center order-1 lg:order-2">
             <div>
-              <button className="w-[78px] mb-4 text-[13px] font-medium text-white text-transparent bg-gradient-to-r from-[#4864fc] to-[#d03cfc] rounded-md p-1">
+              <button className="w-[78px] mb-4 text-[13px] font-medium text-white text-transparent bg-gradient-to-r from-[#4864fc] to-[#d03cfc] rounded-md p-1 transition-all duration-200 ease-in-out active:scale-95 active:opacity-80">
                 LINH HOẠT
               </button>
               <p className="text-3xl font-medium">
@@ -361,8 +379,8 @@ const PagesHome = () => {
                 Tối ưu trải nghiệm, tiết kiệm thời gian, công sức, đảm bảo tính
                 khách quan và có thêm thời gian nghiên cứu, học tập.
               </p>
-              <button className="mt-4 w-[110px] h-10 text-[13px] font-medium text-white text-transparent bg-gradient-to-r from-[#4864fc] to-[#d03cfc] rounded-3xl p-1">
-                Bắt đầu ngay
+              <button className="mt-4 w-[110px] h-10 text-[13px] font-medium text-white text-transparent bg-gradient-to-r from-[#4864fc] to-[#d03cfc] rounded-3xl p-1 transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg hover:opacity-90 active:scale-95">
+                <NavLink to="/taoDeThi">Bắt đầu ngay</NavLink>
               </button>
             </div>
           </div>

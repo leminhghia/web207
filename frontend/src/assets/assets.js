@@ -28,10 +28,12 @@ import BANNERBLOG from './BannerBlog.png'
 import PAY from './Pay.png'
 import APPSTORE from './AppStore.png'
 import GOOGLEPLAY from './GooglePlay.png'
+import BANNERBLOG2 from './Sua-thumb-tai-day.png'
 import { FaAngleUp, FaAngleDown } from 'react-icons/fa6'
 import { BiCategory } from 'react-icons/bi'
 
 export const assets = {
+  BANNERBLOG2,
   GOOGLEPLAY,
   APPSTORE,
   PAY,
