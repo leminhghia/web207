@@ -102,7 +102,7 @@ const Soancauhoi = () => {
     }
 
     fetchData()
-  }, [checkId, oldImage])
+  }, [checkId])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -117,7 +117,6 @@ const Soancauhoi = () => {
     if (!allAnswersFilled) return
 
     try {
-      console.log(file);
       
       const formData = new FormData();
 
@@ -161,13 +160,7 @@ const Soancauhoi = () => {
       formData.append("question_type", selectedOption);
       formData.append("answers", JSON.stringify(userAnswers));
 
-      for (let [key, value] of formData.entries()) {
-        if (value instanceof File) {
-          console.log(`${key}: ${value.name}`); // Nếu giá trị là file, log tên file
-        } else {
-          console.log(`${key}: ${value}`); // Nếu không phải file, log giá trị
-        }
-      }
+    
       const res = await axios.put(`http://localhost:2000/api/question/update`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',  // Quan trọng

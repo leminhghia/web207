@@ -40,9 +40,9 @@ export const login = (req, res) => {
         if (err) return res.json({ Error: "Lỗi so sánh mật khẩu" });
 
         if (result) {
-          const { user_id, name, email, role, gender, birthday, phonenumber } = data[0];
+          const { user_id, name, email, role, gender, birthday, phonenumber,user_image } = data[0];
           const token = jwt.sign(
-            { user_id, name, email, role, gender, birthday, phonenumber },
+            { user_id, name, email, role, gender, birthday, phonenumber,user_image },
             "jwt-secret-key",
             { expiresIn: "1d" }
           );
@@ -60,19 +60,20 @@ export const login = (req, res) => {
 };
 
 export const getUser = (req, res) => {
-  const { user_id, name, email, role, gender, birthday, phonenumber } = req.user;
-  return res.json({ user_id, name, email, role, gender, birthday, phonenumber });
+  const { user_id, name, email, role, gender, birthday, phonenumber, user_image } = req.user;
+  return res.json({ user_id, name, email, role, gender, birthday, phonenumber,user_image });
 };
 
 export const updateUser = (req, res) => {
   const { name, phonenumber, gender, birthday } = req.body;
+  const image = req.file ? req.file.filename : null;
 
   // Lấy user_id từ middleware verifyUser
   const { user_id } = req.user;
 
-  const sql = `UPDATE user SET name = ?, phonenumber = ?, gender = ?, birthday = ? WHERE user_id = ?`;
+  const sql = `UPDATE user SET name = ?,user_image = ? , phonenumber = ?, gender = ?, birthday = ? WHERE user_id = ?`;
 
-  db.query(sql, [name, phonenumber, gender, birthday, user_id], (err, result) => {
+  db.query(sql, [name,image, phonenumber, gender, birthday, user_id], (err, result) => {
     if (err) {
       console.error("Lỗi:", err);
       return res.json({ Error: "Lỗi cơ sở dữ liệu" });
@@ -87,9 +88,9 @@ export const updateUser = (req, res) => {
         }
 
         if (data.length > 0) {
-          const { user_id, name, email, role, gender, birthday, phonenumber } = data[0];
+          const { user_id, name, email, role, gender, birthday, phonenumber,user_image } = data[0];
           const token = jwt.sign(
-            { user_id, name, email, role, gender, birthday, phonenumber },
+            { user_id, name, email, role, gender, birthday, phonenumber,user_image },
             "jwt-secret-key",
             { expiresIn: "1d" }
           );
@@ -97,7 +98,7 @@ export const updateUser = (req, res) => {
           res.clearCookie("token");
           res.cookie("token", token);
 
-          return res.json({ message: "Cập nhật thành công", token });
+          return res.json({ message: "Cập nhật thành công", token ,data});
         } else {
           return res.json({ Error: "Không tìm thấy người dùng" });
         }

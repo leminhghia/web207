@@ -37,6 +37,7 @@ const EduQuiz = () => {
       })
 
   }, [user])
+  console.log(data);
 
   const [isNam, setIsNam] = useState(true)
   const [isNganh, setIsNganh] = useState(true)
@@ -135,8 +136,8 @@ const EduQuiz = () => {
                 >
                   <div className="flex flex-col space-y-2">
                     <img
-                      src="https://via.placeholder.com/150"
-                      className="w-full h-32 object-cover rounded"
+                    src={`http://localhost:2000/uploads/${item.quiz_image}`}
+                    className="w-full h-32 object-cover rounded"
                     />
                     <h3 className="font-bold text-lg min-h-[3rem]">
                       {item.title}

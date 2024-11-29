@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 29, 2024 at 04:18 AM
+-- Generation Time: Nov 29, 2024 at 12:17 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -35,32 +35,6 @@ CREATE TABLE `answeroption` (
   `created_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `answeroption`
---
-
-INSERT INTO `answeroption` (`option_id`, `question_id`, `option_text`, `is_correct`, `created_at`) VALUES
-(253, 85, '12', 1, '2024-11-29 09:51:02'),
-(254, 85, '2', 0, '2024-11-29 09:51:02'),
-(255, 85, '4', 0, '2024-11-29 09:51:02'),
-(256, 85, '5', 0, '2024-11-29 09:51:02'),
-(257, 86, '11', 1, '2024-11-29 09:51:29'),
-(258, 86, '11', 1, '2024-11-29 09:51:29'),
-(259, 86, '22', 0, '2024-11-29 09:51:29'),
-(260, 86, '44', 0, '2024-11-29 09:51:29');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `category`
---
-
-CREATE TABLE `category` (
-  `category_id` int(11) NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `description` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 -- --------------------------------------------------------
 
 --
@@ -73,6 +47,59 @@ CREATE TABLE `feedback` (
   `rating` int(11) DEFAULT NULL CHECK (`rating` between 1 and 5),
   `comments` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `level`
+--
+
+CREATE TABLE `level` (
+  `level_id` int(11) NOT NULL,
+  `level_name` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `level`
+--
+
+INSERT INTO `level` (`level_id`, `level_name`, `description`) VALUES
+(1, 'Đại học', NULL),
+(2, 'Trung học phổ thông', NULL),
+(3, 'Cao đẳng', NULL),
+(4, 'Trung học cơ sở', NULL),
+(5, 'Cao học', NULL),
+(6, 'Doanh nghiệp', NULL),
+(7, 'Trung tâm đào tạo', NULL),
+(8, 'Tiểu học', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `major`
+--
+
+CREATE TABLE `major` (
+  `major_id` int(11) NOT NULL,
+  `major_name` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `major`
+--
+
+INSERT INTO `major` (`major_id`, `major_name`, `description`) VALUES
+(1, 'Y Dược', NULL),
+(2, 'Tiếng Anh', NULL),
+(3, 'Đại cương', NULL),
+(4, 'Công nghệ thông tin', NULL),
+(5, 'Luật', NULL),
+(6, 'Kế toán', NULL),
+(7, 'Thương mại', NULL),
+(8, 'Du lịch', NULL),
+(9, 'Quản trị kinh doanh', NULL);
 
 -- --------------------------------------------------------
 
@@ -102,36 +129,6 @@ CREATE TABLE `question` (
   `created_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `question`
---
-
-INSERT INTO `question` (`question_id`, `quiz_id`, `question_img`, `question_type`, `question_text`, `difficulty`, `created_at`) VALUES
-(85, 90, '1732848703324-INMA.jpg', 'single', '11 +1 = ?', NULL, '2024-11-29 09:51:02'),
-(86, 90, '1732848689267-BannerBlog.png', 'multiple', '1+ 10 = ? ', NULL, '2024-11-29 09:51:29');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `questioncategory`
---
-
-CREATE TABLE `questioncategory` (
-  `question_id` int(11) NOT NULL,
-  `category_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `questiontag`
---
-
-CREATE TABLE `questiontag` (
-  `question_id` int(11) NOT NULL,
-  `tag_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 -- --------------------------------------------------------
 
 --
@@ -140,20 +137,10 @@ CREATE TABLE `questiontag` (
 
 CREATE TABLE `quiz` (
   `quiz_id` int(11) NOT NULL,
-  `subject_id` int(11) DEFAULT NULL,
   `title` varchar(100) NOT NULL,
   `quiz_image` varchar(200) DEFAULT NULL,
-  `total_questions` int(11) DEFAULT NULL,
-  `duration_minutes` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `quiz`
---
-
-INSERT INTO `quiz` (`quiz_id`, `subject_id`, `title`, `quiz_image`, `total_questions`, `duration_minutes`, `created_at`) VALUES
-(90, 2, 'quiz 8', NULL, 20, 45, '2024-11-29 09:50:36');
 
 -- --------------------------------------------------------
 
@@ -167,6 +154,39 @@ CREATE TABLE `quizsetting` (
   `shuffle_questions` tinyint(1) DEFAULT 1,
   `shuffle_options` tinyint(1) DEFAULT 1,
   `time_limit` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `quiz_level`
+--
+
+CREATE TABLE `quiz_level` (
+  `quiz_id` int(11) NOT NULL,
+  `level_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `quiz_major`
+--
+
+CREATE TABLE `quiz_major` (
+  `quiz_id` int(11) NOT NULL,
+  `major_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `quiz_subject`
+--
+
+CREATE TABLE `quiz_subject` (
+  `quiz_id` int(11) NOT NULL,
+  `subject_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -218,7 +238,6 @@ CREATE TABLE `rolepermission` (
 CREATE TABLE `subject` (
   `subject_id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `logo` varchar(200) NOT NULL,
   `description` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -226,38 +245,15 @@ CREATE TABLE `subject` (
 -- Dumping data for table `subject`
 --
 
-INSERT INTO `subject` (`subject_id`, `name`, `logo`, `description`) VALUES
-(1, 'Lập trình Android nâng cao', 'ADAV.jpg', NULL),
-(2, 'Lập trình Android cơ bản', 'ADBS.jpg', NULL),
-(7, 'Kiểm thử và triển khai ứng dụng Android', 'ADTE.jpg', NULL),
-(8, 'Thiết kế giao diện trên Android', 'ADUI.jpg', NULL),
-(9, 'Lập trình ASP.NET', 'ASNE.png', NULL),
-(10, 'Điện toán đám mây', 'CLCO.jpg', NULL),
-(11, 'SQL Server', 'DBAV.png', NULL),
-(12, 'Cơ sở dữ liệu', 'DBBS.png', NULL),
-(13, 'Lập trình game 2D', 'GAME.png', NULL),
-(14, 'HTML5 và CSS3', 'HTCS.jpg', NULL),
-(15, 'Internet Marketing', 'INMA.jpg', NULL),
-(16, 'Lập trình Java nâng cao', 'JAAV.png', NULL),
-(17, 'Lập trình hướng đối tượng với Java', 'JABS.png', NULL),
-(18, 'Lập trình JavaScript', 'JSPR.png', NULL),
-(19, 'Thiết kế layout', 'LAYO.jpg', NULL),
-(20, 'Thiết kế web cho điện thoại di động', 'MOWE.png', NULL),
-(21, 'Lập trình PHP', 'PHPP.png', NULL),
-(22, 'Quản lý dự án với Agile', 'PMAG.jpg', NULL),
-(23, 'Lập trình VB.NET', 'VBPR.png', NULL),
-(24, 'Xây dựng trang web', 'WEBU.jpg', NULL);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tag`
---
-
-CREATE TABLE `tag` (
-  `tag_id` int(11) NOT NULL,
-  `name` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+INSERT INTO `subject` (`subject_id`, `name`, `description`) VALUES
+(25, 'Toán', NULL),
+(26, 'Văn', NULL),
+(27, 'Hóa', NULL),
+(28, 'Lí', NULL),
+(29, 'Công nghệ', NULL),
+(30, 'Triết học', NULL),
+(31, 'GDCD', NULL),
+(32, 'Tiếng Anh', NULL);
 
 -- --------------------------------------------------------
 
@@ -317,15 +313,6 @@ CREATE TABLE `userquiz` (
   `created_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `userquiz`
---
-
-INSERT INTO `userquiz` (`user_quiz_id`, `user_id`, `quiz_id`, `start_time`, `end_time`, `time_taken`, `score`, `created_at`) VALUES
-(367, 5, 90, '09:52:36', NULL, NULL, 0, '2024-11-29 09:52:36'),
-(368, 5, 90, '10:12:34', NULL, NULL, 0, '2024-11-29 10:12:34'),
-(369, 5, 90, '10:14:22', NULL, NULL, 0, '2024-11-29 10:14:22');
-
 -- --------------------------------------------------------
 
 --
@@ -351,13 +338,6 @@ CREATE TABLE `user_quiz_creator` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `user_quiz_creator`
---
-
-INSERT INTO `user_quiz_creator` (`user_quiz_creator_id`, `user_id`, `quiz_id`, `created_at`) VALUES
-(26, 5, 90, '2024-11-29 09:50:36');
-
---
 -- Indexes for dumped tables
 --
 
@@ -369,17 +349,23 @@ ALTER TABLE `answeroption`
   ADD KEY `FK_answeroption_question` (`question_id`);
 
 --
--- Indexes for table `category`
---
-ALTER TABLE `category`
-  ADD PRIMARY KEY (`category_id`);
-
---
 -- Indexes for table `feedback`
 --
 ALTER TABLE `feedback`
   ADD PRIMARY KEY (`feedback_id`),
   ADD KEY `FK_feedback_userquiz` (`user_quiz_id`);
+
+--
+-- Indexes for table `level`
+--
+ALTER TABLE `level`
+  ADD PRIMARY KEY (`level_id`);
+
+--
+-- Indexes for table `major`
+--
+ALTER TABLE `major`
+  ADD PRIMARY KEY (`major_id`);
 
 --
 -- Indexes for table `permission`
@@ -395,20 +381,6 @@ ALTER TABLE `question`
   ADD KEY `FK_question_quiz` (`quiz_id`);
 
 --
--- Indexes for table `questioncategory`
---
-ALTER TABLE `questioncategory`
-  ADD PRIMARY KEY (`question_id`,`category_id`),
-  ADD KEY `FK_questioncategory_category` (`category_id`);
-
---
--- Indexes for table `questiontag`
---
-ALTER TABLE `questiontag`
-  ADD PRIMARY KEY (`question_id`,`tag_id`),
-  ADD KEY `FK_questiontag_tag` (`tag_id`);
-
---
 -- Indexes for table `quiz`
 --
 ALTER TABLE `quiz`
@@ -421,6 +393,27 @@ ALTER TABLE `quiz`
 ALTER TABLE `quizsetting`
   ADD PRIMARY KEY (`setting_id`),
   ADD KEY `FK_quizsetting_quiz` (`quiz_id`);
+
+--
+-- Indexes for table `quiz_level`
+--
+ALTER TABLE `quiz_level`
+  ADD PRIMARY KEY (`quiz_id`,`level_id`),
+  ADD KEY `level_id` (`level_id`);
+
+--
+-- Indexes for table `quiz_major`
+--
+ALTER TABLE `quiz_major`
+  ADD PRIMARY KEY (`quiz_id`,`major_id`),
+  ADD KEY `major_id` (`major_id`);
+
+--
+-- Indexes for table `quiz_subject`
+--
+ALTER TABLE `quiz_subject`
+  ADD PRIMARY KEY (`quiz_id`,`subject_id`),
+  ADD KEY `subject_id` (`subject_id`);
 
 --
 -- Indexes for table `result`
@@ -449,12 +442,6 @@ ALTER TABLE `rolepermission`
 --
 ALTER TABLE `subject`
   ADD PRIMARY KEY (`subject_id`);
-
---
--- Indexes for table `tag`
---
-ALTER TABLE `tag`
-  ADD PRIMARY KEY (`tag_id`);
 
 --
 -- Indexes for table `user`
@@ -505,16 +492,22 @@ ALTER TABLE `answeroption`
   MODIFY `option_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=261;
 
 --
--- AUTO_INCREMENT for table `category`
---
-ALTER TABLE `category`
-  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `feedback`
 --
 ALTER TABLE `feedback`
   MODIFY `feedback_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `level`
+--
+ALTER TABLE `level`
+  MODIFY `level_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `major`
+--
+ALTER TABLE `major`
+  MODIFY `major_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `permission`
@@ -556,13 +549,7 @@ ALTER TABLE `role`
 -- AUTO_INCREMENT for table `subject`
 --
 ALTER TABLE `subject`
-  MODIFY `subject_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
-
---
--- AUTO_INCREMENT for table `tag`
---
-ALTER TABLE `tag`
-  MODIFY `tag_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `subject_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `user`
@@ -611,12 +598,6 @@ ALTER TABLE `question`
   ADD CONSTRAINT `FK_question_quiz` FOREIGN KEY (`quiz_id`) REFERENCES `quiz` (`quiz_id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `questioncategory`
---
-ALTER TABLE `questioncategory`
-  ADD CONSTRAINT `FK_questioncategory_category` FOREIGN KEY (`category_id`) REFERENCES `category` (`category_id`);
-
---
 -- Constraints for table `quiz`
 --
 ALTER TABLE `quiz`
@@ -627,6 +608,27 @@ ALTER TABLE `quiz`
 --
 ALTER TABLE `quizsetting`
   ADD CONSTRAINT `FK_quizsetting_quiz` FOREIGN KEY (`quiz_id`) REFERENCES `quiz` (`quiz_id`);
+
+--
+-- Constraints for table `quiz_level`
+--
+ALTER TABLE `quiz_level`
+  ADD CONSTRAINT `quiz_level_ibfk_1` FOREIGN KEY (`quiz_id`) REFERENCES `quiz` (`quiz_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `quiz_level_ibfk_2` FOREIGN KEY (`level_id`) REFERENCES `level` (`level_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `quiz_major`
+--
+ALTER TABLE `quiz_major`
+  ADD CONSTRAINT `quiz_major_ibfk_1` FOREIGN KEY (`quiz_id`) REFERENCES `quiz` (`quiz_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `quiz_major_ibfk_2` FOREIGN KEY (`major_id`) REFERENCES `major` (`major_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `quiz_subject`
+--
+ALTER TABLE `quiz_subject`
+  ADD CONSTRAINT `quiz_subject_ibfk_1` FOREIGN KEY (`quiz_id`) REFERENCES `quiz` (`quiz_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `quiz_subject_ibfk_2` FOREIGN KEY (`subject_id`) REFERENCES `subject` (`subject_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `result`

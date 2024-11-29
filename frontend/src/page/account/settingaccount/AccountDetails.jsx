@@ -4,41 +4,33 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 
 const AccountDetails = () => {
-  const [avatar, setAvatar] = useState('https://via.placeholder.com/150')
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [user, setUser] = useState({})
-  const [name, setName] = useState('')
-  const [phonenumber, setPhoneNumber] = useState('')
-  const [gender, setGender] = useState('')
-  const [birthday, setBirthday] = useState('')
+  const [oldImage, setOldImage] = useState("")
+  const [file, setFile] = useState(null);
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setAvatar(reader.result)
-      }
-      reader.readAsDataURL(file)
-    }
-  }
+  const [formData, setFormData] = useState({
+    name: '',
+    phonenumber: '',
+    email: '',
+    gender: '',
+    birthday: ''
+  })
 
   useEffect(() => {
     axios
       .get('http://localhost:2000/api/auth/list')
       .then((res) => {
-        setUser(res.data)
-        setName(res.data.name)
-        setPhoneNumber(res.data.phonenumber)
-        setGender(res.data.gender)
-        const formattedBirthday = res.data.birthday
-          ? new Date(res.data.birthday).toISOString().split('T')[0]
-          : ''
-
-        setBirthday(formattedBirthday)
-        if (res.data.avatar) {
-          setAvatar(res.data.avatar)
-        }
+        setFormData({
+          name: res.data.name,
+          phonenumber: res.data.phonenumber,
+          email: res.data.email,
+          gender: res.data.gender,
+          birthday: res.data.birthday
+            ? new Date(res.data.birthday).toISOString().split('T')[0]
+            : '',
+        })
+        setOldImage(res.data.user_image)
+        
       })
       .catch((err) => console.log(err))
 
@@ -53,27 +45,28 @@ const AccountDetails = () => {
     }
   }, [isModalOpen])
 
-  const handleSave = () => {
-    axios
-      .put(
-        'http://localhost:2000/api/auth/update',
-        {
-          name,
-          phonenumber,
-          gender,
-          birthday,
+  const handleSave = async (e) => {
+    e.preventDefault()
+    const data = new FormData();
+    data.append('name', formData.name)
+    data.append('email', formData.email)
+    data.append('phonenumber', formData.phonenumber)
+    data.append('gender', formData.gender)
+    data.append('birthday', formData.birthday)
+    if (file) data.append('image', file);
+  
+    try {
+      const res = await axios.put('http://localhost:2000/api/auth/update', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',  // Quan trọng
         },
-        {
-          withCredentials: true,
-        }
-      )
-      .then((res) => {
-        toast.success(res.data.message)
-        setIsModalOpen(false)
+        withCredentials: true,
       })
-      .catch((err) => {
-        toast.error(err.data.Error)
-      })
+      toast.success(res.data.message)
+
+    } catch (error) {
+      console.error('Error:', error);
+    }
   }
 
   return (
@@ -82,7 +75,7 @@ const AccountDetails = () => {
         <div className="flex flex-col md:flex-row items-center space-x-4 mb-4 md:mb-0">
           <div className="relative">
             <img
-              src={avatar}
+              src={`http://localhost:2000/uploads/${oldImage}`}
               alt="Avatar"
               className="w-20 h-20 md:w-24 md:h-24 rounded-full border-2 border-gray-300"
             />
@@ -90,9 +83,10 @@ const AccountDetails = () => {
               type="file"
               id="file-input"
               accept="image/*"
-              onChange={handleImageChange}
+              onChange={(e) => setFile(e.target.files[0])}
               className="hidden"
             />
+         
             <label
               htmlFor="file-input"
               className="absolute bottom-0 right-0 bg-blue-500 p-2 rounded-full cursor-pointer"
@@ -100,7 +94,7 @@ const AccountDetails = () => {
               <FaCamera className="text-white" />
             </label>
           </div>
-          <h1 className="text-xl md:text-2xl font-bold">{user.name}</h1>
+          <h1 className="text-xl md:text-2xl font-bold">{formData.name}</h1>
         </div>
         <button
           className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800"
@@ -117,31 +111,31 @@ const AccountDetails = () => {
         <div>
           <p>Họ tên</p>
           <div className="mt-1 block w-full p-2 border border-gray-300 rounded-md">
-            {user.name}
+            {formData.name}
           </div>
         </div>
         <div>
           <p>Số điện thoại</p>
           <div className="mt-1 block w-full p-2 border border-gray-300 rounded-md">
-            {user.phonenumber}
+            {formData.phonenumber}
           </div>
         </div>
         <div>
           <p>Email</p>
           <div className="mt-1 block w-full p-2 border border-gray-300 rounded-md">
-            {user.email}
+            {formData.email}
           </div>
         </div>
         <div>
           <p>Giới tính</p>
           <div className="mt-1 block w-full p-2 border border-gray-300 rounded-md">
-            {user.gender}
+            {formData.gender}
           </div>
         </div>
         <div>
           <p>Ngày sinh</p>
           <div className="mt-1 block w-full p-2 border border-gray-300 rounded-md">
-            {birthday}
+            {formData.birthday}
           </div>
         </div>
       </div>
@@ -156,8 +150,8 @@ const AccountDetails = () => {
               <p>Họ Tên</p>
               <input
                 type="text"
-                onChange={(e) => setName(e.target.value)}
-                value={name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                value={formData.name}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
               />
             </div>
@@ -166,8 +160,8 @@ const AccountDetails = () => {
               <p>Số điện thoại</p>
               <input
                 type="number"
-                value={phonenumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
+                value={formData.phonenumber}
+                onChange={(e) => setFormData({ ...formData, phonenumber: e.target.value })}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
               />
             </div>
@@ -175,8 +169,8 @@ const AccountDetails = () => {
             <div className="mb-4">
               <p>Giới tính</p>
               <select
-                onChange={(e) => setGender(e.target.value)}
-                value={gender}
+                onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
+                value={formData.gender}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
               >
                 <option disabled>
@@ -190,9 +184,9 @@ const AccountDetails = () => {
             <div className="mb-4">
               <p>Ngày Sinh</p>
               <input
-                value={birthday}
+                value={formData.birthday}
                 type="date"
-                onChange={(e) => setBirthday(e.target.value)}
+                onChange={(e) => setFormData({ ...formData, birthday: e.target.value })}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
               />
             </div>

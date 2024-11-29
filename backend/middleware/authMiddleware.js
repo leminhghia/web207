@@ -15,6 +15,7 @@ export const verifyUser = (req, res, next) => {
     req.user = {
       user_id: decoded.user_id,
       name: decoded.name,
+      user_image: decoded.user_image,
       email: decoded.email,
       gender: decoded.gender,
       birthday: decoded.birthday,

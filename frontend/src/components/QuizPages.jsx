@@ -94,10 +94,13 @@ const EduQuiz = () => {
                 {/* Căn chỉnh thẳng lối bằng min-h */}
                 <div className="flex flex-col space-y-2">
                   <img
-                    src="https://via.placeholder.com/150"
+                    src={`http://localhost:2000/uploads/${item.quiz_image}`}
                     alt={item.title}
                     className="w-full h-32 object-cover rounded"
                   />
+                  <div>
+
+                  </div>
                   <h3 className="font-bold text-lg min-h-[3rem]">
                     {item.title}
                   </h3>
