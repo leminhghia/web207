@@ -9,6 +9,8 @@ const ResultOnpage = () => {
   const [question, setQuestion] = useState([])
   const [answer, setAnswer] = useState([])
   const [userAnswer, setUserAnswer] = useState([])
+  const [tongCauHoi, setTongCauHoi] = useState([])
+
   const formatDate = (dateS) => {
     const date = new Date(dateS);
     return date.toLocaleString("vi-VN");
@@ -16,13 +18,17 @@ const ResultOnpage = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-
-
         const res = await axios.get(
           `http://localhost:2000/api/userquiz/result/list/${id}`//id user quiz
         )
-        setData(res.data)
-        const quizId = data.map((q) => q.quiz_id)
+        const userQuizData = res.data; 
+        setData(userQuizData);
+        const quizId = userQuizData.length > 0 ? userQuizData[0].quiz_id : null;
+        if (!quizId) {
+          console.error("quizId is undefined or empty");
+          return;
+        }
+  
 
 
         const res2 = await axios.get(
@@ -31,13 +37,17 @@ const ResultOnpage = () => {
         setUserAnswer(res2.data)
 
         const res3 = await axios.get(
-          `http://localhost:2000/api/question/list/${quizId}`//id quiz
+          `http://localhost:2000/api/question/list/userquiz/${id}/quiz/${quizId}`//id quiz
         )
-        const questions = res3.data
-        setQuestion(questions)
+        const questions = res3.data;
+        const uniqueQuestions = Array.from(
+          new Map(questions.map((item) => [item.question_id, item])).values()
+        );
+
+        setQuestion(uniqueQuestions);
 
         const questionId = questions.map((q) => q.question_id)
-
+        setTongCauHoi(uniqueQuestions.length)
 
 
         const answers = await Promise.all(
@@ -47,17 +57,18 @@ const ResultOnpage = () => {
               .then((res) => res.data)
           )
         )
-        setAnswer(answers.flat())
-
-
-
+        const uniqueAnswers = Array.from(
+          new Map(answers.flat().map((answer) => [answer.option_id, answer])).values()
+        );
+        
+        setAnswer(uniqueAnswers)
 
       } catch (error) {
         console.log(error)
       }
     }
     fetchData()
-  }, [data, id])
+  }, [id])
 
   return (
     <div>
@@ -149,12 +160,12 @@ const ResultOnpage = () => {
                   </div>
                   <div className="flex flex-col gap-2 items-center ">
                     <p className="text-lg text-black">Số câu sai</p>
-                    <p className="text-lg font-semibold text-gray-800">{0}</p>
+                    <p className="text-lg font-semibold text-gray-800">{tongCauHoi - item.total_correct}</p>
                   </div>
-                  <div className="flex flex-col gap-2 items-center">
+                  {/* <div className="flex flex-col gap-2 items-center">
                     <p className="text-lg text-black">Số câu bỏ trống</p>
                     <p className="text-lg font-semibold text-gray-800">0</p>
-                  </div>
+                  </div> */}
                 </div>
                 {/*  */}
                 <hr className="mt-3" />

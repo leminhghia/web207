@@ -23,6 +23,29 @@ export const getQuestion = (req, res) => {
   });
 };
 
+export const getQuestionByUserQuizId = (req, res) => {
+  const { user_quiz_id, quiz_id } = req.params;
+  
+  const sql = ` SELECT 
+  ua.user_quiz_id,
+  q.*
+  FROM
+  useranswer ua
+  JOIN
+  question q ON ua.question_id = q.question_id
+  WHERE
+  ua.user_quiz_id = ? AND q.quiz_id = ? 
+   `;
+
+  db.query(sql, [user_quiz_id, quiz_id], (err, data) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Lỗi khi lấy câu hỏi và lựa chọn" });
+    }
+    return res.json(data)
+  });
+};
+
 export const getQuestionbyId = (req, res) => {
   const { id } = req.params;
 
@@ -85,52 +108,62 @@ export const addQuestion = (req, res) => {
     const image = req.file ? req.file.filename : null;
 
     const questionSql = `INSERT INTO question (quiz_id, question_img, question_text, question_type) VALUES (?, ?, ?, ?)`;
-    db.query(questionSql, [quiz_id, image || null, question, question_type], (err, result) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).json({ error: "Lỗi khi thêm câu hỏi" });
-      }
-
-      const question_id = result.insertId;
-
-      const answerSql = `INSERT INTO answeroption (question_id, option_text, is_correct) VALUES ?`;
-      const answerValues = answers.map((answer) => [
-        question_id,
-        answer.answer_text,
-        answer.is_correct,
-      ]);
-
-      db.query(answerSql, [answerValues], (err) => {
+    db.query(
+      questionSql,
+      [quiz_id, image || null, question, question_type],
+      (err, result) => {
         if (err) {
           console.error(err);
-          return res.status(500).json({ error: "Lỗi khi thêm câu trả lời" });
+          return res.status(500).json({ error: "Lỗi khi thêm câu hỏi" });
         }
 
-        return res.json({
-          message: "Câu hỏi và câu trả lời được thêm thành công",
+        const question_id = result.insertId;
+
+        const answerSql = `INSERT INTO answeroption (question_id, option_text, is_correct) VALUES ?`;
+        const answerValues = answers.map((answer) => [
           question_id,
+          answer.answer_text,
+          answer.is_correct,
+        ]);
+
+        db.query(answerSql, [answerValues], (err) => {
+          if (err) {
+            console.error(err);
+            return res.status(500).json({ error: "Lỗi khi thêm câu trả lời" });
+          }
+
+          return res.json({
+            message: "Câu hỏi và câu trả lời được thêm thành công",
+            question_id,
+          });
         });
-      });
-    });
+      }
+    );
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: "Đã xảy ra lỗi trong server" });
   }
 };
 
-
 export const updateQuestion = (req, res) => {
   const { question_id, question, question_type } = req.body;
   const image = req.file ? req.file.filename : null;
- 
+
   let answers;
   try {
     answers = JSON.parse(req.body.answers);
   } catch (err) {
     return res.status(400).json({ error: "Dữ liệu answers không hợp lệ" });
   }
-  const questionSql = `UPDATE question SET question_text = ?, question_type = ? ${image ? ", question_img = ?" : ""} WHERE question_id = ?`;
-  const questionValues = [question, question_type, ...(image ? [image] : []), question_id];
+  const questionSql = `UPDATE question SET question_text = ?, question_type = ? ${
+    image ? ", question_img = ?" : ""
+  } WHERE question_id = ?`;
+  const questionValues = [
+    question,
+    question_type,
+    ...(image ? [image] : []),
+    question_id,
+  ];
 
   db.query(questionSql, questionValues, (err, result) => {
     if (err) {
@@ -139,7 +172,7 @@ export const updateQuestion = (req, res) => {
     }
 
     const answerSql = `UPDATE answeroption SET option_text = ?, is_correct = ? WHERE question_id = ? AND option_id = ?`;
-    
+
     answers.forEach((answer) => {
       db.query(
         answerSql,
@@ -162,7 +195,6 @@ export const updateQuestion = (req, res) => {
     });
   });
 };
-
 
 export const DeleteQuestion = (req, res) => {
   const { id, checkId } = req.params;

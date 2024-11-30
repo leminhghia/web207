@@ -6,6 +6,8 @@ const QuizzAdd = () => {
   const { tab, setTab, idthemquiz } = useContext(QuizContext)
   console.log(idthemquiz)
 
+
+
   return (
     <div className="mx-8 bg-[#f5f5f5] p-6">
       <h1 className="text-2xl font-semibold mb-4">Chỉnh sửa đề thi</h1>
