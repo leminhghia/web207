@@ -1,5 +1,4 @@
 import db from "../config/db.js";
-import { login } from "./authController.js";
 export const addUserQuiz = (req, res) => {
   const { user_id } = req.user;
   const { quiz_id } = req.body;
@@ -18,7 +17,7 @@ export const addUserQuiz = (req, res) => {
 };
 
 export const updateUserQuiz = (req, res) => {
-  const { score, user_quiz_id, quiz_id } = req.body;
+  const { score, user_quiz_id, quiz_id,total_correct } = req.body;
   const { user_id } = req.user;
 
   const checkSql = "SELECT * FROM userquiz WHERE user_quiz_id = ?";
@@ -62,10 +61,10 @@ export const updateUserQuiz = (req, res) => {
 
         // Lưu kết quả vào bảng result
         const insertResultSql =
-          "INSERT INTO result (user_id, quiz_id, user_quiz_id, score, rating, date_taken, time_taken) VALUES (?, ?, ?, ?, ?, NOW(),?)";
+          "INSERT INTO result (user_id, quiz_id, user_quiz_id, score,total_correct, rating, date_taken, time_taken) VALUES (?, ?, ?, ?, ?, ?, NOW(),?)";
         db.query(
           insertResultSql,
-          [user_id, quiz_id, user_quiz_id, score, rating, timeTaken],
+          [user_id, quiz_id, user_quiz_id, score,total_correct, rating, timeTaken],
           (err, insertResult) => {
             if (err) {
               return res.json({
@@ -90,10 +89,12 @@ SELECT
     u.email,
     u.user_id,
     uq.user_quiz_id,
+    uq.quiz_id,
     r.score,
     r.date_taken,
     r.time_taken,
-    r.rating
+    r.rating,
+    r.total_correct
 FROM 
     user u
 JOIN 

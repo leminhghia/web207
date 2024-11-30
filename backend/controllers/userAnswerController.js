@@ -125,7 +125,7 @@ export const addUserAnswer = (req, res) => {
 
           // Gửi kết quả về client
           return res.json({
-            message: "Nộp bài thành công", score: scorePercentage,
+            message: "Nộp bài thành công", score: scorePercentage , correctCount,
           });
         });
       });

@@ -30,7 +30,6 @@ const CauHoi = () => {
       })
     }
   }
-console.log(question);
 
   useEffect(() => {
     async function fetchData() {
@@ -125,8 +124,8 @@ console.log(question);
         answer: data,
         user_quiz_id: userQuizId,
       })
-
       await axios.put(`http://localhost:2000/api/userquiz/update`, {
+        total_correct: res.data.correctCount,
         score: res.data.score,
         user_quiz_id: userQuizId,
         quiz_id: id,
@@ -312,7 +311,7 @@ console.log(question);
                     {
                       q.question_img ? <div>
                         <img src={'http://localhost:2000/uploads/' + q.question_img} alt="" />
-                      </div> : <div>a</div>
+                      </div> : <div></div>
                     }
                     <ul>
                       {filter.map((a) => (
