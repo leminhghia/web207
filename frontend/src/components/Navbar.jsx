@@ -21,6 +21,8 @@ const Navbar = () => {
       .get(`http://localhost:2000/api/auth/list`)
       .then((res) => {
         setUser(res.data)
+
+
       })
 
       .catch((err) => console.log(err))
@@ -65,11 +67,10 @@ const Navbar = () => {
             <NavLink
               to="/quizadd"
               onClick={handleMenuItemClick}
-              className={`relative p-3 group ${
-                user.role == 'student' || user.role == undefined
-                  ? 'hidden'
-                  : 'block'
-              }`}
+              className={`relative p-3 group ${user.role == 'student' || user.role == undefined
+                ? 'hidden'
+                : 'block'
+                }`}
             >
               <p className="group-hover:text-transparent group-hover bg-clip-text bg-gradient-to-r from-[#4864fc] to-[#d03cfc] font-medium">
                 Tạo quiz
@@ -138,23 +139,23 @@ const Navbar = () => {
                 setLogin(!login) // Toggle menu khi đã đăng nhập
               }
             }}
-            className={`flex items-center justify-center cursor-pointer relative transition-all hover:bg-[#f4f4f5] w-[200px] h-[55px]${
-              login ? 'text-blue-500' : ''
-            } ml-6 hidden lg:flex`}
+            className={`flex items-center justify-center cursor-pointer relative transition-all hover:bg-[#f4f4f5] w-[200px] h-[55px]${login ? 'text-blue-500' : ''
+              } ml-6 hidden lg:flex`}
           >
             <div className="flex items-center gap-1">
-              <FaUserCircle size={35} />
+              {
+                user.user_image ? <div> <img  className='rounded-full w-[50px] border-black border' src={`http://localhost:2000/uploads/${user.user_image}`} alt="" /> </div> : <FaUserCircle size={35} />
+              }
               <p>{user.user_id ? user.name : 'Đăng nhập'}</p>
             </div>
 
             {/* Dropdown menu */}
             {user.user_id && (
               <div
-                className={`absolute top-[40px] right-0 shadow-md bg-white w-full overflow-hidden transition-all duration-300 ease-in-out ${
-                  login
-                    ? 'max-h-[300px] translate-y-[0%] border-2'
-                    : 'max-h-0 border-0 translate-y-[20%]'
-                }`}
+                className={`absolute top-[40px] right-0 shadow-md bg-white w-full overflow-hidden transition-all duration-300 ease-in-out ${login
+                  ? 'max-h-[300px] translate-y-[0%] border-2'
+                  : 'max-h-0 border-0 translate-y-[20%]'
+                  }`}
               >
                 <div className="flex flex-col gap-2 p-1 ">
                   {/* Profile Link */}
@@ -246,16 +247,14 @@ const Navbar = () => {
           {/* Tài khoản dropdown cho mobile */}
           <div
             onClick={() => setLogin(!login)}
-            className={`flex items-center justify-between cursor-pointer relative transition-all ${
-              login ? 'text-blue-500' : ''
-            } p-3 hover:bg-gray-300`}
+            className={`flex items-center justify-between cursor-pointer relative transition-all ${login ? 'text-blue-500' : ''
+              } p-3 hover:bg-gray-300`}
           >
             <p>Tài Khoản</p>
             {login ? <FaAngleUp /> : <FaAngleDown />}
             <div
-              className={`absolute text-black top-[35px] right-[-14px] shadow-md bottom-0 overflow-hidden bg-white h-[180px] ${
-                login ? 'w-[170%] border-2' : 'w-0 border-0'
-              }`}
+              className={`absolute text-black top-[35px] right-[-14px] shadow-md bottom-0 overflow-hidden bg-white h-[180px] ${login ? 'w-[170%] border-2' : 'w-0 border-0'
+                }`}
             >
               <div className="flex flex-col gap-1">
                 {user.user_id ? (

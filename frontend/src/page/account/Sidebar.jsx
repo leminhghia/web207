@@ -1,15 +1,17 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FaUser } from 'react-icons/fa'
 import { LuBookOpenCheck } from 'react-icons/lu'
 import { FaRegUserCircle } from 'react-icons/fa'
 import { IoMdSettings } from 'react-icons/io'
 import { GoTriangleDown } from 'react-icons/go'
 import { BsFillMortarboardFill } from 'react-icons/bs'
+import axios from 'axios'
 
 export default function Sidebar({ onSelectSection }) {
   const [active, setActive] = useState('account')
   const [isOpen, setIsOpen] = useState(true)
   const [isOpen2, setIsOpen2] = useState(true)
+  const [user, setUser] = useState([])
   const toggleMenu = () => {
     setIsOpen(!isOpen)
   }
@@ -22,17 +24,33 @@ export default function Sidebar({ onSelectSection }) {
     onSelectSection(section)
   }
 
+  useEffect(() => {
+    axios.get(`http://localhost:2000/api/auth/list`)
+      .then((res) => {
+        setUser(res.data)
+
+
+      })
+
+      .catch((err) => console.log(err))
+  }, [])
+
   return (
     <div className="bg-white text-black h-full w-64 p-6 shadow-lg border border-gray-300 rounded-lg lg:mt-3">
       {/* Profile Section */}
-      <div className="flex items-center mb-6 w-full">
-        <img
-          src="https://via.placeholder.com/50"
-          alt="Profile"
-          className="rounded-full w-12 h-12 mr-4"
-        />
+      <div className="flex items-center mb-6 w-full gap-2">
+
+        {
+          user.user_image ? <div> <img className='rounded-full w-[50px] border-black border' src={`http://localhost:2000/uploads/${user.user_image}`} alt="" /> </div> 
+          : 
+          <img
+            src="https://via.placeholder.com/50"
+            alt="Profile"
+            className="rounded-full w-12 h-12 mr-4"
+          />
+        }
         <div>
-          <p className="text-lg font-bold">Robert Fox</p>
+          <p className="text-lg font-bold">{user.name}</p>
           <p className="text-gray-500 text-sm">Hello 👋</p>
         </div>
       </div>
@@ -48,26 +66,23 @@ export default function Sidebar({ onSelectSection }) {
         </span>
 
         <span
-          className={`inline ml-2 text-lg transition-transform duration-300 ${
-            isOpen ? 'rotate-180' : 'rotate-0'
-          }`}
+          className={`inline ml-2 text-lg transition-transform duration-300 ${isOpen ? 'rotate-180' : 'rotate-0'
+            }`}
         >
           {isOpen ? <GoTriangleDown /> : <GoTriangleDown />}
         </span>
       </button>
 
       <div
-        className={`transition-all duration-[3s] ease-in-out overflow-hidden ${
-          isOpen ? 'h-auto' : 'h-0'
-        }`}
+        className={`transition-all duration-[3s] ease-in-out overflow-hidden ${isOpen ? 'h-auto' : 'h-0'
+          }`}
       >
         <button
           onClick={() => handleSelect('account')}
-          className={`flex items-center p-3 my-2 rounded-lg text-left w-full ${
-            active === 'account'
-              ? 'bg-blue-100 text-blue-500 font-semibold'
-              : 'text-gray-600 hover:bg-blue-100 hover:text-blue-500 focus:bg-blue-100 focus:text-blue-500'
-          }`}
+          className={`flex items-center p-3 my-2 rounded-lg text-left w-full ${active === 'account'
+            ? 'bg-blue-100 text-blue-500 font-semibold'
+            : 'text-gray-600 hover:bg-blue-100 hover:text-blue-500 focus:bg-blue-100 focus:text-blue-500'
+            }`}
         >
           <span className="material-icons mr-3 flex items-center gap-3">
             <FaRegUserCircle />
@@ -77,11 +92,10 @@ export default function Sidebar({ onSelectSection }) {
 
         <button
           onClick={() => handleSelect('tests')}
-          className={`flex items-center p-3 my-2 rounded-lg text-left w-full ${
-            active === 'tests'
-              ? 'bg-blue-100 text-blue-500 font-semibold'
-              : 'text-gray-600 hover:bg-blue-100 hover:text-blue-500 focus:bg-blue-100 focus:text-blue-500'
-          }`}
+          className={`flex items-center p-3 my-2 rounded-lg text-left w-full ${active === 'tests'
+            ? 'bg-blue-100 text-blue-500 font-semibold'
+            : 'text-gray-600 hover:bg-blue-100 hover:text-blue-500 focus:bg-blue-100 focus:text-blue-500'
+            }`}
         >
           <span className="material-icons mr-3 flex items-center gap-3">
             <LuBookOpenCheck />
@@ -99,26 +113,23 @@ export default function Sidebar({ onSelectSection }) {
         </span>
 
         <span
-          className={`inline ml-2 text-lg transition-transform duration-300 ${
-            isOpen2 ? 'rotate-180' : 'rotate-0'
-          }`}
+          className={`inline ml-2 text-lg transition-transform duration-300 ${isOpen2 ? 'rotate-180' : 'rotate-0'
+            }`}
         >
           {isOpen2 ? <GoTriangleDown /> : <GoTriangleDown />}
         </span>
       </button>
 
       <div
-        className={`transition-all duration-[3s] ease-in-out overflow-hidden ${
-          isOpen2 ? 'h-auto' : 'h-0'
-        }`}
+        className={`transition-all duration-[3s] ease-in-out overflow-hidden ${isOpen2 ? 'h-auto' : 'h-0'
+          }`}
       >
         <button
           onClick={() => handleSelect('examquestion')}
-          className={`flex items-center p-3 my-2 rounded-lg text-left w-full ${
-            active === 'examquestion'
-              ? 'bg-blue-100 text-blue-500 font-semibold'
-              : 'text-gray-600 hover:bg-blue-100 hover:text-blue-500 focus:bg-blue-100 focus:text-blue-500'
-          }`}
+          className={`flex items-center p-3 my-2 rounded-lg text-left w-full ${active === 'examquestion'
+            ? 'bg-blue-100 text-blue-500 font-semibold'
+            : 'text-gray-600 hover:bg-blue-100 hover:text-blue-500 focus:bg-blue-100 focus:text-blue-500'
+            }`}
         >
           <span className="material-icons mr-3 flex items-center gap-3">
             <FaRegUserCircle />
@@ -128,11 +139,10 @@ export default function Sidebar({ onSelectSection }) {
 
         <button
           onClick={() => handleSelect('khoahoc')}
-          className={`flex items-center p-3 my-2 rounded-lg text-left w-full ${
-            active === 'khoahoc'
-              ? 'bg-blue-100 text-blue-500 font-semibold'
-              : 'text-gray-600 hover:bg-blue-100 hover:text-blue-500 focus:bg-blue-100 focus:text-blue-500'
-          }`}
+          className={`flex items-center p-3 my-2 rounded-lg text-left w-full ${active === 'khoahoc'
+            ? 'bg-blue-100 text-blue-500 font-semibold'
+            : 'text-gray-600 hover:bg-blue-100 hover:text-blue-500 focus:bg-blue-100 focus:text-blue-500'
+            }`}
         >
           <span className="material-icons mr-3 flex items-center gap-3">
             <LuBookOpenCheck />
@@ -142,11 +152,10 @@ export default function Sidebar({ onSelectSection }) {
 
         <button
           onClick={() => handleSelect('settings')}
-          className={`flex items-center p-3 my-2 rounded-lg text-left w-full ${
-            active === 'settings'
-              ? 'bg-blue-100 text-blue-500 font-semibold'
-              : 'text-gray-600 hover:bg-blue-100 hover:text-blue-500 focus:bg-blue-100 focus:text-blue-500'
-          }`}
+          className={`flex items-center p-3 my-2 rounded-lg text-left w-full ${active === 'settings'
+            ? 'bg-blue-100 text-blue-500 font-semibold'
+            : 'text-gray-600 hover:bg-blue-100 hover:text-blue-500 focus:bg-blue-100 focus:text-blue-500'
+            }`}
         >
           <span className="material-icons mr-3 flex items-center gap-3">
             <IoMdSettings />
