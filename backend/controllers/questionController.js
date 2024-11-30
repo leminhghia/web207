@@ -85,7 +85,7 @@ export const addQuestion = (req, res) => {
     const image = req.file ? req.file.filename : null;
 
     const questionSql = `INSERT INTO question (quiz_id, question_img, question_text, question_type) VALUES (?, ?, ?, ?)`;
-    db.query(questionSql, [quiz_id, image, question, question_type], (err, result) => {
+    db.query(questionSql, [quiz_id, image || null, question, question_type], (err, result) => {
       if (err) {
         console.error(err);
         return res.status(500).json({ error: "Lỗi khi thêm câu hỏi" });

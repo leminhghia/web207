@@ -255,7 +255,8 @@ export const getQuizbyUser = (req, res) => {
   const checksql = `SELECT 
   uqc.*, 
   q.quiz_id, 
-  q.title
+  q.title,
+  q.quiz_image
 FROM user_quiz_creator uqc
 JOIN quiz q ON uqc.quiz_id = q.quiz_id
 WHERE uqc.user_id = ?

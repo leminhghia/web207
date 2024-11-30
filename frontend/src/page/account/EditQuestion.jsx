@@ -20,6 +20,8 @@ const EditQuestion = () => {
       try {
         const res = await axios.get(`http://localhost:2000/api/quizzes/GetByUser`)
         setData(res.data)
+        console.log(res.data);
+        
       } catch (error) {
         console.error(error);
 
@@ -77,8 +79,7 @@ const EditQuestion = () => {
                 {/* Image */}
                 <div className="h-40 bg-blue-100 flex items-center justify-center">
                   <img
-                    src="https://via.placeholder.com/150"
-                    alt="Exam"
+                    src={`http://localhost:2000/uploads/${item.quiz_image}`}
                     className="object-cover h-full w-full"
                   />
                 </div>
