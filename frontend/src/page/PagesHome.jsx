@@ -29,7 +29,7 @@ const PagesHome = () => {
           {/* Main Heading */}
           <h1 className="text-3xl lg:text-4xl font-bold text-gray-800 mb-2 flex flex-col leading-relaxed text-start ml-4 lg:ml-16">
             Có một cách đơn giản hơn để{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4864fc] to-[#d03cfc] h-auto min-h-[40px] pb-1 text-4xl lg:text-5xl mb-3 mt-3 p-1">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#4864fc] to-[#d03cfc] h-auto min-h-[60px] pb-1 text-4xl lg:text-5xl mb-3 mt-3 p-1">
               <ReactTyped
                 strings={[
                   'tự động tạo câu hỏi',

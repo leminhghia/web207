@@ -15,17 +15,14 @@ const PORT = 2000
 app.use(express.json())
 app.use(
   cors({
-    origin: ['http://localhost:5173'],
+    origin: ['http://localhost:5174'],
     methods: ['POST', 'GET', 'PUT', 'DELETE'],
     credentials: true,
   })
 )
 app.use(cookieParser())
 
-
-
-app.use("/uploads", express.static("uploads"));
-
+app.use('/uploads', express.static('uploads'))
 
 app.use('/api/auth', authRoutes)
 app.use('/api/quizzes', quizRoutes)
@@ -33,7 +30,6 @@ app.use('/api/question', questionRoutes)
 app.use('/api/answeroption', answerOptionRoutes)
 app.use('/api/useranswer', userAnswerRoutes)
 app.use('/api/userquiz', userQuizRoutes)
-
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`)

@@ -51,6 +51,7 @@ function App() {
           <Route path="/taoDeThi" element={<EditQuestion />} />
           <Route path="/docThemBlog" element={<BlogPost />} />
           {/* <Route path="/mainAccountDetails" element={<MainAccountDetails />} /> */}
+          <Route path="/ketqua" element={<ResultOnpage />} />
         </Routes>
       </div>
       <Footer />
