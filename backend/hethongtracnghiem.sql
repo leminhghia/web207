@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 29, 2024 at 12:17 PM
+-- Generation Time: Nov 30, 2024 at 01:33 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -92,7 +92,6 @@ CREATE TABLE `major` (
 
 INSERT INTO `major` (`major_id`, `major_name`, `description`) VALUES
 (1, 'Y Dược', NULL),
-(2, 'Tiếng Anh', NULL),
 (3, 'Đại cương', NULL),
 (4, 'Công nghệ thông tin', NULL),
 (5, 'Luật', NULL),
@@ -142,6 +141,14 @@ CREATE TABLE `quiz` (
   `created_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `quiz`
+--
+
+INSERT INTO `quiz` (`quiz_id`, `title`, `quiz_image`, `created_at`) VALUES
+(94, '11221', '1732890748108-ASNE.png', '2024-11-29 21:32:28'),
+(95, 'quiz 10 6777', '1732926593327-ASNE.png', '2024-11-30 07:29:53');
+
 -- --------------------------------------------------------
 
 --
@@ -167,6 +174,14 @@ CREATE TABLE `quiz_level` (
   `level_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `quiz_level`
+--
+
+INSERT INTO `quiz_level` (`quiz_id`, `level_id`) VALUES
+(94, 2),
+(95, 2);
+
 -- --------------------------------------------------------
 
 --
@@ -178,6 +193,14 @@ CREATE TABLE `quiz_major` (
   `major_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `quiz_major`
+--
+
+INSERT INTO `quiz_major` (`quiz_id`, `major_id`) VALUES
+(94, 4),
+(95, 4);
+
 -- --------------------------------------------------------
 
 --
@@ -188,6 +211,14 @@ CREATE TABLE `quiz_subject` (
   `quiz_id` int(11) NOT NULL,
   `subject_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `quiz_subject`
+--
+
+INSERT INTO `quiz_subject` (`quiz_id`, `subject_id`) VALUES
+(94, 26),
+(95, 26);
 
 -- --------------------------------------------------------
 
@@ -237,7 +268,7 @@ CREATE TABLE `rolepermission` (
 
 CREATE TABLE `subject` (
   `subject_id` int(11) NOT NULL,
-  `name` varchar(50) NOT NULL,
+  `subject_name` varchar(50) NOT NULL,
   `description` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -245,7 +276,7 @@ CREATE TABLE `subject` (
 -- Dumping data for table `subject`
 --
 
-INSERT INTO `subject` (`subject_id`, `name`, `description`) VALUES
+INSERT INTO `subject` (`subject_id`, `subject_name`, `description`) VALUES
 (25, 'Toán', NULL),
 (26, 'Văn', NULL),
 (27, 'Hóa', NULL),
@@ -279,7 +310,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_id`, `name`, `password`, `user_image`, `email`, `gender`, `birthday`, `phonenumber`, `role`, `created_at`) VALUES
-(5, 'minh nghia 1233', '$2b$10$yP0DAor.Qz3disjuu1R.eehhgNlQhy29vT3HNeVCvfL65sKuxN1Bm', '', 'nghia@111', 'Nam', '2024-11-27', 12309999, 'admin', '2024-11-19 18:24:38'),
+(5, 'nghia pro', '$2b$10$yP0DAor.Qz3disjuu1R.eehhgNlQhy29vT3HNeVCvfL65sKuxN1Bm', '1732894062834-ADBS.jpg', 'nghia@111', 'Nam', '2024-11-19', 31132999, 'admin', '2024-11-19 18:24:38'),
 (7, 'nghia', '$2b$10$zAkXhO1O1skjtpv8HrdOnOrVMZq1rHCy33olvKFGrbMJpSlSrxF7C', '', 'test@gmail.com', 'Nam', '2024-11-18', 99999, 'admin', '2024-11-28 22:08:37');
 
 -- --------------------------------------------------------
@@ -338,6 +369,14 @@ CREATE TABLE `user_quiz_creator` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Dumping data for table `user_quiz_creator`
+--
+
+INSERT INTO `user_quiz_creator` (`user_quiz_creator_id`, `user_id`, `quiz_id`, `created_at`) VALUES
+(30, 5, 94, '2024-11-29 21:32:04'),
+(31, 5, 95, '2024-11-30 07:29:44');
+
+--
 -- Indexes for dumped tables
 --
 
@@ -384,8 +423,7 @@ ALTER TABLE `question`
 -- Indexes for table `quiz`
 --
 ALTER TABLE `quiz`
-  ADD PRIMARY KEY (`quiz_id`),
-  ADD KEY `FK_quiz_subject` (`subject_id`);
+  ADD PRIMARY KEY (`quiz_id`);
 
 --
 -- Indexes for table `quizsetting`
@@ -525,7 +563,7 @@ ALTER TABLE `question`
 -- AUTO_INCREMENT for table `quiz`
 --
 ALTER TABLE `quiz`
-  MODIFY `quiz_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
+  MODIFY `quiz_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
 
 --
 -- AUTO_INCREMENT for table `quizsetting`
@@ -567,13 +605,13 @@ ALTER TABLE `useranswer`
 -- AUTO_INCREMENT for table `userquiz`
 --
 ALTER TABLE `userquiz`
-  MODIFY `user_quiz_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=370;
+  MODIFY `user_quiz_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=371;
 
 --
 -- AUTO_INCREMENT for table `user_quiz_creator`
 --
 ALTER TABLE `user_quiz_creator`
-  MODIFY `user_quiz_creator_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `user_quiz_creator_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- Constraints for dumped tables
@@ -596,12 +634,6 @@ ALTER TABLE `feedback`
 --
 ALTER TABLE `question`
   ADD CONSTRAINT `FK_question_quiz` FOREIGN KEY (`quiz_id`) REFERENCES `quiz` (`quiz_id`) ON DELETE CASCADE;
-
---
--- Constraints for table `quiz`
---
-ALTER TABLE `quiz`
-  ADD CONSTRAINT `FK_quiz_subject` FOREIGN KEY (`subject_id`) REFERENCES `subject` (`subject_id`);
 
 --
 -- Constraints for table `quizsetting`

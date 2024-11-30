@@ -45,7 +45,7 @@ const Navbar = () => {
   }
 
   return (
-    <div className="w-full h-[70px] bg-gray-50 z-100  border border-gray-200 sticky top-0 items-center">
+    <div className="w-full h-[70px] bg-gray-50 z-10  border border-gray-200 sticky top-0 items-center">
       <div className="flex items-center justify-between gap-4 h-14 p-3 border border-gray-50">
         {/* Logo */}
         <NavLink
@@ -62,18 +62,21 @@ const Navbar = () => {
 
         <div className="flex items-center ml-auto mr-4">
           <ul className="flex gap-6 hidden lg:flex">
-            {user.role !== 'student' && (
-              <NavLink
-                to="/quizadd"
-                onClick={handleMenuItemClick}
-                className="relative p-3 group"
-              >
-                <p className="group-hover:text-transparent group-hover bg-clip-text bg-gradient-to-r from-[#4864fc] to-[#d03cfc] font-medium">
-                  Tạo quiz
-                </p>
-                <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-gradient-to-r from-[#4864fc] to-[#d03cfc] transition-all group-hover:w-full"></span>
-              </NavLink>
-            )}
+            <NavLink
+              to="/quizadd"
+              onClick={handleMenuItemClick}
+              className={`relative p-3 group ${
+                user.role == 'student' || user.role == undefined
+                  ? 'hidden'
+                  : 'block'
+              }`}
+            >
+              <p className="group-hover:text-transparent group-hover bg-clip-text bg-gradient-to-r from-[#4864fc] to-[#d03cfc] font-medium">
+                Tạo quiz
+              </p>
+              <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-gradient-to-r from-[#4864fc] to-[#d03cfc] transition-all group-hover:w-full"></span>
+            </NavLink>
+
             <NavLink
               to="/Quiz"
               onClick={handleMenuItemClick}

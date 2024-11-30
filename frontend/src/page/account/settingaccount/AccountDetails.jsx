@@ -5,15 +5,15 @@ import { toast } from 'react-toastify'
 
 const AccountDetails = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [oldImage, setOldImage] = useState("")
-  const [file, setFile] = useState(null);
+  const [oldImage, setOldImage] = useState('')
+  const [file, setFile] = useState(null)
 
   const [formData, setFormData] = useState({
     name: '',
     phonenumber: '',
     email: '',
     gender: '',
-    birthday: ''
+    birthday: '',
   })
 
   useEffect(() => {
@@ -30,7 +30,6 @@ const AccountDetails = () => {
             : '',
         })
         setOldImage(res.data.user_image)
-        
       })
       .catch((err) => console.log(err))
 
@@ -47,25 +46,28 @@ const AccountDetails = () => {
 
   const handleSave = async (e) => {
     e.preventDefault()
-    const data = new FormData();
+    const data = new FormData()
     data.append('name', formData.name)
     data.append('email', formData.email)
     data.append('phonenumber', formData.phonenumber)
     data.append('gender', formData.gender)
     data.append('birthday', formData.birthday)
-    if (file) data.append('image', file);
-  
-    try {
-      const res = await axios.put('http://localhost:2000/api/auth/update', data, {
-        headers: {
-          'Content-Type': 'multipart/form-data',  // Quan trọng
-        },
-        withCredentials: true,
-      })
-      toast.success(res.data.message)
+    if (file) data.append('image', file)
 
+    try {
+      const res = await axios.put(
+        'http://localhost:2000/api/auth/update',
+        data,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data', // Quan trọng
+          },
+          withCredentials: true,
+        }
+      )
+      toast.success(res.data.message)
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error:', error)
     }
   }
 
@@ -77,7 +79,7 @@ const AccountDetails = () => {
             <img
               src={`http://localhost:2000/uploads/${oldImage}`}
               alt="Avatar"
-              className="w-20 h-20 md:w-24 md:h-24 rounded-full border-2 border-gray-300"
+              className="w-15 h-15 md:w-16 md:h-16 rounded-full border-2 border-gray-300"
             />
             <input
               type="file"
@@ -86,7 +88,7 @@ const AccountDetails = () => {
               onChange={(e) => setFile(e.target.files[0])}
               className="hidden"
             />
-         
+
             <label
               htmlFor="file-input"
               className="absolute bottom-0 right-0 bg-blue-500 p-2 rounded-full cursor-pointer"
@@ -150,7 +152,9 @@ const AccountDetails = () => {
               <p>Họ Tên</p>
               <input
                 type="text"
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
                 value={formData.name}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
               />
@@ -161,7 +165,9 @@ const AccountDetails = () => {
               <input
                 type="number"
                 value={formData.phonenumber}
-                onChange={(e) => setFormData({ ...formData, phonenumber: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, phonenumber: e.target.value })
+                }
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
               />
             </div>
@@ -169,13 +175,13 @@ const AccountDetails = () => {
             <div className="mb-4">
               <p>Giới tính</p>
               <select
-                onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, gender: e.target.value })
+                }
                 value={formData.gender}
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
               >
-                <option disabled>
-                  - Chọn Giới Tính
-                </option>
+                <option disabled>- Chọn Giới Tính</option>
                 <option value="Nam">Nam</option>
                 <option value="Nữ">Nữ</option>
               </select>
@@ -186,7 +192,9 @@ const AccountDetails = () => {
               <input
                 value={formData.birthday}
                 type="date"
-                onChange={(e) => setFormData({ ...formData, birthday: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, birthday: e.target.value })
+                }
                 className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
               />
             </div>
