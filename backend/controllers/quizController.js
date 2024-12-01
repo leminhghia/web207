@@ -37,13 +37,20 @@ export const getQuiz = (req, res) => {
   user_quiz_creator.quiz_id,
   user_quiz_creator.user_id,
   user.user_id,
-  user.name
+  user.name,
+  level.*,
+  subject.*,
+  major.*
 FROM quiz
 LEFT JOIN quiz_level ON quiz.quiz_id = quiz_level.quiz_id
 LEFT JOIN quiz_subject ON quiz.quiz_id = quiz_subject.quiz_id
 LEFT JOIN quiz_major ON quiz.quiz_id = quiz_major.quiz_id
 LEFT JOIN user_quiz_creator ON quiz.quiz_id = user_quiz_creator.quiz_id
-LEFT JOIN user ON user_quiz_creator.user_id = user.user_id;
+LEFT JOIN user ON user_quiz_creator.user_id = user.user_id
+LEFT JOIN level ON quiz_level.level_id = level.level_id
+LEFT JOIN subject ON quiz_subject.subject_id = subject.subject_id
+LEFT JOIN major ON quiz_major.major_id = major.major_id;
+
 `;
   db.query(sql, (err, data) => {
     if (err) {
