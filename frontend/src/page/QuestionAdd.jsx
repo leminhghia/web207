@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react'
 import Soancauhoi from '../components/SoanCauHoi/Soancauhoi'
 import Thongtincoban from '../components/Thongtincoban'
 import { QuizContext } from '../context/QuizContext'
+import Setting from '../components/Setting'
 
 const QuestionAdd = () => {
   const { tab, setTab, idthemquiz } = useContext(QuizContext)
@@ -45,6 +46,15 @@ const QuestionAdd = () => {
           Thông tin cơ bản
         </div>
         <div
+          onClick={() => handleTabChange(3)}
+          id="tab-3"
+          className={`${
+            tab === 3 ? 'text-blue-600' : 'text-gray-600'
+          } cursor-pointer hover:text-blue-600 transition-all duration-300`}
+        >
+          Setting
+        </div>
+        <div
           onClick={() => handleTabChange(2)}
           id="tab-2"
           className={`${
@@ -70,6 +80,8 @@ const QuestionAdd = () => {
           <Thongtincoban />
         ) : tab === 2 && idthemquiz !== undefined ? (
           <Soancauhoi />
+        ) : tab === 3 ? (
+          <Setting />
         ) : (
           <Thongtincoban />
         )}

@@ -21,11 +21,12 @@ import Tset from './page/tset'
 import QuestionAdd from './page/QuestionAdd'
 import EditQuestion from './page/account/EditQuestion'
 import BlogPost from './page/BLOG/BlogPost'
+import ScrollToTop from './components/ScrollToTop '
 function App() {
   return (
     <div className="flex flex-col min-h-screen">
       <ToastContainer />
-
+      <ScrollToTop />
       <div className="sticky top-0 z-10">
         <Navbar />
       </div>

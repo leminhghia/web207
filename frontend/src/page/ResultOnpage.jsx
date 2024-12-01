@@ -12,43 +12,40 @@ const ResultOnpage = () => {
   const [tongCauHoi, setTongCauHoi] = useState([])
 
   const formatDate = (dateS) => {
-    const date = new Date(dateS);
-    return date.toLocaleString("vi-VN");
-  };
+    const date = new Date(dateS)
+    return date.toLocaleString('vi-VN')
+  }
   useEffect(() => {
     async function fetchData() {
       try {
         const res = await axios.get(
-          `http://localhost:2000/api/userquiz/result/list/${id}`//id user quiz
+          `http://localhost:2000/api/userquiz/result/list/${id}` //id user quiz
         )
-        const userQuizData = res.data; 
-        setData(userQuizData);
-        const quizId = userQuizData.length > 0 ? userQuizData[0].quiz_id : null;
+        const userQuizData = res.data
+        setData(userQuizData)
+        const quizId = userQuizData.length > 0 ? userQuizData[0].quiz_id : null
         if (!quizId) {
-          console.error("quizId is undefined or empty");
-          return;
+          console.error('quizId is undefined or empty')
+          return
         }
-  
-
 
         const res2 = await axios.get(
-          `http://localhost:2000/api/useranswer/list/${id}`//id user quiz
+          `http://localhost:2000/api/useranswer/list/${id}` //id user quiz
         )
         setUserAnswer(res2.data)
 
         const res3 = await axios.get(
-          `http://localhost:2000/api/question/list/userquiz/${id}/quiz/${quizId}`//id quiz
+          `http://localhost:2000/api/question/list/userquiz/${id}/quiz/${quizId}` //id quiz
         )
-        const questions = res3.data;
+        const questions = res3.data
         const uniqueQuestions = Array.from(
           new Map(questions.map((item) => [item.question_id, item])).values()
-        );
+        )
 
-        setQuestion(uniqueQuestions);
+        setQuestion(uniqueQuestions)
 
         const questionId = questions.map((q) => q.question_id)
         setTongCauHoi(uniqueQuestions.length)
-
 
         const answers = await Promise.all(
           questionId.map((question_id) =>
@@ -58,11 +55,12 @@ const ResultOnpage = () => {
           )
         )
         const uniqueAnswers = Array.from(
-          new Map(answers.flat().map((answer) => [answer.option_id, answer])).values()
-        );
-        
-        setAnswer(uniqueAnswers)
+          new Map(
+            answers.flat().map((answer) => [answer.option_id, answer])
+          ).values()
+        )
 
+        setAnswer(uniqueAnswers)
       } catch (error) {
         console.log(error)
       }
@@ -156,16 +154,16 @@ const ResultOnpage = () => {
                   </div>
                   <div className="flex flex-col gap-2 items-center ">
                     <p className="text-lg text-black">Số câu đúng</p>
-                    <p className="text-lg font-semibold text-gray-800">{item.total_correct}</p>
+                    <p className="text-lg font-semibold text-gray-800">
+                      {item.total_correct}
+                    </p>
                   </div>
                   <div className="flex flex-col gap-2 items-center ">
                     <p className="text-lg text-black">Số câu sai</p>
-                    <p className="text-lg font-semibold text-gray-800">{tongCauHoi - item.total_correct}</p>
+                    <p className="text-lg font-semibold text-gray-800">
+                      {tongCauHoi - item.total_correct}
+                    </p>
                   </div>
-                  {/* <div className="flex flex-col gap-2 items-center">
-                    <p className="text-lg text-black">Số câu bỏ trống</p>
-                    <p className="text-lg font-semibold text-gray-800">0</p>
-                  </div> */}
                 </div>
                 {/*  */}
                 <hr className="mt-3" />
@@ -173,19 +171,19 @@ const ResultOnpage = () => {
             </div>
           ))}
         </div>
-
       </div>
-      <div className='flex justify-center'>
-
+      <div className="flex justify-center">
         {/* Question Section */}
         <div className="w-full md:w-2/4 bg-white p-4 rounded-lg shadow">
           <ul className="space-y-3">
             {question.map((q, i) => {
-              const options = answer.filter((a) => a.question_id === q.question_id);
+              const options = answer.filter(
+                (a) => a.question_id === q.question_id
+              )
 
               const userSelected = userAnswer.filter(
                 (ua) => ua.question_id === q.question_id
-              );
+              )
 
               return (
                 <div key={i} className="bg-white">
@@ -195,7 +193,7 @@ const ResultOnpage = () => {
                   {q.question_img ? (
                     <div>
                       <img
-                        src={"http://localhost:2000/uploads/" + q.question_img}
+                        src={'http://localhost:2000/uploads/' + q.question_img}
                         alt="question"
                       />
                     </div>
@@ -206,38 +204,41 @@ const ResultOnpage = () => {
                     {options.map((option) => {
                       const isUserSelected = userSelected.some(
                         (ua) => ua.selected_option_id === option.option_id
-                      );
-
+                      )
 
                       return (
                         <li
                           key={option.option_id}
-                          className={`p-2 rounded ${isUserSelected
-                            ? option.is_correct == 1
-                              ? "bg-green-200" // Người dùng chọn đúng
-                              : "bg-red-200" // Người dùng chọn sai
-                            : option.is_correct == 1
-                              ? "bg-blue-200" // Đáp án đúng
-                              : "bg-gray-100"
-                            }`}
+                          className={`p-2 rounded ${
+                            isUserSelected
+                              ? option.is_correct == 1
+                                ? 'bg-green-200' // Người dùng chọn đúng
+                                : 'bg-red-200' // Người dùng chọn sai
+                              : option.is_correct == 1
+                              ? 'bg-blue-200' // Đáp án đúng
+                              : 'bg-gray-100'
+                          }`}
                         >
                           {option.option_text}
                           {isUserSelected && (
-                            <span className="ml-2 text-yellow-600">(Bạn chọn)</span>
+                            <span className="ml-2 text-yellow-600">
+                              (Bạn chọn)
+                            </span>
                           )}
                           {option.is_correct == 1 && (
-                            <span className="ml-2 text-green-600">(Đáp án đúng)</span>
+                            <span className="ml-2 text-green-600">
+                              (Đáp án đúng)
+                            </span>
                           )}
                         </li>
-                      );
+                      )
                     })}
                   </ul>
                 </div>
-              );
+              )
             })}
           </ul>
         </div>
-
       </div>
     </div>
   )
