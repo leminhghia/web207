@@ -1,9 +1,63 @@
-import { useState } from 'react'
-
+import { useState, useEffect } from 'react'
+import axios from 'axios'
+import { useParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
 const Setting = () => {
   const [shuffleQuestions, setShuffleQuestions] = useState(false)
   const [shuffleAnswers, setShuffleAnswers] = useState(false)
   const [examTime, setExamTime] = useState(0)
+  const { id } = useParams()
+  const [data, setData] = useState([])
+
+
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const res = await axios.get(`http://localhost:2000/api/question/shuffle/${id}` );
+          setData(res.data); 
+          setShuffleQuestions(!!res.data[0].shuffle_questions); 
+          setShuffleAnswers(!!res.data[0].shuffle_options); 
+          setExamTime(res.data[0].time_limit || 0);   
+      } catch (error) {
+        console.error( error);
+      }
+    };
+
+    fetchSettings();
+  }, [id]);
+
+  const handleSaveSettings = async () => {
+    try {
+      const res = await axios.post('http://localhost:2000/api/question/add/shuffle', {
+        id,
+        shuffleQuestions,
+        shuffleOptions: shuffleAnswers,
+        timeLimit: examTime,
+      });
+
+      toast.success(res.data.message);
+    } catch (error) {
+      console.error( error);
+      
+    }
+  };
+
+  const handleUpdateSettings = async () => {
+    try {
+      const res = await axios.put("http://localhost:2000/api/question/update/shuffle", {
+        id,
+        shuffleQuestions,
+        shuffleOptions: shuffleAnswers,
+        timeLimit: examTime,
+      });
+      toast.success(res.data.message); 
+    } catch (error) {
+      console.error(error);
+ 
+    }
+  };
+
 
   return (
     <div className="max-w-lg mx-auto p-8 bg-gradient-to-br from-blue-50 to-blue-100 shadow-2xl rounded-lg border border-gray-200 transform transition-all duration-500 hover:scale-105 hover:shadow-3xl">
@@ -56,9 +110,9 @@ const Setting = () => {
         />
       </div>
 
-      {/* Nút lưu */}
+  
       <div className="flex justify-end">
-        <button className="bg-blue-600 text-white text-lg px-8 py-3 rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 active:scale-95">
+        <button onClick={data ? handleUpdateSettings :handleSaveSettings} className="bg-blue-600 text-white text-lg px-8 py-3 rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 active:scale-95">
           Lưu cài đặt
         </button>
       </div>

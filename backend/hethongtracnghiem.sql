@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 01, 2024 at 04:16 AM
+-- Generation Time: Dec 01, 2024 at 05:34 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -204,6 +204,13 @@ CREATE TABLE `quizsetting` (
   `shuffle_options` tinyint(1) DEFAULT 1,
   `time_limit` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `quizsetting`
+--
+
+INSERT INTO `quizsetting` (`setting_id`, `quiz_id`, `shuffle_questions`, `shuffle_options`, `time_limit`) VALUES
+(1, 112, 1, 1, 302);
 
 -- --------------------------------------------------------
 
@@ -437,7 +444,12 @@ INSERT INTO `userquiz` (`user_quiz_id`, `user_id`, `quiz_id`, `start_time`, `end
 (378, 5, 112, '10:27:11', '10:27:17', '2024-11-30 10:27:17', 3.33, '2024-11-30 10:27:11'),
 (379, 5, 112, '10:58:00', '10:58:07', '2024-11-30 10:58:07', 7.5, '2024-11-30 10:58:00'),
 (380, 5, 112, '16:15:04', '16:15:15', '2024-11-30 16:15:15', 8.33, '2024-11-30 16:15:04'),
-(381, 5, 112, '16:19:36', NULL, NULL, 0, '2024-11-30 16:19:36');
+(381, 5, 112, '16:19:36', NULL, NULL, 0, '2024-11-30 16:19:36'),
+(382, 5, 112, '11:22:40', NULL, NULL, 0, '2024-12-01 11:22:40'),
+(383, 5, 112, '11:23:33', NULL, NULL, 0, '2024-12-01 11:23:33'),
+(384, 5, 112, '11:25:01', NULL, NULL, 0, '2024-12-01 11:25:01'),
+(385, 5, 112, '11:25:48', NULL, NULL, 0, '2024-12-01 11:25:48'),
+(386, 5, 112, '11:28:16', NULL, NULL, 0, '2024-12-01 11:28:16');
 
 -- --------------------------------------------------------
 
@@ -664,7 +676,7 @@ ALTER TABLE `quiz`
 -- AUTO_INCREMENT for table `quizsetting`
 --
 ALTER TABLE `quizsetting`
-  MODIFY `setting_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `setting_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `result`
@@ -700,7 +712,7 @@ ALTER TABLE `useranswer`
 -- AUTO_INCREMENT for table `userquiz`
 --
 ALTER TABLE `userquiz`
-  MODIFY `user_quiz_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=382;
+  MODIFY `user_quiz_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=387;
 
 --
 -- AUTO_INCREMENT for table `user_quiz_creator`
@@ -734,7 +746,7 @@ ALTER TABLE `question`
 -- Constraints for table `quizsetting`
 --
 ALTER TABLE `quizsetting`
-  ADD CONSTRAINT `FK_quizsetting_quiz` FOREIGN KEY (`quiz_id`) REFERENCES `quiz` (`quiz_id`);
+  ADD CONSTRAINT `FK_quizsetting_quiz` FOREIGN KEY (`quiz_id`) REFERENCES `quiz` (`quiz_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `quiz_level`

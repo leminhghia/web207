@@ -21,6 +21,7 @@ const CauHoi = () => {
   const [answeredQuestions, setAnsweredQuestions] = useState(new Set())
   const { visible, userQuizId, setVisible } = useContext(QuizContext)
   const questionRefs = useRef([])
+  const [time, setTime] = useState('')
   const handleNavigateToQuestion = (index) => {
     // setCurrentQuestionIndex(index)
     if (questionRefs.current[index]) {
@@ -39,6 +40,7 @@ const CauHoi = () => {
         )
         const questions = res1.data
         setQuestion(questions)
+        setTime(res1.data[0].time_limit)
 
         const questionId = questions.map((q) => q.question_id)
 
@@ -55,7 +57,7 @@ const CauHoi = () => {
       }
     }
     fetchData()
-  }, [id])
+  }, [id, time])
 
   const handleAdd = (question_id, option_id, isChecked) => {
     if (!question_id || !option_id) {
@@ -137,7 +139,7 @@ const CauHoi = () => {
     }
   }
 
-  const chitiet = () => {}
+  const chitiet = () => { }
 
   return (
     <div className="bg-[#f2f3f5]">
@@ -159,7 +161,7 @@ const CauHoi = () => {
                   <span className="text-sm font-medium">
                     Thời gian còn lại:
                   </span>
-                  <span className="font-bold text-red-500 text-lg">--:--</span>
+                  <span className="font-bold text-red-500 text-lg">{time}</span>
                 </div>
                 <hr className="border-gray-300" />
                 <div className="flex flex-col sm:flex-row items-center gap-4">
@@ -337,11 +339,10 @@ const CauHoi = () => {
                             </div>
                           ) : (
                             <button
-                              className={`w-full text-left px-4 py-2 rounded-lg border transition-all duration-300 ${
-                                color[q.question_id] === a.option_id
+                              className={`w-full text-left px-4 py-2 rounded-lg border transition-all duration-300 ${color[q.question_id] === a.option_id
                                   ? 'bg-blue-500 text-white border-blue-500'
                                   : 'bg-white hover:bg-blue-100 focus:bg-blue-600 focus:text-white'
-                              }`}
+                                }`}
                               onClick={() =>
                                 handleAdd(q.question_id, a.option_id)
                               }
@@ -361,18 +362,17 @@ const CauHoi = () => {
           {/*  */}
           <div
             className="w-full md:w-1/4 bg-white p-4 rounded-lg shadow-md mb-4 md:mb-0 sticky top-[64px] max-h-[80vh] overflow-auto z-0 "
-            // style={{ top: '64px', maxHeight: '80vh', overflow: 'auto' }}
+          // style={{ top: '64px', maxHeight: '80vh', overflow: 'auto' }}
           >
             <h3 className="text-lg font-bold mb-5">Mục lục câu hỏi</h3>
             <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-6 gap-2">
               {question.map((q, index) => (
                 <button
                   key={q.question_id}
-                  className={`border rounded p-2 text-center ${
-                    answeredQuestions.has(q.question_id)
+                  className={`border rounded p-2 text-center ${answeredQuestions.has(q.question_id)
                       ? 'bg-blue-500 text-white'
                       : 'bg-gray-100 hover:bg-blue-100'
-                  }`}
+                    }`}
                   onClick={() => handleNavigateToQuestion(index)}
                 >
                   {index + 1}
