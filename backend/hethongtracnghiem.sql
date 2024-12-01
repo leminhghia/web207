@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 01, 2024 at 05:34 AM
+-- Generation Time: Dec 01, 2024 at 07:40 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -63,7 +63,11 @@ INSERT INTO `answeroption` (`option_id`, `question_id`, `option_text`, `is_corre
 (293, 95, 'a', 1, '2024-11-30 16:14:55'),
 (294, 95, 'b', 0, '2024-11-30 16:14:55'),
 (295, 95, 'c', 0, '2024-11-30 16:14:55'),
-(296, 95, 'd', 0, '2024-11-30 16:14:55');
+(296, 95, 'd', 0, '2024-11-30 16:14:55'),
+(318, 101, '12', 0, '2024-12-01 13:35:09'),
+(319, 101, '124', 1, '2024-12-01 13:35:09'),
+(320, 101, '325', 0, '2024-12-01 13:35:09'),
+(321, 101, '5', 0, '2024-12-01 13:35:09');
 
 -- --------------------------------------------------------
 
@@ -168,7 +172,8 @@ INSERT INTO `question` (`question_id`, `quiz_id`, `question_img`, `question_type
 (92, 112, NULL, 'single', '10 + 1', NULL, '2024-11-30 10:04:46'),
 (93, 112, NULL, 'multiple', '1 + 3 = ?', NULL, '2024-11-30 10:57:53'),
 (94, 112, NULL, 'multiple', '1+ 20', NULL, '2024-11-30 16:14:44'),
-(95, 112, NULL, 'single', 'a', NULL, '2024-11-30 16:14:55');
+(95, 112, NULL, 'single', 'a', NULL, '2024-11-30 16:14:55'),
+(101, 118, NULL, 'multiple', '10+ 2 = ?', NULL, '2024-12-01 13:35:09');
 
 -- --------------------------------------------------------
 
@@ -189,7 +194,7 @@ CREATE TABLE `quiz` (
 
 INSERT INTO `quiz` (`quiz_id`, `title`, `quiz_image`, `created_at`) VALUES
 (112, 'Toán Cấp 1', '1732930478055-AppStore.png', '2024-11-30 08:34:38'),
-(113, 'quiz 12', '1732958647703-PHPP.png', '2024-11-30 16:24:07');
+(118, 'quiz test', NULL, '2024-12-01 13:34:56');
 
 -- --------------------------------------------------------
 
@@ -210,7 +215,8 @@ CREATE TABLE `quizsetting` (
 --
 
 INSERT INTO `quizsetting` (`setting_id`, `quiz_id`, `shuffle_questions`, `shuffle_options`, `time_limit`) VALUES
-(1, 112, 1, 1, 302);
+(1, 112, 1, 1, 302),
+(8, 118, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -229,7 +235,7 @@ CREATE TABLE `quiz_level` (
 
 INSERT INTO `quiz_level` (`quiz_id`, `level_id`) VALUES
 (112, 3),
-(113, 3);
+(118, 3);
 
 -- --------------------------------------------------------
 
@@ -248,7 +254,7 @@ CREATE TABLE `quiz_major` (
 
 INSERT INTO `quiz_major` (`quiz_id`, `major_id`) VALUES
 (112, 6),
-(113, 7);
+(118, 5);
 
 -- --------------------------------------------------------
 
@@ -267,7 +273,7 @@ CREATE TABLE `quiz_subject` (
 
 INSERT INTO `quiz_subject` (`quiz_id`, `subject_id`) VALUES
 (112, 27),
-(113, 30);
+(118, 25);
 
 -- --------------------------------------------------------
 
@@ -295,7 +301,10 @@ INSERT INTO `result` (`result_id`, `user_id`, `quiz_id`, `user_quiz_id`, `score`
 (89, 5, 112, 377, 10, 3, 'giỏi', '2024-11-30 10:05:28', '00:00:39'),
 (90, 5, 112, 378, 3.33, 1, 'Kém', '2024-11-30 10:27:17', '00:00:06'),
 (91, 5, 112, 379, 7.5, 3, 'Khá', '2024-11-30 10:58:07', '00:00:07'),
-(92, 5, 112, 380, 8.33, 5, 'Khá', '2024-11-30 16:15:15', '00:00:11');
+(92, 5, 112, 380, 8.33, 5, 'Khá', '2024-11-30 16:15:15', '00:00:11'),
+(93, 7, 112, 388, 6.67, 4, 'Trung bình', '2024-12-01 12:44:06', '00:00:13'),
+(94, 7, 112, 389, 10, 6, 'giỏi', '2024-12-01 12:46:11', '00:00:16'),
+(95, 7, 112, 390, 1.67, 1, 'Kém', '2024-12-01 12:46:57', '00:00:05');
 
 -- --------------------------------------------------------
 
@@ -411,7 +420,24 @@ INSERT INTO `useranswer` (`user_answer_id`, `user_quiz_id`, `question_id`, `sele
 (687, 380, 93, 285, '1'),
 (688, 380, 94, 290, '1'),
 (689, 380, 94, 289, '1'),
-(690, 380, 95, 294, '0');
+(690, 380, 95, 294, '0'),
+(691, 388, 92, 281, '1'),
+(692, 388, 93, 286, '0'),
+(693, 388, 93, 288, '0'),
+(694, 388, 95, 293, '1'),
+(695, 388, 94, 289, '1'),
+(696, 388, 94, 290, '1'),
+(697, 388, 90, 274, '1'),
+(698, 389, 90, 274, '1'),
+(699, 389, 91, 277, '1'),
+(700, 389, 95, 293, '1'),
+(701, 389, 92, 281, '1'),
+(702, 389, 94, 289, '1'),
+(703, 389, 94, 290, '1'),
+(704, 389, 93, 285, '1'),
+(705, 389, 93, 286, '1'),
+(706, 390, 93, 286, '0'),
+(707, 390, 92, 281, '1');
 
 -- --------------------------------------------------------
 
@@ -449,7 +475,14 @@ INSERT INTO `userquiz` (`user_quiz_id`, `user_id`, `quiz_id`, `start_time`, `end
 (383, 5, 112, '11:23:33', NULL, NULL, 0, '2024-12-01 11:23:33'),
 (384, 5, 112, '11:25:01', NULL, NULL, 0, '2024-12-01 11:25:01'),
 (385, 5, 112, '11:25:48', NULL, NULL, 0, '2024-12-01 11:25:48'),
-(386, 5, 112, '11:28:16', NULL, NULL, 0, '2024-12-01 11:28:16');
+(386, 5, 112, '11:28:16', NULL, NULL, 0, '2024-12-01 11:28:16'),
+(387, 5, 112, '12:16:49', NULL, NULL, 0, '2024-12-01 12:16:49'),
+(388, 7, 112, '12:43:53', '12:44:06', '2024-12-01 12:44:06', 6.67, '2024-12-01 12:43:53'),
+(389, 7, 112, '12:45:55', '12:46:11', '2024-12-01 12:46:11', 10, '2024-12-01 12:45:55'),
+(390, 7, 112, '12:46:52', '12:46:57', '2024-12-01 12:46:57', 1.67, '2024-12-01 12:46:52'),
+(393, 5, 112, '13:18:17', NULL, NULL, 0, '2024-12-01 13:18:17'),
+(396, 5, 112, '13:18:57', NULL, NULL, 0, '2024-12-01 13:18:57'),
+(400, 5, 118, '13:36:45', NULL, NULL, 0, '2024-12-01 13:36:45');
 
 -- --------------------------------------------------------
 
@@ -481,7 +514,7 @@ CREATE TABLE `user_quiz_creator` (
 
 INSERT INTO `user_quiz_creator` (`user_quiz_creator_id`, `user_id`, `quiz_id`, `created_at`) VALUES
 (48, 5, 112, '2024-11-30 08:34:38'),
-(49, 5, 113, '2024-11-30 16:24:07');
+(54, 5, 118, '2024-12-01 13:34:56');
 
 --
 -- Indexes for dumped tables
@@ -634,7 +667,7 @@ ALTER TABLE `user_quiz_creator`
 -- AUTO_INCREMENT for table `answeroption`
 --
 ALTER TABLE `answeroption`
-  MODIFY `option_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=297;
+  MODIFY `option_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=322;
 
 --
 -- AUTO_INCREMENT for table `feedback`
@@ -664,25 +697,25 @@ ALTER TABLE `permission`
 -- AUTO_INCREMENT for table `question`
 --
 ALTER TABLE `question`
-  MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
+  MODIFY `question_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
 
 --
 -- AUTO_INCREMENT for table `quiz`
 --
 ALTER TABLE `quiz`
-  MODIFY `quiz_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=114;
+  MODIFY `quiz_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=119;
 
 --
 -- AUTO_INCREMENT for table `quizsetting`
 --
 ALTER TABLE `quizsetting`
-  MODIFY `setting_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `setting_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `result`
 --
 ALTER TABLE `result`
-  MODIFY `result_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=93;
+  MODIFY `result_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
 
 --
 -- AUTO_INCREMENT for table `role`
@@ -706,19 +739,19 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `useranswer`
 --
 ALTER TABLE `useranswer`
-  MODIFY `user_answer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=691;
+  MODIFY `user_answer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=708;
 
 --
 -- AUTO_INCREMENT for table `userquiz`
 --
 ALTER TABLE `userquiz`
-  MODIFY `user_quiz_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=387;
+  MODIFY `user_quiz_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=401;
 
 --
 -- AUTO_INCREMENT for table `user_quiz_creator`
 --
 ALTER TABLE `user_quiz_creator`
-  MODIFY `user_quiz_creator_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `user_quiz_creator_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
 -- Constraints for dumped tables
