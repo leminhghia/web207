@@ -8,9 +8,12 @@ export const getSubject = (req, res) => {
     SELECT 
       q.*, 
       s.shuffle_questions ,
-      s.time_limit
+      s.time_limit,
+      qz.quiz_id,
+      qz.title
     FROM question q
     JOIN quizsetting s ON q.quiz_id = s.quiz_id
+    JOIN quiz qz ON q.quiz_id = qz.quiz_id
     WHERE q.quiz_id = ?`;
 
   db.query(sql, [quiz_id], (err, data) => {

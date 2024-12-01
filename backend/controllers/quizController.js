@@ -1,5 +1,30 @@
 import db from "../config/db.js";
 
+export const getQuizCreator = (req, res) => {
+  const { id } = req.query;
+  console.log(req.query);
+
+  const sql = ` SELECT 
+  qc.*,
+  q.quiz_id,
+  q.title,
+  q.quiz_image,
+  u.user_id,
+  u.name,
+  u.user_image
+  FROM user_quiz_creator qc
+  JOIN quiz q ON qc.quiz_id = q.quiz_id
+  JOIN user u ON qc.user_id = u.user_id
+  WHERE qc.quiz_id = ?  
+  `;
+  db.query(sql, [id], (err, data) => {
+    if (err) {
+      return res.json({ Error: "Không thể lấy dữ liệu quiz" });
+    }
+    return res.json(data);
+  });
+};
+
 export const getQuiz = (req, res) => {
   const sql = `
  SELECT 
@@ -9,12 +34,17 @@ export const getQuiz = (req, res) => {
   quiz.created_at,
   quiz_level.level_id,
   quiz_subject.subject_id,
-  quiz_major.major_id
+  quiz_major.major_id,
+  user_quiz_creator.quiz_id,
+  user_quiz_creator.user_id,
+  user.user_id,
+  user.name
 FROM quiz
 LEFT JOIN quiz_level ON quiz.quiz_id = quiz_level.quiz_id
 LEFT JOIN quiz_subject ON quiz.quiz_id = quiz_subject.quiz_id
-LEFT JOIN quiz_major ON quiz.quiz_id = quiz_major.quiz_id;
-
+LEFT JOIN quiz_major ON quiz.quiz_id = quiz_major.quiz_id
+LEFT JOIN user_quiz_creator ON quiz.quiz_id = user_quiz_creator.quiz_id
+LEFT JOIN user ON user_quiz_creator.user_id = user.user_id;
 `;
   db.query(sql, (err, data) => {
     if (err) {
@@ -63,7 +93,7 @@ export const addQuiz = (req, res) => {
   const { title, level_id, subject_id, major_id } = req.body; // Lấy dữ liệu từ req.body
   const { user_id } = req.user; // Lấy user_id từ req.user
   const image = req.file ? req.file.filename : null;
-  
+
   // Kiểm tra bắt buộc 'title', 'level_id'
   if (!title || !level_id) {
     return res.json({

@@ -36,8 +36,13 @@ const EduQuiz = () => {
         console.error('Error fetching quizzes:', err)
       })
 
-  }, [user])
-  console.log(data);
+  }, [])
+
+  const formatDate = (dateS) => {
+    const date = new Date(dateS)
+    return date.toLocaleDateString('vi-VN')
+  }
+
 
   const [isNam, setIsNam] = useState(true)
   const [isNganh, setIsNganh] = useState(true)
@@ -142,13 +147,13 @@ const EduQuiz = () => {
                     <h3 className="font-bold text-lg min-h-[3rem]">
                       {item.title}
                     </h3>
-                    <p className="text-sm text-gray-600">{item.date}</p>
-                    <p className="text-sm">
+                    <p className="text-sm text-gray-600">{formatDate(item.created_at)}</p>
+                    {/* <p className="text-sm">
                       <strong>{item.questions}</strong> câu hỏi,{' '}
                       <strong>{item.submissions}</strong> lượt nộp
-                    </p>
+                    </p> */}
                     <p className="text-sm text-gray-600">
-                      Tác giả: {item.author}
+                      Tác giả: {item.name}
                     </p>
                   </div>
                   <div>

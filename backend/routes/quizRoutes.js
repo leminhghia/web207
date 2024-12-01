@@ -1,5 +1,5 @@
 import express from 'express'
-import { getQuiz, addQuiz, getQuizId, updateQuiz, getQuizbyUser, DeleteQuiz, Levels, Majors, Subjects } from '../controllers/quizController.js'
+import { getQuiz, addQuiz, getQuizId, updateQuiz, getQuizbyUser, DeleteQuiz, Levels, Majors, Subjects, getQuizCreator } from '../controllers/quizController.js'
 import { verifyUser, checkRole } from '../middleware/authMiddleware.js'
 import multer from 'multer';
 
@@ -24,5 +24,6 @@ router.put('/update', verifyUser,upload.single("image"), checkRole(['teacher', '
 router.get('/levels', Levels)
 router.get('/subjects', Subjects)
 router.get('/majors', Majors)
+router.get('/getuserquizcreator', getQuizCreator)
 
 export default router

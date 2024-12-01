@@ -8,6 +8,7 @@ const CauHoi = () => {
   const [showModal, setShowModal] = useState(false)
   const [showModalSubmit, setShowModalSubmid] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [title, setTitle] = useState('')
 
   const hancleBack = () => {
     setShowModal(false)
@@ -41,6 +42,7 @@ const CauHoi = () => {
         const questions = res1.data
         setQuestion(questions)
         setTime(res1.data[0].time_limit)
+        setTitle(res1.data[0].title)
 
         const questionId = questions.map((q) => q.question_id)
 
@@ -152,7 +154,7 @@ const CauHoi = () => {
           <div className="w-full md:w-1/4 bg-gray-50 sticky top-[64px] max-h-[80vh] overflow-auto border-r border-gray-200">
             <div className="bg-white shadow-lg rounded-lg p-4">
               <div className="space-y-4">
-                <h1 className="text-xl font-bold text-gray-800">Quiz 1</h1>
+                <h1 className="text-xl font-bold text-gray-800">{title}</h1>
                 <p className="text-sm text-gray-500">Chế độ: Thi thử</p>
                 <hr className="border-gray-300" />
               </div>
@@ -340,8 +342,8 @@ const CauHoi = () => {
                           ) : (
                             <button
                               className={`w-full text-left px-4 py-2 rounded-lg border transition-all duration-300 ${color[q.question_id] === a.option_id
-                                  ? 'bg-blue-500 text-white border-blue-500'
-                                  : 'bg-white hover:bg-blue-100 focus:bg-blue-600 focus:text-white'
+                                ? 'bg-blue-500 text-white border-blue-500'
+                                : 'bg-white hover:bg-blue-100 focus:bg-blue-600 focus:text-white'
                                 }`}
                               onClick={() =>
                                 handleAdd(q.question_id, a.option_id)
@@ -370,8 +372,8 @@ const CauHoi = () => {
                 <button
                   key={q.question_id}
                   className={`border rounded p-2 text-center ${answeredQuestions.has(q.question_id)
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-gray-100 hover:bg-blue-100'
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-gray-100 hover:bg-blue-100'
                     }`}
                   onClick={() => handleNavigateToQuestion(index)}
                 >
