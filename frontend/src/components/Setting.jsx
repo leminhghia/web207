@@ -7,7 +7,6 @@ const Setting = () => {
   const [shuffleAnswers, setShuffleAnswers] = useState(false)
   const [examTime, setExamTime] = useState(0)
   const { id } = useParams()
-  const [data, setData] = useState([])
 
 
 
@@ -15,7 +14,6 @@ const Setting = () => {
     const fetchSettings = async () => {
       try {
         const res = await axios.get(`http://localhost:2000/api/question/shuffle/${id}` );
-          setData(res.data); 
           setShuffleQuestions(!!res.data[0].shuffle_questions); 
           setShuffleAnswers(!!res.data[0].shuffle_options); 
           setExamTime(res.data[0].time_limit || 0);   
@@ -26,22 +24,6 @@ const Setting = () => {
 
     fetchSettings();
   }, [id]);
-
-  const handleSaveSettings = async () => {
-    try {
-      const res = await axios.post('http://localhost:2000/api/question/add/shuffle', {
-        id,
-        shuffleQuestions,
-        shuffleOptions: shuffleAnswers,
-        timeLimit: examTime,
-      });
-
-      toast.success(res.data.message);
-    } catch (error) {
-      console.error( error);
-      
-    }
-  };
 
   const handleUpdateSettings = async () => {
     try {
@@ -112,7 +94,7 @@ const Setting = () => {
 
   
       <div className="flex justify-end">
-        <button onClick={data ? handleUpdateSettings :handleSaveSettings} className="bg-blue-600 text-white text-lg px-8 py-3 rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 active:scale-95">
+        <button onClick={handleUpdateSettings} className="bg-blue-600 text-white text-lg px-8 py-3 rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 active:scale-95">
           Lưu cài đặt
         </button>
       </div>

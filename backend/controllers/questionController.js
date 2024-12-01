@@ -19,10 +19,7 @@ export const getSubject = (req, res) => {
   db.query(sql, [quiz_id], (err, data) => {
     if (err) return res.status(500).json({ Error: "Database error", details: err });
 
-    // Nếu không có dữ liệu, trả về phản hồi rỗng
-    if (data.length === 0) {
-      return res.status(404).json({ Error: "No questions found" });
-    }
+ 
 
     const shuffleQuestions = data[0].shuffle_questions; // Kiểm tra shuffle_questions từ kết quả
     let questions = data.map(({ shuffle_questions, ...rest }) => rest); // Loại bỏ shuffle_questions khỏi kết quả
@@ -130,33 +127,7 @@ export const getQuestionbyId = (req, res) => {
   });
 };
 
-export const AddShuffleQuestion = (req, res) => {
-  const { id, shuffleQuestions, shuffleOptions, timeLimit } = req.body;
 
-  if (!id) {
-    return res.status(400).json({ message: "Quiz ID is required" });
-  }
-
-  const query = `
-        INSERT INTO quizsetting (quiz_id, shuffle_questions, shuffle_options, time_limit)
-        VALUES (?, ?, ?, ?)
-        ON DUPLICATE KEY UPDATE 
-            shuffle_questions = VALUES(shuffle_questions),
-            shuffle_options = VALUES(shuffle_options),
-            time_limit = VALUES(time_limit)
-    `;
-
-  const values = [id, shuffleQuestions, shuffleOptions, timeLimit];
-
-  db.query(query, values, (err, results) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error", error: err });
-    }
-    res
-      .status(200)
-      .json({ message: "Lưu thành công", results });
-  });
-};
 
 export const GetShuffleQuestion = (req, res) => {
   const { id } = req.params;

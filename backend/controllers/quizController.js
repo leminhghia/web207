@@ -2,7 +2,6 @@ import db from "../config/db.js";
 
 export const getQuizCreator = (req, res) => {
   const { id } = req.query;
-  console.log(req.query);
 
   const sql = ` SELECT 
   qc.*,
@@ -167,11 +166,20 @@ export const addQuiz = (req, res) => {
         if (err) {
           return res.json({ Error: "Thêm quiz creator thất bại" });
         }
-
-        return res.json({
-          message: "Thêm quiz thành công",
-          quiz_id: quiz_id,
-        });
+        const query = `
+        INSERT INTO quizsetting (quiz_id, shuffle_questions, shuffle_options, time_limit)
+        VALUES (?, 0, 0, 0)
+    `;
+    db.query(query, quiz_id, (err, results) => {
+      if (err) {
+        return res.status(500).json({ message: "Database error", error: err });
+      }
+      return res.json({
+        message: "Thêm quiz thành công",
+        quiz_id: quiz_id,
+      });
+    });
+        
       });
     });
   });
