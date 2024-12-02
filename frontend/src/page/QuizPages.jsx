@@ -46,6 +46,7 @@ const EduQuiz = () => {
 
   const [isNam, setIsNam] = useState(true)
   const [isNganh, setIsNganh] = useState(true)
+console.log(data);
 
   const toggleNam = () => setIsNam(!isNam)
   const toggleNganh = () => setIsNganh(!isNganh)
