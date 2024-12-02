@@ -41,7 +41,7 @@ const CauHoi = () => {
         )
         const questions = res1.data
         setQuestion(questions)
-        setTime(questions[0].time_limit) // time_limit là số giây
+        setTime(questions[0].time_limit * 60)
         setTitle(questions[0].title)
 
         const questionId = questions.map((q) => q.question_id)
@@ -61,7 +61,6 @@ const CauHoi = () => {
     fetchData()
   }, [id])
 
-  // Đếm ngược thời gian
   useEffect(() => {
     if (time > 0) {
       const timer = setInterval(() => {
@@ -78,6 +77,7 @@ const CauHoi = () => {
       remainingSeconds
     ).padStart(2, '0')}`
   }
+
   //
   const handleAdd = (question_id, option_id, isChecked) => {
     if (!question_id || !option_id) {
@@ -143,6 +143,7 @@ const CauHoi = () => {
     }
     try {
       const res = await axios.post(`http://localhost:2000/api/useranswer/add`, {
+        quiz_id: id,
         answer: data,
         user_quiz_id: userQuizId,
       })
@@ -159,7 +160,7 @@ const CauHoi = () => {
     }
   }
 
-  const chitiet = () => {}
+  const chitiet = () => { }
 
   return (
     <div className="bg-[#f2f3f5]">
@@ -361,11 +362,10 @@ const CauHoi = () => {
                             </div>
                           ) : (
                             <button
-                              className={`w-full text-left px-4 py-2 rounded-lg border transition-all duration-300 ${
-                                color[q.question_id] === a.option_id
-                                  ? 'bg-blue-500 text-white border-blue-500'
-                                  : 'bg-white hover:bg-blue-100 focus:bg-blue-600 focus:text-white'
-                              }`}
+                              className={`w-full text-left px-4 py-2 rounded-lg border transition-all duration-300 ${color[q.question_id] === a.option_id
+                                ? 'bg-blue-500 text-white border-blue-500'
+                                : 'bg-white hover:bg-blue-100 focus:bg-blue-600 focus:text-white'
+                                }`}
                               onClick={() =>
                                 handleAdd(q.question_id, a.option_id)
                               }
@@ -385,18 +385,17 @@ const CauHoi = () => {
           {/*  */}
           <div
             className="w-full md:w-1/4 bg-white p-4 rounded-lg shadow-md mb-4 md:mb-0 sticky top-[64px] max-h-[80vh] overflow-auto z-0 "
-            // style={{ top: '64px', maxHeight: '80vh', overflow: 'auto' }}
+          // style={{ top: '64px', maxHeight: '80vh', overflow: 'auto' }}
           >
             <h3 className="text-lg font-bold mb-5">Mục lục câu hỏi</h3>
             <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-6 gap-2">
               {question.map((q, index) => (
                 <button
                   key={q.question_id}
-                  className={`border rounded p-2 text-center ${
-                    answeredQuestions.has(q.question_id)
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-gray-100 hover:bg-blue-100'
-                  }`}
+                  className={`border rounded p-2 text-center ${answeredQuestions.has(q.question_id)
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-gray-100 hover:bg-blue-100'
+                    }`}
                   onClick={() => handleNavigateToQuestion(index)}
                 >
                   {index + 1}
