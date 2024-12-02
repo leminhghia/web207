@@ -32,7 +32,7 @@ const CauHoi = () => {
       })
     }
   }
-
+  //
   useEffect(() => {
     async function fetchData() {
       try {
@@ -41,8 +41,8 @@ const CauHoi = () => {
         )
         const questions = res1.data
         setQuestion(questions)
-        setTime(res1.data[0].time_limit)
-        setTitle(res1.data[0].title)
+        setTime(questions[0].time_limit) // time_limit là số giây
+        setTitle(questions[0].title)
 
         const questionId = questions.map((q) => q.question_id)
 
@@ -59,8 +59,26 @@ const CauHoi = () => {
       }
     }
     fetchData()
-  }, [id, time])
+  }, [id])
 
+  // Đếm ngược thời gian
+  useEffect(() => {
+    if (time > 0) {
+      const timer = setInterval(() => {
+        setTime((prevTime) => prevTime - 1)
+      }, 1000)
+
+      return () => clearInterval(timer) // Dọn dẹp bộ đếm thời gian
+    }
+  }, [time])
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60)
+    const remainingSeconds = seconds % 60
+    return `${String(minutes).padStart(2, '0')}:${String(
+      remainingSeconds
+    ).padStart(2, '0')}`
+  }
+  //
   const handleAdd = (question_id, option_id, isChecked) => {
     if (!question_id || !option_id) {
       return
@@ -141,7 +159,7 @@ const CauHoi = () => {
     }
   }
 
-  const chitiet = () => { }
+  const chitiet = () => {}
 
   return (
     <div className="bg-[#f2f3f5]">
@@ -163,7 +181,9 @@ const CauHoi = () => {
                   <span className="text-sm font-medium">
                     Thời gian còn lại:
                   </span>
-                  <span className="font-bold text-red-500 text-lg">{time}</span>
+                  <span className="font-bold text-red-500 text-lg">
+                    {formatTime(time)}
+                  </span>
                 </div>
                 <hr className="border-gray-300" />
                 <div className="flex flex-col sm:flex-row items-center gap-4">
@@ -341,10 +361,11 @@ const CauHoi = () => {
                             </div>
                           ) : (
                             <button
-                              className={`w-full text-left px-4 py-2 rounded-lg border transition-all duration-300 ${color[q.question_id] === a.option_id
-                                ? 'bg-blue-500 text-white border-blue-500'
-                                : 'bg-white hover:bg-blue-100 focus:bg-blue-600 focus:text-white'
-                                }`}
+                              className={`w-full text-left px-4 py-2 rounded-lg border transition-all duration-300 ${
+                                color[q.question_id] === a.option_id
+                                  ? 'bg-blue-500 text-white border-blue-500'
+                                  : 'bg-white hover:bg-blue-100 focus:bg-blue-600 focus:text-white'
+                              }`}
                               onClick={() =>
                                 handleAdd(q.question_id, a.option_id)
                               }
@@ -364,17 +385,18 @@ const CauHoi = () => {
           {/*  */}
           <div
             className="w-full md:w-1/4 bg-white p-4 rounded-lg shadow-md mb-4 md:mb-0 sticky top-[64px] max-h-[80vh] overflow-auto z-0 "
-          // style={{ top: '64px', maxHeight: '80vh', overflow: 'auto' }}
+            // style={{ top: '64px', maxHeight: '80vh', overflow: 'auto' }}
           >
             <h3 className="text-lg font-bold mb-5">Mục lục câu hỏi</h3>
             <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-6 gap-2">
               {question.map((q, index) => (
                 <button
                   key={q.question_id}
-                  className={`border rounded p-2 text-center ${answeredQuestions.has(q.question_id)
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-gray-100 hover:bg-blue-100'
-                    }`}
+                  className={`border rounded p-2 text-center ${
+                    answeredQuestions.has(q.question_id)
+                      ? 'bg-blue-500 text-white'
+                      : 'bg-gray-100 hover:bg-blue-100'
+                  }`}
                   onClick={() => handleNavigateToQuestion(index)}
                 >
                   {index + 1}

@@ -29,10 +29,17 @@ import PAY from './Pay.png'
 import APPSTORE from './AppStore.png'
 import GOOGLEPLAY from './GooglePlay.png'
 import BANNERBLOG2 from './Sua-thumb-tai-day.png'
+import MACDINH from './MacDinh.png'
+import search_icon from './search_icon.png'
+import BANNERLOGIN from './loginBanner.png'
 import { FaAngleUp, FaAngleDown } from 'react-icons/fa6'
 import { BiCategory } from 'react-icons/bi'
-
+import cross_icon from './cross_icon.png'
 export const assets = {
+  BANNERLOGIN,
+  cross_icon,
+  search_icon,
+  MACDINH,
   BANNERBLOG2,
   GOOGLEPLAY,
   APPSTORE,
