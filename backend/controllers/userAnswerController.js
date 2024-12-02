@@ -12,7 +12,7 @@ export const getUsetAnswer = (req, res) => {
 
 
 export const addUserAnswer = (req, res) => {
-  const { user_quiz_id, answer: answers } = req.body;
+  const { user_quiz_id, answer: answers, quiz_id } = req.body;
 
   // Tạo mảng các giá trị cần chèn vào bảng useranswer
   const values = answers.map((a) => [a.user_quiz_id, a.question_id, a.option_id]);
@@ -27,9 +27,9 @@ export const addUserAnswer = (req, res) => {
     // Lấy tổng số câu hỏi trong bài quiz
     const totalQuestionsSql = `
       SELECT COUNT(*) AS total_questions 
-      FROM question`;
+      FROM question WHERE quiz_id = ?`;
 
-    db.query(totalQuestionsSql, (err, totalQuestionsResult) => {
+    db.query(totalQuestionsSql,quiz_id, (err, totalQuestionsResult) => {
       if (err) {
         console.error(err);
         return res.json({ error: "Lỗi lấy tổng số câu hỏi" });
