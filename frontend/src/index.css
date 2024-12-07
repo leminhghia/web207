@@ -4,11 +4,11 @@
 @tailwind components;
 @tailwind utilities;
 
-body,
+/* body,
 html {
   overflow-x: hidden;
-}
-/* Tùy chỉnh thanh cuộn */
+} */
+
 ::-webkit-scrollbar {
   width: 8px; /* Độ rộng của thanh cuộn */
 }

@@ -22,6 +22,10 @@ import QuestionAdd from './page/QuestionAdd'
 import EditQuestion from './page/account/EditQuestion'
 import BlogPost from './page/BLOG/BlogPost'
 import ScrollToTop from './components/ScrollToTop '
+import Text from './page/BLOG/Text'
+import AddBlog from './page/BLOG/Addblog'
+import UpdateBlog from './page/BLOG/UpdateBlog'
+import SettingBlog from './page/BLOG/settingBlog'
 function App() {
   return (
     <div className="flex flex-col min-h-screen">
@@ -53,6 +57,10 @@ function App() {
           <Route path="/docThemBlog" element={<BlogPost />} />
           {/* <Route path="/mainAccountDetails" element={<MainAccountDetails />} /> */}
           <Route path="/ketqua" element={<ResultOnpage />} />
+          <Route path="/text1" element={<Text />} />
+          <Route path="/addBlog" element={<AddBlog />} />
+          <Route path="/updateBlog" element={<UpdateBlog />} />
+          <Route path="/settingBlog" element={<SettingBlog />} />
         </Routes>
       </div>
       <Footer />

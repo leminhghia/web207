@@ -7,5 +7,5 @@ const router = express.Router()
 router.post('/add',verifyUser,addUserQuiz)
 router.put('/update',verifyUser,updateUserQuiz)
 router.get('/result/list/:id',verifyUser,getResultById)
-router.get('/result/list',verifyUser,getResult)
+router.get('/list',verifyUser,getResult)
 export default router;

@@ -91,16 +91,16 @@ const EduQuiz = () => {
           <FiMenu /> Menu
         </button>
         <aside
-          className={`bg-white p-4 rounded-lg shadow w-full md:w-1/5 ${
+          className={`bg-white p-4 rounded-lg shadow w-full md:w-1/5 sticky top-10 overflow-auto ${
             isSidebarOpen ? 'block' : 'hidden'
           } md:block`}
-          style={{ height: '100vh', position: 'sticky', top: 0 }}
+          // style={{ height: '100vh', position: 'sticky', top: 10 }}
         >
           {/*Trường */}
           <div>
             <button
               onClick={toggleNam}
-              className="font-medium flex justify-between items-center w-full text-left"
+              className="font-medium flex justify-between items-center w-full text-left select-none"
             >
               Trường
               <span>
@@ -374,7 +374,7 @@ const EduQuiz = () => {
           <div>
             <button
               onClick={toggleMon}
-              className="font-medium flex justify-between items-center w-full text-left"
+              className="font-medium flex justify-between items-center w-full text-left select-none"
             >
               Môn học
               <span>
@@ -543,7 +543,7 @@ const EduQuiz = () => {
                 <Link
                   to={`${item.quiz_id}`}
                   key={index}
-                  className="p-4 bg-white rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105 hover:-translate-y-2"
+                  className="p-4 select-none bg-white rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105 hover:-translate-y-2"
                 >
                   <div className="flex flex-col space-y-2">
                     <img

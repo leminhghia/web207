@@ -62,7 +62,7 @@ const Thongtincoban = () => {
       [name]: value,
     })
   }
-
+  //add
   const handleSubmit = async (e) => {
     e.preventDefault()
     const data = new FormData()
@@ -85,7 +85,7 @@ const Thongtincoban = () => {
       console.error('Error:', error)
     }
   }
-
+	
   const handleUpdate = async (e) => {
     e.preventDefault()
     const data = new FormData()
