@@ -26,6 +26,7 @@ import Text from './page/BLOG/Text'
 import AddBlog from './page/BLOG/Addblog'
 import UpdateBlog from './page/BLOG/UpdateBlog'
 import SettingBlog from './page/BLOG/settingBlog'
+import PersonalDataPage from './page/Text/text'
 function App() {
   return (
     <div className="flex flex-col min-h-screen">
@@ -61,6 +62,7 @@ function App() {
           <Route path="/addBlog" element={<AddBlog />} />
           <Route path="/updateBlog" element={<UpdateBlog />} />
           <Route path="/settingBlog" element={<SettingBlog />} />
+          <Route path="/text3" element={<PersonalDataPage />} />
         </Routes>
       </div>
       <Footer />

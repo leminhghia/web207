@@ -24,7 +24,7 @@ const upload = multer({ storage })
 //
 router.post('/add', verifyUser, upload.single('image'), addBlog)
 router.put('/update', verifyUser, updateBlog)
-router.get('/list', verifyUser, getBlog)
+router.get('/list', verifyUser, getBlog.getAllBlogs)
 router.delete('/delete/:id', verifyUser, deleteBlog)
 
 export default router
