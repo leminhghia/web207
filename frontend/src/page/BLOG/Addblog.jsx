@@ -42,16 +42,11 @@ const AddBlog = () => {
     }
 
     const data = new FormData()
-    // data.append('image', formData.image)
     data.append('tag', formData.tag)
     data.append('title', formData.title)
     data.append('description', formData.description)
     data.append('image', formData.image)
-    // data.append('image', formData.image)
 
-    data.forEach((value, key) => {
-      console.log(`${key}: ${value}`)
-    })
     try {
       const res = await axios.post('http://localhost:2000/api/blog/add', data)
       console.log(res.data.message)
@@ -59,13 +54,12 @@ const AddBlog = () => {
       console.error('Error:', error)
     }
   }
-  console.log(formData)
-	
+
   return (
     <div className="min-h-screen flex flex-col lg:flex-row justify-center items-start bg-gray-100 p-6 gap-6">
       {/* Form Add Blog */}
       <form
-        className="w-full lg:w-1/2 bg-white shadow-md rounded-lg p-6"
+        className="w-full lg:w-1/2 bg-white shadow-lg rounded-lg p-6 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl"
         onSubmit={handleSubmit}
       >
         <h1 className="text-2xl font-bold text-gray-800 mb-4">Add Blog</h1>
@@ -83,7 +77,7 @@ const AddBlog = () => {
             id="image"
             name="image"
             accept="image/*"
-            className="w-full p-2 border rounded-md"
+            className="w-full p-2 border rounded-md transition-all duration-300 ease-in-out hover:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-400"
             onChange={handleImageChange}
           />
         </div>
@@ -99,7 +93,7 @@ const AddBlog = () => {
             name="tag"
             value={formData.tag}
             onChange={handleChange}
-            className="w-full p-2 border rounded-md"
+            className="w-full p-2 border rounded-md transition-all duration-300 ease-in-out hover:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-400"
             placeholder="Enter a tag (e.g., Tech, Lifestyle)"
           />
         </div>
@@ -118,7 +112,7 @@ const AddBlog = () => {
             name="title"
             value={formData.title}
             onChange={handleChange}
-            className="w-full p-2 border rounded-md"
+            className="w-full p-2 border rounded-md transition-all duration-300 ease-in-out hover:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-400"
             placeholder="Enter blog title"
           />
         </div>
@@ -136,7 +130,7 @@ const AddBlog = () => {
             name="description"
             value={formData.description}
             onChange={handleChange}
-            className="w-full p-2 border rounded-md"
+            className="w-full p-2 border rounded-md transition-all duration-300 ease-in-out hover:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-400"
             placeholder="Enter blog description"
             rows="5"
           ></textarea>
@@ -146,7 +140,7 @@ const AddBlog = () => {
         <div className="flex justify-end">
           <button
             type="submit"
-            className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
+            className="bg-green-500 text-white px-4 py-2 rounded-md transition-all duration-300 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400"
           >
             Add Blog
           </button>
@@ -154,7 +148,7 @@ const AddBlog = () => {
       </form>
 
       {/* Preview Blog */}
-      <div className="w-full lg:w-1/2 bg-white shadow-md rounded-lg p-6">
+      <div className="w-full lg:w-1/2 bg-white shadow-lg rounded-lg p-6 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl">
         <h2 className="text-2xl font-bold text-gray-800 mb-4">Preview</h2>
 
         <div className="bg-white shadow-md rounded-lg overflow-hidden">
@@ -163,7 +157,7 @@ const AddBlog = () => {
             <img
               src={URL.createObjectURL(formData.image)}
               alt="Preview"
-              className="w-full h-48 object-cover"
+              className="w-full h-48 object-cover transition-all duration-300 ease-in-out transform hover:scale-105"
             />
           )}
           <div className="p-4">

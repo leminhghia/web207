@@ -8,7 +8,7 @@ const QuizContextProvider = (props) => {
   const [visible, setVisible] = useState(false) //constext
   const [userQuizId, setUserQuizId] = useState(null) //conteext
   const [idthemquiz, setIdthemquiz] = useState(1)
-  const [tab, setTab] = useState('1')
+  const [tab, setTab] = useState(1)
   const [checkId, setCheckId] = useState('')
   const [search, setSearch] = useState('')
   const [showSearch, setShowSearch] = useState(false)

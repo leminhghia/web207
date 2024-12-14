@@ -14,6 +14,19 @@ export const getBlog = (req, res) => {
     res.json(data)
   })
 }
+//
+export const getBlogid = (req, res) => {
+  const { id } = req.params
+  // console.log(req.params)
+  const sql = `SELECT * FROM posts WHERE id=?`
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      console.error(err)
+      return res.status(500).json({ error: 'Lỗi khi thêm bài viết' })
+    }
+    res.json(result)
+  })
+}
 
 export const addBlog = (req, res) => {
   const { tag, title, description } = req.body

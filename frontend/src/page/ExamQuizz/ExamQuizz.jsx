@@ -51,7 +51,7 @@ const ExamQuizz = () => {
             </div>
           </div>
           {/*  */}
-          <div className=" bg-white mt-9 h-auto] shadow-md rounded-lg p-3">
+          <div className=" bg-white mt-9 h-auto shadow-md rounded-lg p-3">
             <h2 className="text-lg font-bold mb-4">Danh sách phần thi</h2>
             <ul className="space-y-2">
               <li className="flex justify-between items-center hover:bg-gray-100 p-2 rounded-lg cursor-pointer">
@@ -98,7 +98,7 @@ const ExamQuizz = () => {
         </div>
 
         {/* Mục lục câu hỏi */}
-        <div className="w-1/4 bg-white p-4 shadow-md rounded-lg">
+        <div className="w-1/4 bg-white p-4 shadow-md rounded-lg relative z-10">
           <h2 className="text-lg font-bold mb-4">Mục lục câu hỏi</h2>
           <div className="grid grid-cols-5 gap-2">
             {[...Array(47)].map((_, index) => (

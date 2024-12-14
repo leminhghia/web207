@@ -3,6 +3,7 @@ import express from 'express'
 import { verifyUser } from '../middleware/authMiddleware.js'
 import {
   addBlog,
+  getBlogid,
   getBlog,
   updateBlog,
   deleteBlog,
@@ -23,8 +24,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage })
 //
 router.post('/add', verifyUser, upload.single('image'), addBlog)
-router.put('/update', verifyUser, updateBlog)
-router.get('/list', verifyUser, getBlog.getAllBlogs)
+router.put('/update/:id', verifyUser, upload.single('image'), updateBlog)
+router.get('/list', getBlog)
+router.get('/list/:id', verifyUser, getBlogid)
 router.delete('/delete/:id', verifyUser, deleteBlog)
 
 export default router
